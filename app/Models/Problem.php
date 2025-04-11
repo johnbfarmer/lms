@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\DB;
+use App\Helpers\OmniHelper;
 
 class Problem extends Model
 {
@@ -58,5 +59,30 @@ class Problem extends Model
         }
 
         return $rec[0]->id;
+    }
+
+    function ensureUserInCourse($userId)
+    {
+        $missingEnrollment = false;
+        OmniHelper::log('ensureUserInCourse');
+
+        $sql = '
+        SELECT C.id as course_id FROM lms.problems P
+        INNER JOIN lms.problem_sets PS ON P.problem_set_id = PS.id
+        INNER JOIN lms.lessons L ON PS.lesson_id = L.id
+        INNER JOIN lms.lesson_sets LS ON L.lesson_set_id = LS.id
+        INNER JOIN lms.courses C ON LS.course_id = C.id
+        WHERE P.id = ?';
+        $rec = DB::select($sql, [$this->id]);
+        $courseId = $rec[0]->course_id;
+
+        $sql = '
+        SELECT count(*) as ct FROM lms.enrollments
+        WHERE course_id = ? AND user_id = ?';
+        $rec = DB::select($sql, [$courseId, $userId]);
+
+        if (empty($rec) || $rec[0]->ct < 1) {
+            Enrollment::enroll($userId, $courseId);
+        }
     }
 }

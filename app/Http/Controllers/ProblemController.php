@@ -40,7 +40,8 @@ class ProblemController extends Controller
     public function show(Request $request, $id)
     {
         $prob = Problem::find($id);
-        $answers = AnswerSet::where(['problem_id' => $id])->get();
+        $answers = AnswerSet::where(['problem_id' => $id])->get()->toArray();
+        shuffle($answers);
         $nextProblemId = $prob->getNextProblemId();
         $nextLessonId = $prob->getNextLessonId();
         $lessonTitle = $prob->getLessonTitle();

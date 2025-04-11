@@ -1,0 +1,23 @@
+<?php
+
+namespace App\Models;
+
+use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\DB;
+
+class Result extends Model
+{
+    protected $fillable = [
+        'user_id',
+        'answer_id',
+        'problem_id',
+    ];
+
+    public static function insert($userId, $problemId, $answers)
+    {
+        foreach ($answers as $answerId) {
+            $sql = 'INSERT INTO lms.results (user_id, problem_id, answer_id) VALUES (?, ?, ?)';
+            DB::insert($sql, [$userId, $problemId, $answerId]);
+        }
+    }
+}

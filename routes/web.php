@@ -6,6 +6,7 @@ use App\Http\Controllers\ProblemSetController;
 use App\Http\Controllers\ProblemController;
 use App\Http\Controllers\LessonSetController;
 use App\Http\Controllers\LessonController;
+use App\Http\Controllers\ResultController;
 use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
@@ -35,6 +36,7 @@ Route::middleware('auth')->group(function () {
     Route::get('/problem-sets', [ProblemSetController::class, 'all'])->name('problemset.all');
     Route::get('/problem-set/{id}', [ProblemSetController::class, 'showSet'])->name('problemset.showset');
     Route::get('/problem/{id}', [ProblemController::class, 'show'])->name('problem.show');
+    Route::post('/record-answer', [ResultController::class, 'recordAnswer'])->name('results.recordanswer');
 });
 
 require __DIR__.'/auth.php';
