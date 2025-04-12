@@ -15,6 +15,9 @@ class Result extends Model
 
     public static function insert($userId, $problemId, $answers)
     {
+        $sql = 'DELETE FROM lms.results WHERE user_id = ? AND problem_id = ?';
+        DB::delete($sql, [$userId, $problemId]);
+
         foreach ($answers as $answerId) {
             $sql = 'INSERT INTO lms.results (user_id, problem_id, answer_id) VALUES (?, ?, ?)';
             DB::insert($sql, [$userId, $problemId, $answerId]);

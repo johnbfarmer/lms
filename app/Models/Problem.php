@@ -64,7 +64,6 @@ class Problem extends Model
     function ensureUserInCourse($userId)
     {
         $missingEnrollment = false;
-        OmniHelper::log('ensureUserInCourse');
 
         $sql = '
         SELECT C.id as course_id FROM lms.problems P

@@ -1,12 +1,13 @@
-import { useState, useEffect, CSSProperties } from 'react';
+import { useState, useEffect } from 'react';
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout';
+import LessonNav from '@/Components/LessonNav';
 import { router, Link, Head } from '@inertiajs/react';
 import 'katex/dist/katex.min.css';
 import Latex from 'react-latex-next';
 
-const Index = ({ auth, lesson, problemSet, pageAssets}) => {
+const Index = ({ auth, lesson, lessonIds, problemSet, pageAssets}) => {
     const [htmlContent, setHtmlContent] = useState(lesson.lesson_text);
-    const title = `Lesson ${ lesson.name }`
+    const title = `${ lesson.name }`
     let lessonSection, problemSection
     if (lesson.lesson_type === 'text') {
         lessonSection = (
@@ -49,6 +50,11 @@ const Index = ({ auth, lesson, problemSet, pageAssets}) => {
                 <div className="mx-auto max-w-7xl space-y-6 sm:px-6 lg:px-8">
                     <div className="mx-1">
                     { problemSection }
+                    </div>
+                </div>
+                <div className="mx-auto max-w-7xl space-y-6 sm:px-6 lg:px-8">
+                    <div className="mx-1">
+                        <LessonNav neighbors={ lessonIds }/>
                     </div>
                 </div>
             </div>

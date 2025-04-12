@@ -29,8 +29,10 @@ Route::middleware('auth')->group(function () {
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
     Route::get('/courses', [CourseController::class, 'all'])->name('course.all');
+    Route::get('/enroll/{id}', [CourseController::class, 'enroll'])->name('course.enroll');
+    Route::get('/upgrade/{id}', [CourseController::class, 'upgrade'])->name('course.upgrade');
     Route::get('/lesson-sets', [LessonSetController::class, 'all'])->name('lessonset.all');
-    Route::get('/lesson-sets/{id}', [LessonSetController::class, 'index'])->name('lessonset.index');
+    Route::get('/course/{id}', [LessonSetController::class, 'index'])->name('lessonset.index');
     Route::get('/lesson-set/{id}', [LessonSetController::class, 'showSet'])->name('lessonset.showset');
     Route::get('/lesson/{id}', [LessonController::class, 'show'])->name('lesson.show');
     Route::get('/problem-sets', [ProblemSetController::class, 'all'])->name('problemset.all');

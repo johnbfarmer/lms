@@ -2,12 +2,14 @@ import { useState, useEffect, CSSProperties } from 'react';
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout';
 import { useForm, Link, Head } from '@inertiajs/react';
 import AnswersComponent from '@/Components/AnswersComponent';
+import HybridDisplay from '@/Components/HybridDisplay';
 import MultiAnswersComponent from '@/Components/MultiAnswersComponent';
 import FeedbackComponent from '@/Components/FeedbackComponent';
+import LessonNav from '@/Components/LessonNav';
 import 'katex/dist/katex.min.css';
 import Latex from 'react-latex-next';
 
-const Index = ({ auth, prob, answers, lessonTitle, nextProblemId, nextLessonId }) => {
+const Index = ({ auth, prob, answers, lessonTitle, nextProblemId, lessonIds }) => {
     const [htmlContent, setHtmlContent] = useState(prob.problem_text)
     const [hasAnswered, setHasAnswered] = useState(false)
     const [points, setPoints] = useState(null)
@@ -30,32 +32,25 @@ const Index = ({ auth, prob, answers, lessonTitle, nextProblemId, nextLessonId }
                 }
             }
         })
-        let pts = Math.floor(0.5 + 100 * score/total) / 100
+        let pts = Math.floor(0.5 + 100 * (100 * score/total)) / 100
         setPoints(pts)
         setHasAnswered(true)
-        setFeedbackMessage('you scored ' + score + ' out of ' + total + ' for ' + pts + ' points')
-        post(route('results.recordanswer', { answers: ans }));
+        setFeedbackMessage('you scored ' + score + ' out of ' + total + ' for ' + pts + '%')
+        post(route('results.recordanswer', { answers: ans, score: pts }));
     }
 
     const answerSelect = (ans) => {
+        let pts
         if (ans.is_correct) {
-            setPoints(1)
+            pts = 100
             setFeedbackMessage('Correct!')
         } else {
-            setPoints(0)
+            pts = 0
             setFeedbackMessage('Not quite!')
         }
         setHasAnswered(true)
-        post(route('results.recordanswer', { answers: [ans.id] }));
-    }
-
-    const shuffle = (array) => {
-        const sortedArr = structuredClone(array);
-        for (let i = sortedArr.length - 1; i > 0; i--) {
-            let j = Math.floor(Math.random() * (i + 1));
-            [sortedArr[i], sortedArr[j]] = [sortedArr[j], sortedArr[i]];
-        }
-        return sortedArr;
+        setPoints(pts)
+        post(route('results.recordanswer', { answers: [ans.id], score: pts }));
     }
 
     let problemSection, answerComponent, answersType = 'latex'
@@ -73,6 +68,11 @@ const Index = ({ auth, prob, answers, lessonTitle, nextProblemId, nextLessonId }
     if (prob.display_type === 'pdf') {
         problemSection = (
             <iframe src={`/storage/${pageAssets.pdf}.pdf`} style={{width:"900px", height:"1200px"}} frameBorder="0" />
+        )
+    }
+    if (prob.display_type === 'hybrid') {
+        problemSection = (
+            <HybridDisplay content={ prob.problem_text } />
         )
     }
 
@@ -111,14 +111,11 @@ const Index = ({ auth, prob, answers, lessonTitle, nextProblemId, nextLessonId }
                         </div>
                     </div>
                 }
-                {
-                    nextLessonId &&
-                    <div className="mx-auto max-w-7xl space-y-6 sm:px-6 lg:px-8">
-                        <div className="bg-white p-6 shadow sm:rounded-lg sm:p-4">
-                            <a href={`/lesson/${nextLessonId}`}>next lesson</a>
-                        </div>
-                    </div>
-                }
+            </div>
+            <div className="mx-auto max-w-7xl space-y-6 sm:px-6 lg:px-8">
+                <div className="mx-1">
+                    <LessonNav neighbors={ lessonIds }/>
+                </div>
             </div>
         </AuthenticatedLayout>
     )

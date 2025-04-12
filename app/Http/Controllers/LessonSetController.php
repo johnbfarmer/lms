@@ -7,17 +7,20 @@ use App\Models\Lesson;
 use App\Models\Course;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
+use App\Helpers\OmniHelper;
 
 class LessonSetController extends Controller
 {
     /**
      * Display a listing of the resource.
      */
-    public function index($id)
+    public function index(Request $request, $id)
     {
-        $data = LessonSet::where(['course_id' => $id])->get();
+        $chapters = LessonSet::where(['course_id' => $id])->get();
         $course = Course::find($id);
-        return Inertia::render('LessonSets/Index', ['lessonSets' => $data, 'course' => $course]);
+        $user = $request->user();
+        $myProgress = $user->getCourseLessonSetProgress($id);
+        return Inertia::render('LessonSets/Index', ['lessonSets' => $chapters, 'course' => $course, 'progress' => $myProgress]);
     }
 
     /**
@@ -74,10 +77,18 @@ class LessonSetController extends Controller
         return Inertia::render('LessonSets/Index', ['reqData' => $data]);
     }
 
-    public function showSet($id)
+    public function showSet(Request $request, $id)
     {
         $data = Lesson::where(['lesson_set_id' => $id])->get();
+OmniHelper::log($data);
         $lessonSet = LessonSet::find($id);
-        return Inertia::render('LessonSets/Show', ['lessons' => $data, 'lessonSet' => $lessonSet]);
+        $user = $request->user();
+        // $myProgress = $user->getCourseProgress($lessonSet->course_id);
+        $myProgress = [
+            'is_premium' => 0,
+            'pct_done' => 23,
+        ];
+OmniHelper::log($myProgress);
+        return Inertia::render('LessonSets/Show', ['lessons' => $data, 'lessonSet' => $lessonSet, 'progress' => $myProgress]);
     }
 }

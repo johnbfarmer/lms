@@ -4,7 +4,7 @@ import Latex from 'react-latex-next';
 
 export default function FeedbackComponent(props) {
     let bgColor = 'bg-orange-300'
-    if (props.points === 1) {
+    if (props.points >= 90) {
         bgColor = 'bg-green-300'
     }
     if (props.points === 0) {

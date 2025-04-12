@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Result;
 use App\Models\Problem;
+use App\Models\ProblemScore;
 use Illuminate\Http\Request;
 use App\Helpers\OmniHelper;
 
@@ -17,5 +18,6 @@ class ResultController extends Controller
         $prob = Problem::find($data['id']);
         $prob->ensureUserInCourse($userId);
         Result::insert($userId, $prob->id, $data['answers']);
+        ProblemScore::insert($userId, $prob->id, $data['score']);
     }
 }

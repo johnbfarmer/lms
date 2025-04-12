@@ -15,14 +15,15 @@ class Lesson extends Model
         'sequence_id',
     ];
 
-    function getNextLessonId()
+    function getNeighboringLessonIds()
     {
-        $sql = 'SELECT id FROM lessons WHERE (sequence_id > ? OR id > ?) AND lesson_set_id = ? ORDER BY id';
-        $rec = DB::select($sql, [$this->sequence_id, $this->id, $this->lesson_set_id]);
-        if (empty($rec)) {
-            return null;
-        }
+        $sql = 'SELECT id FROM lms.lessons WHERE (sequence_id > ? OR sequence_id = ? AND id > ?) AND lesson_set_id = ? ORDER BY sequence_id, id';
+        $rec = DB::select($sql, [$this->sequence_id, $this->sequence_id, $this->id, $this->lesson_set_id]);
+        $nextLessonId = empty($rec) ? null :  $rec[0]->id;
+        $sql = 'SELECT id FROM lms.lessons WHERE (sequence_id < ? OR sequence_id = ? AND id < ?) AND lesson_set_id = ? ORDER BY sequence_id desc, id desc';
+        $rec = DB::select($sql, [$this->sequence_id, $this->sequence_id, $this->id, $this->lesson_set_id]);
+        $previousLessonId = empty($rec) ? null : $rec[0]->id;
 
-        return $rec[0]->id;
+        return ['previous' => $previousLessonId, 'next' => $nextLessonId];
     }
 }

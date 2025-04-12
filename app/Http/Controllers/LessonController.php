@@ -23,6 +23,8 @@ class LessonController extends Controller
             $pageAssets = ['pdf' => $lesson->lesson_page];
         }
 
-        return Inertia::render('Lessons/Show', ['lesson' => $lesson, 'problemSet' => $problemSet, 'pageAssets' => $pageAssets]);
+        $lessonIds = $lesson->getNeighboringLessonIds();
+
+        return Inertia::render('Lessons/Show', ['lesson' => $lesson, 'lessonIds' => $lessonIds, 'problemSet' => $problemSet, 'pageAssets' => $pageAssets]);
     }
 }

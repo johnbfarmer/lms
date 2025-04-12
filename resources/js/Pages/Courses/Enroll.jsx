@@ -3,20 +3,16 @@ import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout';
 import CourseDescription from '@/Components/CourseDescription';
 import { router, Link, Head } from '@inertiajs/react';
 
-const Index = ({ auth, courses, myProgress }) => {
+const Enroll = ({ auth, course }) => {
 
     const title = 'Courses'
-console.log(myProgress)
+
     return (
         <AuthenticatedLayout auth={auth} user={auth.user} header={title}>
             <Head title={title} />
-            {courses.map ((course, k) => {
-                return (
-                    <CourseDescription key={ k } course={ course } progress={ myProgress[course.id] }/>
-                )
-            })}
+            <CourseDescription course={ course } />
         </AuthenticatedLayout>
     )
 }
 
-export default Index;
+export default Enroll;
