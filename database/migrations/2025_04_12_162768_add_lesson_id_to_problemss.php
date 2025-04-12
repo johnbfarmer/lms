@@ -11,8 +11,8 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::table('problem_sets', function (Blueprint $table) {
-            $table->integer('sequence_id')->after('lesson_id');
+        Schema::table('problems', function (Blueprint $table) {
+            $table->text('lesson_id')->after('name');
         });
     }
 
@@ -21,8 +21,8 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::table('problem_sets', function (Blueprint $table) {
-            $table->dropColumn('sequence_id');
+        Schema::table('problems', function (Blueprint $table) {
+            $table->dropColumn('lesson_id');
         });
     }
 };

@@ -28,7 +28,7 @@ const Index = ({ auth, lesson, lessonIds, problemSet, pageAssets}) => {
         problemSection = (
             <div className="mx-auto my-6 max-w-7xl space-y-6 sm:px-6 lg:px-8">
                 <div className="bg-white text-center p-6 shadow sm:rounded-lg sm:p-4">
-                    <a href={`/problem-set/${ problemSet.id }`}>
+                    <a href={`/problem-set/${ lesson.id }`}>
                         problems
                     </a>
                 </div>

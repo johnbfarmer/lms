@@ -13,7 +13,7 @@ const Index = ({ auth, problems, lessonTitle }) => {
             <div className="flex">
                 {data.map ((r,k) => {
                     return (
-                        <a href={`/problem/${ r.id }`}>
+                        <a href={`/problem/${ r.id }`} key={ r.id }>
                             <div className="py-12" key={ r.id }>
                                 <div className="mx-auto max-w-7xl space-y-6 sm:px-6 lg:px-8">
                                     <div className="bg-white p-4 shadow sm:rounded-lg sm:p-8">

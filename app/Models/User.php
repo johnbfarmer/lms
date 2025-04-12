@@ -63,8 +63,7 @@ class User extends Authenticatable
             FROM lms.courses C
             INNER JOIN lms.lesson_sets LS ON C.id = LS.course_id
             INNER JOIN lms.lessons L ON LS.id = L.lesson_set_id
-            INNER JOIN lms.problem_sets PS ON L.id = PS.lesson_id
-            INNER JOIN lms.problems P ON PS.id = P.problem_set_id
+            INNER JOIN lms.problems P ON PS.id = P.lesson_id
             WHERE C.id = ?';
         $rec = DB::select($sql, [$courseId]);
         $totalProbs = $rec[0]->ct;
@@ -76,8 +75,7 @@ class User extends Authenticatable
             INNER JOIN lms.courses C ON C.id = E.course_id
             INNER JOIN lms.lesson_sets LS ON C.id = LS.course_id
             INNER JOIN lms.lessons L ON LS.id = L.lesson_set_id
-            INNER JOIN lms.problem_sets PS ON L.id = PS.lesson_id
-            INNER JOIN lms.problems P ON PS.id = P.problem_set_id
+            INNER JOIN lms.problems P ON PS.id = P.lesson_id
             INNER JOIN lms.problem_scores S ON P.id = S.problem_id
             WHERE E.user_id = ? and C.id = ?';
         $rec = DB::select($sql, [$this->id, $courseId]);
@@ -104,8 +102,7 @@ class User extends Authenticatable
                 FROM lms.courses C
                 INNER JOIN lms.lesson_sets LS ON C.id = LS.course_id
                 INNER JOIN lms.lessons L ON LS.id = L.lesson_set_id
-                INNER JOIN lms.problem_sets PS ON L.id = PS.lesson_id
-                INNER JOIN lms.problems P ON PS.id = P.problem_set_id
+                INNER JOIN lms.problems P ON PS.id = P.lesson_id
                 WHERE C.id = ?
                 GROUP BY LS.id
             ) T1
@@ -114,8 +111,7 @@ class User extends Authenticatable
                 FROM lms.courses C
                 INNER JOIN lms.lesson_sets LS ON C.id = LS.course_id
                 INNER JOIN lms.lessons L ON LS.id = L.lesson_set_id
-                INNER JOIN lms.problem_sets PS ON L.id = PS.lesson_id
-                INNER JOIN lms.problems P ON PS.id = P.problem_set_id
+                INNER JOIN lms.problems P ON PS.id = P.lesson_id
                 INNER JOIN lms.problem_scores S ON P.id = S.problem_id
                 WHERE C.id = ? AND user_id = ?
                 GROUP BY LS.id

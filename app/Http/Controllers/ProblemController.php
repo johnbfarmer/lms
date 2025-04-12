@@ -5,7 +5,6 @@ namespace App\Http\Controllers;
 use App\Models\Problem;
 use App\Models\Lesson;
 use App\Models\AnswerSet;
-use App\Models\ProblemSet;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
 
@@ -44,8 +43,7 @@ class ProblemController extends Controller
         $answers = AnswerSet::where(['problem_id' => $id])->get()->toArray();
         shuffle($answers);
         $nextProblemId = $prob->getNextProblemId();
-        $ps = ProblemSet::find($prob->problem_set_id);
-        $lesson = Lesson::find($ps->lesson_id);
+        $lesson = Lesson::find($prob->lesson_id);
         $lessonIds = $lesson->getNeighboringLessonIds();
         $lessonTitle = $prob->getLessonTitle();
 

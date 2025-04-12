@@ -3,7 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Lesson;
-use App\Models\ProblemSet;
+use App\Models\Problem;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 use Inertia\Inertia;
@@ -14,8 +14,8 @@ class LessonController extends Controller
     public function show(Request $request, $id)
     {
         $lesson = Lesson::find($id);
-        $problemSet = ProblemSet::where(['lesson_id' => $id])->first();
-        if (!$problemSet || $problemSet->getProblemCount() < 1) {
+        $problemSet = Problem::where(['lesson_id' => $id])->get();
+        if (!$problemSet || $problemSet->count() < 1) {
             $problemSet = null;
         }
         $pageAssets = [];
@@ -26,5 +26,13 @@ class LessonController extends Controller
         $lessonIds = $lesson->getNeighboringLessonIds();
 
         return Inertia::render('Lessons/Show', ['lesson' => $lesson, 'lessonIds' => $lessonIds, 'problemSet' => $problemSet, 'pageAssets' => $pageAssets]);
+    }
+
+    public function showProblemSet($id)
+    {
+        $problems = Problem::where(['lesson_id' => $id])->get();
+        $lesson = Lesson::find($id);
+        $lessonTitle = $lesson->name;
+        return Inertia::render('ProblemSets/Show', ['problems' => $problems, 'lessonTitle' =>$lessonTitle]);
     }
 }

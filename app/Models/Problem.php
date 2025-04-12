@@ -10,7 +10,7 @@ class Problem extends Model
 {
     protected $fillable = [
         'name',
-        'problem_set_id',
+        'lesson_id',
         'problem_type_id',
         'sequence_id',
         'problem_text',
@@ -21,8 +21,7 @@ class Problem extends Model
     {
         $sql = '
         SELECT L.name FROM lms.problems P
-        INNER JOIN lms.problem_sets PS ON P.problem_set_id = PS.id
-        INNER JOIN lms.lessons L ON PS.lesson_id = L.id
+        INNER JOIN lms.lessons L ON P.lesson_id = L.id
         WHERE P.id = ?';
         $rec = DB::select($sql, [$this->id]);
         if (empty($rec)) {
@@ -34,26 +33,8 @@ class Problem extends Model
 
     function getNextProblemId()
     {
-        $sql = 'SELECT id FROM problems WHERE (sequence_id > ? OR id > ?) AND problem_set_id = ? ORDER BY id';
-        $rec = DB::select($sql, [$this->sequence_id, $this->id, $this->problem_set_id]);
-        if (empty($rec)) {
-            return null;
-        }
-
-        return $rec[0]->id;
-    }
-
-    function getNextLessonId()
-    {
-        $sql = '
-        SELECT L2.id 
-        FROM lms.problems P 
-        INNER JOIN lms.problem_sets PS ON P.problem_set_id = PS.id
-        INNER JOIN lms.lessons L ON PS.lesson_id = L.id
-        INNER JOIN lms.lessons L2 ON L2.lesson_set_id = L.lesson_set_id 
-        AND (L2.sequence_id > L.sequence_id OR L2.id > L.id )
-        WHERE P.id = ?';
-        $rec = DB::select($sql, [$this->id]);
+        $sql = 'SELECT id FROM problems WHERE (sequence_id > ? OR id > ?) AND lesson_id = ? ORDER BY id';
+        $rec = DB::select($sql, [$this->sequence_id, $this->id, $this->lesson_id]);
         if (empty($rec)) {
             return null;
         }
@@ -67,8 +48,7 @@ class Problem extends Model
 
         $sql = '
         SELECT C.id as course_id FROM lms.problems P
-        INNER JOIN lms.problem_sets PS ON P.problem_set_id = PS.id
-        INNER JOIN lms.lessons L ON PS.lesson_id = L.id
+        INNER JOIN lms.lessons L ON P.lesson_id = L.id
         INNER JOIN lms.lesson_sets LS ON L.lesson_set_id = LS.id
         INNER JOIN lms.courses C ON LS.course_id = C.id
         WHERE P.id = ?';
