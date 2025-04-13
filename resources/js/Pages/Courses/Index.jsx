@@ -6,7 +6,6 @@ import { router, Link, Head } from '@inertiajs/react';
 const Index = ({ auth, courses, myProgress }) => {
 
     const title = 'Courses'
-console.log(myProgress)
     return (
         <AuthenticatedLayout auth={auth} user={auth.user} header={title}>
             <Head title={title} />

@@ -6,17 +6,18 @@ import HybridDisplay from '@/Components/HybridDisplay';
 import MultiAnswersComponent from '@/Components/MultiAnswersComponent';
 import FeedbackComponent from '@/Components/FeedbackComponent';
 import LessonNav from '@/Components/LessonNav';
+import ProblemNav from '@/Components/ProblemNav';
 import 'katex/dist/katex.min.css';
 import Latex from 'react-latex-next';
 
-const Index = ({ auth, prob, answers, lessonTitle, nextProblemId, lessonIds }) => {
+const Index = ({ auth, prob, answers, lesson, problemIds, lessonIds }) => {
     const [htmlContent, setHtmlContent] = useState(prob.problem_text)
     const [hasAnswered, setHasAnswered] = useState(false)
     const [points, setPoints] = useState(null)
     const [feedbackMessage, setFeedbackMessage] = useState('right')
-    const { data, setData, post, processing, reset, errors } = useForm(prob)
+    const { data, setData, patch, processing, reset, errors } = useForm(prob)
 
-    const title = `${ lessonTitle }`
+    const title = `${ lesson.name }`
 
     const multiAnswerSelect = (ans) => {
         let score = 0, total = answers.length
@@ -36,7 +37,7 @@ const Index = ({ auth, prob, answers, lessonTitle, nextProblemId, lessonIds }) =
         setPoints(pts)
         setHasAnswered(true)
         setFeedbackMessage('you scored ' + score + ' out of ' + total + ' for ' + pts + '%')
-        post(route('results.recordanswer', { answers: ans, score: pts }));
+        patch(route('results.recordanswer', { answers: ans, score: pts }));
     }
 
     const answerSelect = (ans) => {
@@ -90,7 +91,12 @@ const Index = ({ auth, prob, answers, lessonTitle, nextProblemId, lessonIds }) =
     return (
         <AuthenticatedLayout auth={auth} user={auth.user} header={title}>
             <Head title={title} />
-            <div className="py-12">
+            <div className="py-2">
+                <div className="mx-auto space-y-6 sm:px-6 lg:px-8">
+                    <div className="p-4 text-base sm:rounded-lg sm:p-1">
+                        <ProblemNav neighbors={ problemIds } lesson={ lesson }/>
+                    </div>
+                </div>
                 <div className="mx-auto space-y-6 sm:px-6 lg:px-8">
                     <div className="text-center bg-white p-4 shadow text-2xl sm:rounded-lg sm:p-8">
                         { problemSection }
@@ -102,19 +108,9 @@ const Index = ({ auth, prob, answers, lessonTitle, nextProblemId, lessonIds }) =
                 points !== null &&
                     <FeedbackComponent feedback={ feedbackMessage } points={points} />
             }
-            <div className="flex py-12">
-                {
-                    nextProblemId &&
-                    <div className="mx-auto max-w-7xl space-y-6 sm:px-6 lg:px-8">
-                        <div className="bg-white p-6 shadow sm:rounded-lg sm:p-4">
-                            <a href={`/problem/${nextProblemId}`}>next problem</a>
-                        </div>
-                    </div>
-                }
-            </div>
-            <div className="mx-auto max-w-7xl space-y-6 sm:px-6 lg:px-8">
-                <div className="mx-1">
-                    <LessonNav neighbors={ lessonIds }/>
+            <div className="mx-auto space-y-6 sm:px-6 lg:px-8">
+                <div className="p-4 text-base sm:rounded-lg sm:p-1">
+                    <LessonNav neighbors={ lessonIds } lesson={ lesson } showLessonLink={ true } />
                 </div>
             </div>
         </AuthenticatedLayout>

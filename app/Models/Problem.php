@@ -17,7 +17,7 @@ class Problem extends Model
         'lesson_id',
     ];
 
-    function getLessonTitle()
+    public function getLessonTitle()
     {
         $sql = '
         SELECT L.name FROM lms.problems P
@@ -31,7 +31,7 @@ class Problem extends Model
         return $rec[0]->name;
     }
 
-    function getNextProblemId()
+    public function getNextProblemId()
     {
         $sql = 'SELECT id FROM problems WHERE (sequence_id > ? OR id > ?) AND lesson_id = ? ORDER BY id';
         $rec = DB::select($sql, [$this->sequence_id, $this->id, $this->lesson_id]);
@@ -42,7 +42,19 @@ class Problem extends Model
         return $rec[0]->id;
     }
 
-    function ensureUserInCourse($userId)
+    public function getNeighboringProblemIds()
+    {
+        $sql = 'SELECT id FROM problems WHERE (sequence_id > ? OR sequence_id = ? AND id > ?) AND lesson_id = ? ORDER BY sequence_id, id';
+        $rec = DB::select($sql, [$this->sequence_id, $this->sequence_id, $this->id, $this->lesson_id]);
+        $nextProblemId = empty($rec) ? null :  $rec[0]->id;
+        $sql = 'SELECT id FROM problems WHERE (sequence_id < ? OR sequence_id = ? AND id < ?) AND lesson_id = ? ORDER BY sequence_id desc, id desc';
+        $rec = DB::select($sql, [$this->sequence_id, $this->sequence_id, $this->id, $this->lesson_id]);
+        $previousProblemId = empty($rec) ? null : $rec[0]->id;
+
+        return ['previous' => $previousProblemId, 'next' => $nextProblemId];
+    }
+
+    public function ensureUserInCourse($userId)
     {
         $missingEnrollment = false;
 

@@ -12,7 +12,6 @@ class ResultController extends Controller
 {
     public function recordAnswer(Request $request)
     {
-        // $problemId, $answerId
         $data = $request->all();
         $userId = $request->user()->id;
         $prob = Problem::find($data['id']);

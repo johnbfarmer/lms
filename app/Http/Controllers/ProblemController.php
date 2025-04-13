@@ -45,9 +45,9 @@ class ProblemController extends Controller
         $nextProblemId = $prob->getNextProblemId();
         $lesson = Lesson::find($prob->lesson_id);
         $lessonIds = $lesson->getNeighboringLessonIds();
-        $lessonTitle = $prob->getLessonTitle();
+        $problemIds = $prob->getNeighboringProblemIds();
 
-    return Inertia::render('Problems/Show', ['prob' => $prob, 'answers' => $answers, 'lessonTitle' => $lessonTitle, 'nextProblemId' => $nextProblemId, 'lessonIds' => $lessonIds]);
+    return Inertia::render('Problems/Show', ['prob' => $prob, 'answers' => $answers, 'lesson' => $lesson, 'problemIds' => $problemIds, 'lessonIds' => $lessonIds]);
     }
 
     /**

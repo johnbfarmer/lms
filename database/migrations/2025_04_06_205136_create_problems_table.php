@@ -14,7 +14,6 @@ return new class extends Migration
         Schema::create('problems', function (Blueprint $table) {
             $table->id();
             $table->string('name');
-            $table->foreignId('problem_set_id');
             $table->text('problem_text');
             $table->timestamps();
         });

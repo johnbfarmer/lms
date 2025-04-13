@@ -43,10 +43,6 @@ return new class extends Migration
             $table->timestamp('created_at')->nullable()->useCurrent()->change();
             $table->timestamp('updated_at')->nullable()->useCurrent()->useCurrentOnUpdate()->change();
         });
-        Schema::table('problem_sets', function (Blueprint $table) {
-            $table->timestamp('created_at')->nullable()->useCurrent()->change();
-            $table->timestamp('updated_at')->nullable()->useCurrent()->useCurrentOnUpdate()->change();
-        });
     }
 
     /**

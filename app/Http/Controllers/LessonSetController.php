@@ -79,16 +79,18 @@ class LessonSetController extends Controller
 
     public function showSet(Request $request, $id)
     {
-        $data = Lesson::where(['lesson_set_id' => $id])->get();
-OmniHelper::log($data);
+        $lessons = Lesson::where(['lesson_set_id' => $id])->get();
         $lessonSet = LessonSet::find($id);
         $user = $request->user();
-        // $myProgress = $user->getCourseProgress($lessonSet->course_id);
-        $myProgress = [
-            'is_premium' => 0,
-            'pct_done' => 23,
-        ];
-OmniHelper::log($myProgress);
-        return Inertia::render('LessonSets/Show', ['lessons' => $data, 'lessonSet' => $lessonSet, 'progress' => $myProgress]);
+        $myProgress = $user->getLessonSetProgressByLesson($id);
+        // $myProgress = [];
+        // foreach ($lessons as $lesson) {
+        //     $myProgress[$lesson->id] = [
+        //         'is_premium' => 0,
+        //         'pct_done' => 17,
+        //     ];
+        // }
+
+        return Inertia::render('LessonSets/Show', ['lessons' => $lessons, 'lessonSet' => $lessonSet, 'progress' => $myProgress]);
     }
 }
