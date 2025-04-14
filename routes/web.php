@@ -37,7 +37,7 @@ Route::middleware('auth')->group(function () {
     Route::get('/lesson/{id}', [LessonController::class, 'show'])->name('lesson.show');
     Route::get('/problem-set/{id}', [LessonController::class, 'showProblemSet'])->name('problemset.showset');
     Route::get('/problem/{id}', [ProblemController::class, 'show'])->name('problem.show');
-    Route::patch('/record-answer', [ResultController::class, 'recordAnswer'])->name('results.recordanswer');
+    Route::get('/record-answer', [ResultController::class, 'recordAnswer'])->name('results.recordanswer');
 });
 
 require __DIR__.'/auth.php';

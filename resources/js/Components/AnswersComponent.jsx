@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import AnswerChoice from '@/Components/AnswerChoice';
 import 'katex/dist/katex.min.css';
 import Latex from 'react-latex-next';
 
@@ -12,6 +13,7 @@ export default function AnswersComponent(props) {
             props.answerSelect(ans)
         }
     }
+    console.log(props)
     return (
         <>
             <div className="mx-auto space-y-6 sm:px-6 lg:px-8">
@@ -21,20 +23,8 @@ export default function AnswersComponent(props) {
                     </div>
                     <div className="flex justify-center">
                     { props.answers.map((r, k) => {
-                        let ans = r.answer_text
-                        if (!isNaN(ans)) {
-                            ans = '$' + ans + '$'
-                        }                
-                        let border = selectedAnswer == r.id ? 'border-2 border-slate-400' : ''
-                        let cursor = !hasAnswered ? 'cursor-pointer' : ''
                         return (
-                            <div key={k} className={`py-16 ${ cursor }`} onClick={ () => selectAnswer(r) } >
-                                <div className="max-w-7xl space-y-6 sm:px-6 lg:px-8">
-                                    <div className={`bg-white ${ border } m-2 p-6 shadow-xl sm:rounded-lg sm:p-4`}>
-                                        <Latex>{ ans }</Latex>
-                                    </div>
-                                </div>
-                            </div>
+                            <AnswerChoice key={ k } answer={ r } select={ selectAnswer } selected={ r.id === selectedAnswer} selectable= { !hasAnswered } />
                         )
                     })}
                     </div>

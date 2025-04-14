@@ -15,7 +15,7 @@ const Index = ({ auth, prob, answers, lesson, problemIds, lessonIds }) => {
     const [hasAnswered, setHasAnswered] = useState(false)
     const [points, setPoints] = useState(null)
     const [feedbackMessage, setFeedbackMessage] = useState('right')
-    const { data, setData, patch, processing, reset, errors } = useForm(prob)
+    // const { data, setData, post, processing, reset, errors } = useForm(prob)
 
     const title = `${ lesson.name }`
 
@@ -37,7 +37,7 @@ const Index = ({ auth, prob, answers, lesson, problemIds, lessonIds }) => {
         setPoints(pts)
         setHasAnswered(true)
         setFeedbackMessage('you scored ' + score + ' out of ' + total + ' for ' + pts + '%')
-        patch(route('results.recordanswer', { answers: ans, score: pts }));
+        fetch(route('results.recordanswer', { id: prob.id, answers: ans, score: pts }))
     }
 
     const answerSelect = (ans) => {
@@ -51,7 +51,7 @@ const Index = ({ auth, prob, answers, lesson, problemIds, lessonIds }) => {
         }
         setHasAnswered(true)
         setPoints(pts)
-        post(route('results.recordanswer', { answers: [ans.id], score: pts }));
+        fetch(route('results.recordanswer', { id: prob.id, answers: [ans.id], score: pts} ))
     }
 
     let problemSection, answerComponent, answersType = 'latex'

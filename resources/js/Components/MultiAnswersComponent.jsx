@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import AnswerChoice from '@/Components/AnswerChoice';
 import 'katex/dist/katex.min.css';
 import Latex from 'react-latex-next';
 
@@ -23,23 +24,11 @@ export default function MultiAnswersComponent(props) {
                     <div className="mx-auto max-w-7xl space-y-6 sm:px-6 lg:px-8 text-center pt-2 text-base">
                         Select all correct answers then click Submit:
                     </div>
-                    <div className="flex">
+                    <div className="flex justify-center">
                     { props.answers.map((r, k) => {
-                        let ans = r.answer_text
                         let isSelected = selectedAnswers.indexOf(r.id) >= 0
-                        let border = isSelected ? 'border-2 border-slate-400' : ''
-                        let bgColor = hasAnswered ? (r.is_correct ? 'bg-green-200' : 'bg-red-200') : 'bg-slate-200'
-                        if (!isNaN(ans)) {
-                            ans = '$' + ans + '$'
-                        }
                         return (
-                            <div key={k} className="mx-auto py-16 cursor-pointer" onClick={ () => selectAnswer(r) }>
-                                <div className="max-w-7xl space-y-6 sm:px-6 lg:px-8">
-                                    <div className={`${ bgColor } ${ border } m-2 p-6 shadow-xl sm:rounded-lg sm:p-4`}>
-                                        <Latex>{ ans }</Latex>
-                                    </div>
-                                </div>
-                            </div>
+                            <AnswerChoice key={ k } answer={ r } select={ selectAnswer } selected={ isSelected } selectable= { !hasAnswered } />
                         )
                     })}
                     </div>
