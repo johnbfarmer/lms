@@ -32,7 +32,6 @@ class LessonController extends Controller
     {
         $problems = Problem::where(['lesson_id' => $id])->get();
         $lesson = Lesson::find($id);
-        $lessonTitle = $lesson->name;
-        return Inertia::render('ProblemSets/Show', ['problems' => $problems, 'lessonTitle' =>$lessonTitle]);
+        return Inertia::render('ProblemSets/Show', ['problems' => $problems, 'lesson' =>$lesson]);
     }
 }

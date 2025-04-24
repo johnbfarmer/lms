@@ -13,9 +13,9 @@ class ProblemController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function home()
     {
-        //
+        return Inertia::render('Problems/Index', ['data' => []]);
     }
 
     /**
@@ -47,7 +47,7 @@ class ProblemController extends Controller
         $lessonIds = $lesson->getNeighboringLessonIds();
         $problemIds = $prob->getNeighboringProblemIds();
 
-    return Inertia::render('Problems/Show', ['prob' => $prob, 'answers' => $answers, 'lesson' => $lesson, 'problemIds' => $problemIds, 'lessonIds' => $lessonIds]);
+        return Inertia::render('Problems/Show', ['prob' => $prob, 'answers' => $answers, 'lesson' => $lesson, 'problemIds' => $problemIds, 'lessonIds' => $lessonIds]);
     }
 
     /**

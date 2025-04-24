@@ -10,7 +10,7 @@ const Index = ({ auth, lessonSets, course, progress }) => {
         <AuthenticatedLayout auth={auth} user={auth.user} header={title}>
             <Head title={title} />
             {lessonSets.map ((r, k) => {
-                let prog = progress[r.id] || { is_premium: 1, pct_done: 0}
+                let prog = progress === null || !(r.id in progress) ? null : progress[r.id]
                 return (
                     <ChapterDescription key={ k } lesson={ r } progress={ prog }/>
                 )

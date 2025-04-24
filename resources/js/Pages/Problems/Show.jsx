@@ -7,6 +7,7 @@ import MultiAnswersComponent from '@/Components/MultiAnswersComponent';
 import FeedbackComponent from '@/Components/FeedbackComponent';
 import LessonNav from '@/Components/LessonNav';
 import ProblemNav from '@/Components/ProblemNav';
+import TopMenu from '@/Components/TopMenu';
 import 'katex/dist/katex.min.css';
 import Latex from 'react-latex-next';
 
@@ -88,17 +89,16 @@ const Index = ({ auth, prob, answers, lesson, problemIds, lessonIds }) => {
         )
     }
 
+    let topMenu = (
+        <TopMenu title={ title } lessonId={ lesson.id }  neighboringProblems={ problemIds } show={['home', 'lesson', 'prob-set', 'prob-nav']} />
+    )
+
     return (
-        <AuthenticatedLayout auth={auth} user={auth.user} header={title}>
-            <Head title={title} />
+        <AuthenticatedLayout auth={auth} user={auth.user} header={ false } topMenu={ topMenu }>
+            <Head title={ title } />
             <div className="py-2">
                 <div className="mx-auto space-y-6 sm:px-6 lg:px-8">
-                    <div className="p-4 text-base sm:rounded-lg sm:p-1">
-                        <ProblemNav neighbors={ problemIds } lesson={ lesson }/>
-                    </div>
-                </div>
-                <div className="mx-auto space-y-6 sm:px-6 lg:px-8">
-                    <div className="text-center bg-white p-4 shadow text-2xl sm:rounded-lg sm:p-8">
+                    <div className="text-center bg-white p-1 shadow text-2xl sm:rounded-lg sm:p-8">
                         { problemSection }
                     </div>
                 </div>

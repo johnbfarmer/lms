@@ -24,12 +24,9 @@ class CourseController extends Controller
     {
         $user = $request->user();
         Enrollment::enroll($user->id, $id);
-        $courses = Course::all();
-        $myProgress = [];
-        foreach ($courses as $course) {
-            $myProgress[$course->id] = $user->getCourseProgress($course->id);
-        }
-        return Inertia::render('Courses/Index', ['courses' => $courses, 'myProgress' => $myProgress]);
+        return redirect()->route(
+            'lessonset.index', ['id' => $id]
+        );
     }
 
     public function enroll(Request $request, $id)

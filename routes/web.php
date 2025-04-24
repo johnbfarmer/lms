@@ -30,13 +30,15 @@ Route::middleware('auth')->group(function () {
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
     Route::get('/courses', [CourseController::class, 'all'])->name('course.all');
     Route::get('/enroll/{id}', [CourseController::class, 'enroll'])->name('course.enroll');
+    Route::get('/enroll-action/{id}', [CourseController::class, 'enrollAction'])->name('course.enrollaction');
     Route::get('/upgrade/{id}', [CourseController::class, 'upgrade'])->name('course.upgrade');
     Route::get('/lesson-sets', [LessonSetController::class, 'all'])->name('lessonset.all');
     Route::get('/course/{id}', [LessonSetController::class, 'index'])->name('lessonset.index');
-    Route::get('/lesson-set/{id}', [LessonSetController::class, 'showSet'])->name('lessonset.showset');
+    Route::get('/chapter/{id}', [LessonSetController::class, 'showSet'])->name('lessonset.showset');
     Route::get('/lesson/{id}', [LessonController::class, 'show'])->name('lesson.show');
     Route::get('/problem-set/{id}', [LessonController::class, 'showProblemSet'])->name('problemset.showset');
     Route::get('/problem/{id}', [ProblemController::class, 'show'])->name('problem.show');
+    Route::get('/problems', [ProblemController::class, 'home'])->name('problem.home');
     Route::get('/record-answer', [ResultController::class, 'recordAnswer'])->name('results.recordanswer');
 });
 

@@ -1,6 +1,4 @@
 import { Fragment } from 'react';
-import 'katex/dist/katex.min.css';
-import Latex from 'react-latex-next';
 
 export default function LessonNav(props) {
     let nbrs = props.neighbors
@@ -9,32 +7,16 @@ export default function LessonNav(props) {
         if (nbrs[i] !== null) {
             parts.push(
                 <div className="mx-auto max-w-7xl space-y-6 sm:px-6 lg:px-8">
-                        <a href={`/lesson/${ nbrs[i] }`}>{ i } lesson</a>
+                    <a href={`/lesson/${ nbrs[i] }`}>{ i } lesson</a>
                 </div>
             )
         } else {
             parts.push(
                 <div className="mx-auto max-w-7xl space-y-6 text-slate-200 sm:px-6 lg:px-8">
-                        { i } lesson
+                    { i } lesson
                 </div>
             )
         }
-    }
-    if ('lesson' in props && 'showLessonLink' in props && props.showLessonLink) {
-        let lessonLink = (
-            <div className="mx-auto max-w-7xl space-y-6 sm:px-6 lg:px-8">
-                <a href={`/lesson/${ props.lesson.id }`}>lesson</a>
-            </div>
-        )
-        parts.splice(1, 0, lessonLink)
-    }
-    if ('showProblemLink' in props && props.showProblemLink) {
-        let lessonLink = (
-            <div className="mx-auto max-w-7xl space-y-6 sm:px-6 lg:px-8">
-                <a href={`/problem-set/${ props.lesson.id }`}>problems</a>
-            </div>
-        )
-        parts.splice(1, 0, lessonLink)
     }
     let finalJsx = parts.map((p,k) => {
         return (

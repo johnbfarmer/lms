@@ -1,13 +1,18 @@
 import { useState, useEffect, CSSProperties } from 'react';
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout';
 import LessonDescription from '@/Components/LessonDescription';
+import TopMenu from '@/Components/TopMenu';
 import { router, Link, Head } from '@inertiajs/react';
 
-const Index = ({ auth, lessons, lessonSet, progress }) => {
+const Index = ({ auth, lessons, lessonSet, progress, chapterIds }) => {
     const title = `${lessonSet.name}`
 
+    let topMenu = (
+        <TopMenu title={ title } neighboringChapters={ chapterIds } show={['chapter-nav']} />
+    )
+
     return (
-        <AuthenticatedLayout auth={auth} user={auth.user} header={title}>
+        <AuthenticatedLayout auth={auth} user={auth.user} header={ false } topMenu={ topMenu }>
             <Head title={title} />
             {lessons.map ((r,k) => {
                 let prog = progress[r.id] || { is_premium: 1, pct_done: 0}

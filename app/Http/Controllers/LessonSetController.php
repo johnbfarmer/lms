@@ -16,81 +16,23 @@ class LessonSetController extends Controller
      */
     public function index(Request $request, $id)
     {
-        $chapters = LessonSet::where(['course_id' => $id])->get();
+        $chapters = LessonSet::where(['course_id' => $id])->orderBy('sequence_id', 'asc')->orderBy('id', 'asc')->get();
         $course = Course::find($id);
         $user = $request->user();
         $myProgress = $user->getCourseLessonSetProgress($id);
+        OmniHelper::log(['lessonSets' => $chapters, 'course' => $course, 'progress' => $myProgress]);
+
         return Inertia::render('LessonSets/Index', ['lessonSets' => $chapters, 'course' => $course, 'progress' => $myProgress]);
-    }
-
-    /**
-     * Show the form for creating a new resource.
-     */
-    public function create()
-    {
-        //
-    }
-
-    /**
-     * Store a newly created resource in storage.
-     */
-    public function store(Request $request)
-    {
-        //
-    }
-
-    /**
-     * Display the specified resource.
-     */
-    public function show(LessonSet $lessonSet)
-    {
-        //
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(LessonSet $lessonSet)
-    {
-        //
-    }
-
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(Request $request, LessonSet $lessonSet)
-    {
-        //
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     */
-    public function destroy(LessonSet $lessonSet)
-    {
-        //
-    }
-
-    public function all()
-    {
-        $data = LessonSet::all();
-        return Inertia::render('LessonSets/Index', ['reqData' => $data]);
     }
 
     public function showSet(Request $request, $id)
     {
-        $lessons = Lesson::where(['lesson_set_id' => $id])->get();
+        $lessons = Lesson::where(['lesson_set_id' => $id])->orderBy('sequence_id', 'asc')->orderBy('id', 'asc')->get();
         $lessonSet = LessonSet::find($id);
         $user = $request->user();
         $myProgress = $user->getLessonSetProgressByLesson($id);
-        // $myProgress = [];
-        // foreach ($lessons as $lesson) {
-        //     $myProgress[$lesson->id] = [
-        //         'is_premium' => 0,
-        //         'pct_done' => 17,
-        //     ];
-        // }
+        $chapterIds = $lessonSet->getNeighboringChapterIds();
 
-        return Inertia::render('LessonSets/Show', ['lessons' => $lessons, 'lessonSet' => $lessonSet, 'progress' => $myProgress]);
+        return Inertia::render('LessonSets/Show', ['lessons' => $lessons, 'lessonSet' => $lessonSet, 'progress' => $myProgress, 'chapterIds' => $chapterIds]);
     }
 }
