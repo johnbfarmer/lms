@@ -7,7 +7,7 @@ import ChapterNav from '@/Components/ChapterNav';
 export default function TopMenu(props) {
     let courseListLink = (
         <div className="mx-1" title="home">
-            <a href="/courses">
+            <a href="/courses/all">
                 <FaHome />
             </a>
         </div>

@@ -14,8 +14,50 @@ class Problem extends Model
         'problem_type_id',
         'sequence_id',
         'problem_text',
-        'lesson_id',
     ];
+
+    public function getAnswers()
+    {
+        $sql = '
+        SELECT * FROM lms.answer_sets
+        WHERE problem_id = ?';
+        $rec = DB::select($sql, [$this->id]);
+        if (empty($rec)) {
+            return [];
+        }
+
+        return $rec;
+    }
+
+    public function deleteAnswers()
+    {
+        $sql = '
+        DELETE FROM lms.answer_sets
+        WHERE problem_id = ?';
+        $rec = DB::delete($sql, [$this->id]);
+    }
+
+    public function getHints()
+    {
+        $sql = '
+        SELECT * FROM lms.problem_hints
+        WHERE problem_id = ?
+        ORDER BY sequence_id, id';
+        $rec = DB::select($sql, [$this->id]);
+        if (empty($rec)) {
+            return [];
+        }
+
+        return $rec;
+    }
+
+    public function deleteHints()
+    {
+        $sql = '
+        DELETE FROM lms.problem_hints
+        WHERE problem_id = ?';
+        $rec = DB::delete($sql, [$this->id]);
+    }
 
     public function getLessonTitle()
     {

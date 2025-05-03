@@ -3,35 +3,52 @@
 namespace App\Http\Controllers;
 
 use App\Models\Problem;
+use App\Models\ProblemHint;
 use App\Models\Lesson;
+use App\Models\LessonSet;
+use App\Models\Course;
 use App\Models\AnswerSet;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
+use App\Helpers\OmniHelper;
 
 class ProblemController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
-    public function home()
+    public function saveProblem(Request $request)
     {
-        return Inertia::render('Problems/Index', ['data' => []]);
-    }
-
-    /**
-     * Show the form for creating a new resource.
-     */
-    public function create()
-    {
-        //
-    }
-
-    /**
-     * Store a newly created resource in storage.
-     */
-    public function store(Request $request)
-    {
-        //
+        OmniHelper::log($request->all());
+        $data = $request->all();
+        $p = $data['problem'];
+        if ($p['id']) {
+            $problem = Problem::find($p['id']);
+        } else {
+            $problem = new Problem();
+        }
+        $problem->name = '';
+        $problem->lesson_id = $p['lesson_id'];
+        $problem->problem_type_id = $p['problem_type_id'];
+        $problem->sequence_id = $p['sequence_id'];
+        $problem->problem_text = $p['problem_text'];
+        $problem->save();
+        $problem->deleteAnswers();
+        $answers = $data['answers'];
+        foreach ($answers as $a) {
+            $answer = new AnswerSet();
+            $answer->problem_id = $a['problem_id'];
+            $answer->display_type = $a['display_type'];
+            $answer->is_correct = $a['is_correct'];
+            $answer->answer_text = $a['answer_text'];
+            $answer->save();
+        }
+        $problem->deleteHints();
+        $hints = $data['hints'];
+        foreach ($hints as $h) {
+            $hint = new ProblemHint();
+            $hint->problem_id = $h['problem_id'];
+            $hint->sequence_id = $h['sequence_id'];
+            $hint->hint = $h['hint'];
+            $hint->save();
+        }
     }
 
     /**
@@ -50,32 +67,30 @@ class ProblemController extends Controller
         return Inertia::render('Problems/Show', ['prob' => $prob, 'answers' => $answers, 'lesson' => $lesson, 'problemIds' => $problemIds, 'lessonIds' => $lessonIds]);
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(Problem $problem)
+    public function editProblem($id)
     {
-        //
-    }
-
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(Request $request, Problem $problem)
-    {
-        //
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     */
-    public function destroy(Problem $problem)
-    {
-        //
-    }
-
-    public function all(Problem $problem)
-    {
-        
+        $p = Problem::find($id);
+        if ($p === null) {
+            $p = new Problem();
+            $p->name = '';
+            $p->lesson_id = 0;
+            $p->problem_type_id = 1;
+            $p->sequence_id = 10;
+            $p->problem_text = '';            
+            $p->save();
+            $courseId = 0;
+            $chapterId = 0;
+            $lessonId = 0;
+        } else {
+            $lessonId = $p->lesson_id;
+            $lesson = Lesson::find($lessonId);
+            $chapterId = $lesson->lesson_set_id;
+            $chapter = LessonSet::find($chapterId);
+            $courseId = $chapter->course_id;
+        }
+        $answers = $p->getAnswers();
+        $hints = $p->getHints();
+        $courses = Course::all();
+        return Inertia::render('Problems/Edit', ['origProblem' => $p, 'origAnswers' => $answers, 'origHints' => $hints, 'courses' => $courses, 'origCourseId' => $courseId, 'origChapterId' => $chapterId, 'origLessonId' => $lessonId]);
     }
 }

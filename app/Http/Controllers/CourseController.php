@@ -42,4 +42,16 @@ class CourseController extends Controller
         $course = Course::find($id);
         return Inertia::render('Courses/Enroll', ['course' => $course, 'upgrade' => true]);
     }
+
+    public function courses(Request $request)
+    {
+        return Course::all();;
+    }
+
+    public function chapters(Request $request, $id)
+    {
+        $user = $request->user();
+        $course = Course::find($id);
+        return $course->getMyChapters();
+    }
 }

@@ -28,7 +28,8 @@ Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
-    Route::get('/courses', [CourseController::class, 'all'])->name('course.all');
+    Route::get('/courses/all', [CourseController::class, 'all'])->name('course.all');
+    Route::get('/courses', [CourseController::class, 'courses'])->name('course.ajax');
     Route::get('/enroll/{id}', [CourseController::class, 'enroll'])->name('course.enroll');
     Route::get('/enroll-action/{id}', [CourseController::class, 'enrollAction'])->name('course.enrollaction');
     Route::get('/upgrade/{id}', [CourseController::class, 'upgrade'])->name('course.upgrade');
@@ -38,7 +39,11 @@ Route::middleware('auth')->group(function () {
     Route::get('/lesson/{id}', [LessonController::class, 'show'])->name('lesson.show');
     Route::get('/problem-set/{id}', [LessonController::class, 'showProblemSet'])->name('problemset.showset');
     Route::get('/problem/{id}', [ProblemController::class, 'show'])->name('problem.show');
+    Route::get('/problem/{id}/edit', [ProblemController::class, 'editProblem'])->name('problem.edit');
+    Route::post('/problem/save', [ProblemController::class, 'saveProblem'])->name('problem.save');
     Route::get('/problems', [ProblemController::class, 'home'])->name('problem.home');
+    Route::get('/course/{id}/chapters', [CourseController::class, 'chapters'])->name('course.chapters');
+    Route::get('/chapter/{id}/lessons', [LessonSetController::class, 'lessons'])->name('chapter.lessons');
     Route::get('/record-answer', [ResultController::class, 'recordAnswer'])->name('results.recordanswer');
 });
 

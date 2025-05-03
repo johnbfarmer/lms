@@ -7,7 +7,12 @@ use Illuminate\Support\Facades\DB;
 
 class LessonSet extends Model
 {
-    //
+    protected $fillable = [
+        'name',
+        'is_premium',
+        'course_id',
+        'sequence_id',
+    ];
 
     public function getNeighboringChapterIds()
     {
@@ -19,5 +24,12 @@ class LessonSet extends Model
         $previousChapterId = empty($rec) ? null : $rec[0]->id;
 
         return ['previous' => $previousChapterId, 'next' => $nextChapterId];
+    }
+
+    public function getMyLessons()
+    {
+        $sql = 'SELECT * FROM lessons where lesson_set_id = ?';
+        $recs = DB::select($sql, [$this->id]);
+        return $recs;
     }
 }

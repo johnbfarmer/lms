@@ -35,4 +35,11 @@ class LessonSetController extends Controller
 
         return Inertia::render('LessonSets/Show', ['lessons' => $lessons, 'lessonSet' => $lessonSet, 'progress' => $myProgress, 'chapterIds' => $chapterIds]);
     }
+
+    public function lessons(Request $request, $id)
+    {
+        $user = $request->user();
+        $chapter = LessonSet::find($id);
+        return $chapter->getMyLessons();
+    }
 }
