@@ -90,7 +90,7 @@ const Index = ({ auth, prob, answers, lesson, problemIds, lessonIds }) => {
     }
 
     let topMenu = (
-        <TopMenu title={ title } lessonId={ lesson.id }  neighboringProblems={ problemIds } show={['home', 'lesson', 'prob-set', 'prob-nav']} />
+        <TopMenu auth={auth} title={ title } lessonId={ lesson.id }  neighboringProblems={ problemIds } show={['home', 'lesson', 'prob-set', 'prob-nav']} />
     )
 
     return (

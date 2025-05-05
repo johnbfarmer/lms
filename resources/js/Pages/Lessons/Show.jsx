@@ -33,7 +33,7 @@ const Index = ({ auth, lesson, lessonIds, problemSet, pageAssets}) => {
     let showProblemLink = problemSet !== null
 
     let topMenu = (
-        <TopMenu title={ title } lessonId={ lesson.id }  neighboringLessons={ lessonIds } show={['home', 'prob-set', 'lesson-nav']} />
+        <TopMenu auth={auth} title={ title } lessonId={ lesson.id }  neighboringLessons={ lessonIds } show={['home', 'prob-set', 'prob-add', 'lesson-nav']} />
     )
 
     return (

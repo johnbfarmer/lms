@@ -1,10 +1,13 @@
 import { FaHome, FaGraduationCap  } from 'react-icons/fa';
 import { BiMath } from 'react-icons/bi';
+import { MdAssignmentAdd, MdOutlineAssignment } from "react-icons/md";
 import ProblemNav from '@/Components/ProblemNav';
 import LessonNav from '@/Components/LessonNav';
 import ChapterNav from '@/Components/ChapterNav';
 
 export default function TopMenu(props) {
+    let editMode = props.auth.edit_mode
+    console.log(props, editMode)
     let courseListLink = (
         <div className="mx-1" title="home">
             <a href="/courses/all">
@@ -20,9 +23,23 @@ export default function TopMenu(props) {
         </div>
     )
     let problemsLink = (
-        <div className="mx-1" title="back to problems">
+        <div className="mx-1" title="go to problems">
             <a href={`/problem-set/${ props.lessonId }`}>
                 <BiMath />
+            </a>
+        </div>
+    )
+    let addProblemLink = (
+        <div className="mx-1" title="add a problem">
+            <a href={`/lesson/${ props.lessonId }/add-problem`}>
+                <MdAssignmentAdd />
+            </a>
+        </div>
+    )
+    let editProblemLink = (
+        <div className="mx-1" title="edit this problem">
+            <a href={`/problem/${ props.problemId }/edit`}>
+                <MdOutlineAssignment />
             </a>
         </div>
     )
@@ -54,6 +71,8 @@ export default function TopMenu(props) {
             { props.show.indexOf('home') >= 0 && courseListLink }
             { props.show.indexOf('lesson') >= 0 && props.lessonId !== null && lessonLink }
             { props.show.indexOf('prob-set') >= 0 && props.lessonId !== null && problemsLink }
+            { props.show.indexOf('prob-add') >= 0 && props.lessonId !== null && editMode && addProblemLink }
+            { props.show.indexOf('prob-edit') >= 0 && props.problemId !== null && editMode && editProblemLink }
             { props.show.indexOf('prob-nav') >= 0 && props.neighboringProblems !== null  && problemNav }
             { props.show.indexOf('lesson-nav') >= 0 && props.neighboringLessons !== null  && lessonNav }
             { props.show.indexOf('chapter-nav') >= 0 && props.neighboringChapters !== null  && chapterNav }

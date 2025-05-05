@@ -7,7 +7,6 @@ import HintComponent from '@/Components/HintComponent';
 import { router, Link, Head } from '@inertiajs/react';
 
 const Index = ({ auth, problems, lesson, answers, hints }) => {
-    console.log(problems, answers, hints)
     const [currentProblem, setCurrentProblem] = useState(null)
     const [currentProblemIdx, setCurrentProblemIdx] = useState(-1)
     const [feedbackMessage, setFeedbackMessage] = useState('')
@@ -19,7 +18,7 @@ const Index = ({ auth, problems, lesson, answers, hints }) => {
     const title = `${ lesson.name } Problems`
 
     let topMenu = (
-        <TopMenu title={ title } lessonId={ lesson.id } show={['home', 'lesson']} />
+        <TopMenu auth={auth} title={ title } lessonId={ lesson.id } problemId={ currentProblem !== null ? currentProblem.id : null } show={['home', 'lesson', 'prob-edit']} />
     )
 
     const nextProblem = () => {

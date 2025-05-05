@@ -11,7 +11,6 @@ import FeedbackComponent from '@/Components/FeedbackComponent';
 import HintComponent from '@/Components/HintComponent';
 
 const Edit = ({ auth, origProblem, origAnswers, origHints, courses, origCourseId, origChapterId, origLessonId }) => {
-    // console.log(origProblem, answers, hints)
     const [probTxt, setProbTxt] = useState(origProblem.problem_text)
     const [problem, setProblem] = useState(origProblem)
     const [answers, setAnswers] = useState(origAnswers)
@@ -151,6 +150,22 @@ const Edit = ({ auth, origProblem, origAnswers, origHints, courses, origCourseId
         setData(data)
     }
 
+    const changeProblemDisplayType = (t) => {
+        let p = { ...problem }
+        p.display_type = t
+        setProblem(p)
+        data.problem = p
+        setData(data)
+    }
+
+    const changeProblemType = (t) => {
+        let p = { ...problem }
+        p.problem_type_id = t
+        setProblem(p)
+        data.problem = p
+        setData(data)
+    }
+
     const deleteProblem = () => {
         if (confirm('Really delete this problem?')) {
             console.log('mkay')
@@ -158,15 +173,39 @@ const Edit = ({ auth, origProblem, origAnswers, origHints, courses, origCourseId
     }
 
     let topMenu = (
-        <TopMenu title={ title } show={['home']} />
+        <TopMenu auth={auth} title={ title } show={['home']} />
     )
+
+    let problemDisplayTypeSelector = ['latex', 'text', 'hybrid'].map(t => {
+        let sel = t === problem.display_type ? 'font-bold' : 'text-slate-500'
+        return (
+            <div key={t} className={`cursor-pointer text-sm mx-1 ${sel}`} onClick={() => changeProblemDisplayType(t)}>{t}</div>
+        )
+    })
+
+    let problemTypeSelector = ['single MC', 'multiple MC', 'text'].map((t,k) => {
+        let key = k + 1
+        let sel = key === problem.problem_type_id ? 'font-bold' : 'text-slate-500'
+        return (
+            <div key={t} className={`cursor-pointer text-sm mx-1 ${sel}`} onClick={() => changeProblemType(key)}>{t}</div>
+        )
+    })
 
     return (
         <AuthenticatedLayout auth={auth} user={auth.user} header={ false } topMenu={ topMenu }>
             <div className="py-2">
                 <div className="mx-auto max-w-7xl space-y-6 sm:px-6 lg:px-8">
                     <div className="text-center bg-white p-1 shadow text-2xl sm:rounded-lg sm:p-8">
-                    <div className="flex items-center"> Question: <FaTrash className="text-base ml-2 cursor-pointer" onClick={deleteProblem} /></div>
+                    <div className="flex items-center"> 
+                        <div className=""> Question:</div>
+                        <div className="flex items-center mx-2">
+                            {problemDisplayTypeSelector}
+                        </div>
+                        <div className="flex items-center mx-2">
+                            {problemTypeSelector}
+                        </div>
+                        <FaTrash className="text-base ml-2 cursor-pointer" onClick={deleteProblem} />
+                    </div>
                         <input
                             type="text"
                             onChange={chgProbTxt}

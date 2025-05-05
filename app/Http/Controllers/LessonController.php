@@ -43,4 +43,18 @@ class LessonController extends Controller
         }
         return Inertia::render('ProblemSets/Show', ['problems' => $problems->shuffle(), 'lesson' => $lesson, 'answers' => $answers, 'hints' => $hints]);
     }
+
+    public function addProblem($id)
+    {
+        $p = new Problem();
+        $p->name = '';
+        $p->lesson_id = $id;
+        $p->problem_type_id = 1;
+        $p->sequence_id = 10;
+        $p->problem_text = '';            
+        $p->save();
+        return redirect()->route(
+            'problem.edit', ['id' => $p->id]
+        );
+    }
 }

@@ -123,4 +123,15 @@ return [
         'store' => env('APP_MAINTENANCE_STORE', 'database'),
     ],
 
+    /*
+    |--------------------------------------------------------------------------
+    | Edit Mode
+    |--------------------------------------------------------------------------
+    |
+    | Turn this off in prod. This allows us to add / edit problems via the UI.
+    |
+    */
+
+    'edit_mode' => env('APP_EDIT_MODE'),
+
 ];
