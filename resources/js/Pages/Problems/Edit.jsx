@@ -173,7 +173,7 @@ const Edit = ({ auth, origProblem, origAnswers, origHints, courses, origCourseId
     }
 
     let topMenu = (
-        <TopMenu auth={auth} title={ title } show={['home']} />
+        <TopMenu auth={auth} title={ title } lessonId={lessonId} show={['home', 'prob-set', 'prob-add']} />
     )
 
     let problemDisplayTypeSelector = ['latex', 'text', 'hybrid'].map(t => {

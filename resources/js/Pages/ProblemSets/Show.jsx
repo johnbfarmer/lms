@@ -4,6 +4,7 @@ import ShowProblem from '@/Components/ShowProblem';
 import TopMenu from '@/Components/TopMenu';
 import FeedbackComponent from '@/Components/FeedbackComponent';
 import HintComponent from '@/Components/HintComponent';
+import EndOfSet from '@/Components/EndOfSet';
 import { router, Link, Head } from '@inertiajs/react';
 
 const Index = ({ auth, problems, lesson, answers, hints }) => {
@@ -14,14 +15,28 @@ const Index = ({ auth, problems, lesson, answers, hints }) => {
     const [points, setPoints] = useState(0)
     const [showHint, setShowHint] = useState(false)
     const [hintsToShow, setHintsToShow] = useState(1)
+    const [showEndOfSet, setShowEndOfSet] = useState(false)
 
     const title = `${ lesson.name } Problems`
 
     let topMenu = (
-        <TopMenu auth={auth} title={ title } lessonId={ lesson.id } problemId={ currentProblem !== null ? currentProblem.id : null } show={['home', 'lesson', 'prob-edit']} />
+        <TopMenu auth={auth} title={ title } lessonId={ lesson.id } problemId={ currentProblem != null ? currentProblem.id : null } show={['home', 'lesson', 'prob-edit']} />
     )
 
+    const toggleEndOfSet = () => {
+        console.log('toggleEndOfSet')
+        setShowEndOfSet(!showEndOfSet)
+    }
+
+    const closeEndOfSet = () => {
+        setShowEndOfSet(false)
+    }
+
     const nextProblem = () => {
+        if (problems.length <= currentProblemIdx + 1) {
+            setCurrentProblem(null)
+            return toggleEndOfSet()
+        }
         let nextIdx = currentProblemIdx + 1
         setCurrentProblemIdx(nextIdx)
         setCurrentProblem(problems[nextIdx])
@@ -51,7 +66,7 @@ const Index = ({ auth, problems, lesson, answers, hints }) => {
     const closeHintModal = () => {
         setShowHint(false)
     }
-
+console.log(currentProblem, showEndOfSet)
     return (
         <AuthenticatedLayout auth={auth} user={auth.user} header={ false } topMenu={ topMenu }>
             <Head title={title} />
@@ -101,6 +116,7 @@ const Index = ({ auth, problems, lesson, answers, hints }) => {
                     />
                 )
             }
+            <EndOfSet show={showEndOfSet} onClose={closeEndOfSet}/>
         </AuthenticatedLayout>
     )
 }

@@ -27,6 +27,7 @@ class ProblemController extends Controller
         $problem->name = '';
         $problem->lesson_id = $p['lesson_id'];
         $problem->problem_type_id = $p['problem_type_id'];
+        $problem->display_type = $p['display_type'];
         $problem->sequence_id = $p['sequence_id'];
         $problem->problem_text = $p['problem_text'];
         $problem->save();
