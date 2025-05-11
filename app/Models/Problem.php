@@ -19,7 +19,7 @@ class Problem extends Model
     public function getAnswers()
     {
         $sql = '
-        SELECT * FROM lms.answer_sets
+        SELECT * FROM answer_sets
         WHERE problem_id = ?';
         $rec = DB::select($sql, [$this->id]);
         if (empty($rec)) {
@@ -32,7 +32,7 @@ class Problem extends Model
     public function deleteAnswers()
     {
         $sql = '
-        DELETE FROM lms.answer_sets
+        DELETE FROM answer_sets
         WHERE problem_id = ?';
         $rec = DB::delete($sql, [$this->id]);
     }
@@ -40,7 +40,7 @@ class Problem extends Model
     public function getHints()
     {
         $sql = '
-        SELECT * FROM lms.problem_hints
+        SELECT * FROM problem_hints
         WHERE problem_id = ?
         ORDER BY sequence_id, id';
         $rec = DB::select($sql, [$this->id]);
@@ -54,7 +54,7 @@ class Problem extends Model
     public function deleteHints()
     {
         $sql = '
-        DELETE FROM lms.problem_hints
+        DELETE FROM problem_hints
         WHERE problem_id = ?';
         $rec = DB::delete($sql, [$this->id]);
     }
@@ -62,8 +62,8 @@ class Problem extends Model
     public function getLessonTitle()
     {
         $sql = '
-        SELECT L.name FROM lms.problems P
-        INNER JOIN lms.lessons L ON P.lesson_id = L.id
+        SELECT L.name FROM problems P
+        INNER JOIN lessons L ON P.lesson_id = L.id
         WHERE P.id = ?';
         $rec = DB::select($sql, [$this->id]);
         if (empty($rec)) {
@@ -101,16 +101,16 @@ class Problem extends Model
         $missingEnrollment = false;
 
         $sql = '
-        SELECT C.id as course_id FROM lms.problems P
-        INNER JOIN lms.lessons L ON P.lesson_id = L.id
-        INNER JOIN lms.lesson_sets LS ON L.lesson_set_id = LS.id
-        INNER JOIN lms.courses C ON LS.course_id = C.id
+        SELECT C.id as course_id FROM problems P
+        INNER JOIN lessons L ON P.lesson_id = L.id
+        INNER JOIN lesson_sets LS ON L.lesson_set_id = LS.id
+        INNER JOIN courses C ON LS.course_id = C.id
         WHERE P.id = ?';
         $rec = DB::select($sql, [$this->id]);
         $courseId = $rec[0]->course_id;
 
         $sql = '
-        SELECT count(*) as ct FROM lms.enrollments
+        SELECT count(*) as ct FROM enrollments
         WHERE course_id = ? AND user_id = ?';
         $rec = DB::select($sql, [$courseId, $userId]);
 

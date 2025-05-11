@@ -15,7 +15,7 @@ class Enrollment extends Model
 
     public static function enroll($userId, $courseId)
     {
-        $sql = 'INSERT INTO lms.enrollments (user_id, course_id) VALUES (?, ?)';
+        $sql = 'INSERT INTO enrollments (user_id, course_id) VALUES (?, ?)';
         DB::insert($sql, [$userId, $courseId]);
     }
 }
