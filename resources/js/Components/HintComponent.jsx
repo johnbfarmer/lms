@@ -14,7 +14,6 @@ export default function HintComponent(props) {
             jsxParts.push(<div><Latex>{ h.hint }</Latex></div>)
         }
     })
-    console.log(jsxParts)
     let xxx = jsxParts.map((p,k) => {
         return (
             <Fragment key={ k }>
@@ -30,7 +29,7 @@ export default function HintComponent(props) {
     return (
         <div className="mx-auto my-6 max-w-7xl space-y-6 sm:px-6 lg:px-8">
             <Modal show={props.show} onClose={props.onClose} >
-                <div className={`bg-white p-12 shadow sm:rounded-lg`}>
+                <div className={`bg-white p-12 shadow sm:rounded-lg flex flex-col`}>
                     <div className="">
                         {xxx}
                     </div>

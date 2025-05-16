@@ -7,7 +7,7 @@ export default function EndOfSet(props) {
             <Modal show={props.show} onClose={props.onClose} >
                 <div className={`p-12 shadow sm:rounded-lg`}>
                     <div className="">
-                        that's all
+                        No hay más problemas
                     </div>
                 </div>
             </Modal>

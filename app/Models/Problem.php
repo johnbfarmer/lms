@@ -14,6 +14,7 @@ class Problem extends Model
         'problem_type_id',
         'sequence_id',
         'problem_text',
+        'display_type',
     ];
 
     public function getAnswers()

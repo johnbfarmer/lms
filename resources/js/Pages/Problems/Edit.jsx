@@ -29,9 +29,16 @@ const Edit = ({ auth, origProblem, origAnswers, origHints, courses, origCourseId
         hints: hints || [],
         lessonId: lessonId
     })
-
+console.log(hints)
+console.log(origHints)
+console.log(data)
     const title = `${ problem.id }`
     const nextProblem = () => {
+        setProblem(problem)
+        setShowFeedback(false)
+        setShowHint(false)
+    }
+    const prevProblem = () => {
         setProblem(problem)
         setShowFeedback(false)
         setShowHint(false)
@@ -232,7 +239,7 @@ const Edit = ({ auth, origProblem, origAnswers, origHints, courses, origCourseId
                         answers.map((a, k) => {
                             let ansTxt = a.answer_text
                             return (
-                                <div className="flex">
+                                <div key={k} className="flex">
                                 <input
                                     key={k}
                                     type="text"
@@ -294,9 +301,13 @@ const Edit = ({ auth, origProblem, origAnswers, origHints, courses, origCourseId
                         handleAnswer={handleAnswer}
                         showHint={showHint} 
                         hint={toggleShowHint}
+                        totalHints={hints.length}
                         hintsToShow={hintsToShow}
                         nextHint={nextHint}
-                        next={nextProblem}
+                        next={() => {}}
+                        prev={() => {}}
+                        hasNextProblem={false}
+                        hasPrevProblem={false}
                     />
                 )
             }

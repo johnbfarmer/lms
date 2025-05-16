@@ -42,6 +42,15 @@ const Index = ({ auth, problems, lesson, answers, hints }) => {
         setCurrentProblem(problems[nextIdx])
         setShowFeedback(false)
         setShowHint(false)
+        setHintsToShow(1)
+    }
+
+    const prevProblem = () => {
+        let prevIdx = currentProblemIdx - 1
+        setCurrentProblemIdx(prevIdx)
+        setCurrentProblem(problems[prevIdx])
+        setShowFeedback(false)
+        setShowHint(false)
     }
 
     const toggleShowHint = () => {
@@ -88,7 +97,11 @@ console.log(currentProblem, showEndOfSet)
                         hint={toggleShowHint}
                         hintsToShow={hintsToShow}
                         nextHint={nextHint}
+                        totalHints={!hints[currentProblem.id] ? 0 : hints[currentProblem.id].length}
                         next={nextProblem}
+                        prev={prevProblem}
+                        hasNextProblem={true}
+                        hasPrevProblem={currentProblemIdx > 0}
                     />
                 )
             }
@@ -100,6 +113,7 @@ console.log(currentProblem, showEndOfSet)
                         points={points}
                         next={nextProblem}
                         hint={toggleShowHint}
+                        hasHints={hints[currentProblem.id] != null && hints[currentProblem.id].length > 0}
                         onClose={closeFeedbackModal}
                     />
                 )

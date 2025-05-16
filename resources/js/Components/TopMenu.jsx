@@ -1,6 +1,5 @@
-import { FaHome, FaGraduationCap  } from 'react-icons/fa';
+import { FaHome, FaGraduationCap, FaPlus, FaPencilAlt  } from 'react-icons/fa';
 import { BiMath } from 'react-icons/bi';
-import { MdAssignmentAdd, MdOutlineAssignment } from "react-icons/md";
 import ProblemNav from '@/Components/ProblemNav';
 import LessonNav from '@/Components/LessonNav';
 import ChapterNav from '@/Components/ChapterNav';
@@ -32,14 +31,14 @@ export default function TopMenu(props) {
     let addProblemLink = (
         <div className="mx-1" title="add a problem">
             <a href={`/lesson/${ props.lessonId }/add-problem`}>
-                <MdAssignmentAdd />
+                <FaPlus />
             </a>
         </div>
     )
     let editProblemLink = (
         <div className="mx-1" title="edit this problem">
             <a href={`/problem/${ props.problemId }/edit`}>
-                <MdOutlineAssignment />
+                <FaPencilAlt />
             </a>
         </div>
     )

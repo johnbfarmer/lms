@@ -29,7 +29,6 @@ export default function ShowProblem(props) {
         })
         let pts = Math.floor(0.5 + 100 * (100 * score/total)) / 100
         setPoints(pts)
-        // setHasAnswered(true)
         let msg = ('you scored ' + score + ' out of ' + total + ' for ' + pts + '%')
         fetch(route('results.recordanswer', { id: props.problem.id, answers: ans, score: pts }))
         props.handleAnswer(props.problem.id, pts, msg)
@@ -51,9 +50,25 @@ export default function ShowProblem(props) {
     }
 
     let problemSection, answerComponent, answersType = 'latex'
-    let hintLink = props.hints === null ? '' : <PiSteps className="cursor-pointer" onClick={props.hint} title="show the steps" />
-    let nextLink = props.hints === null ? '' : <MdNavigateNext className="cursor-pointer" onClick={props.next} title="next problem" />
-    let prevLink = props.hints === null ? '' : <MdNavigateBefore className="cursor-pointer" onClick={props.prev} title="previous problem" />
+
+    console.log(props.totalHints)
+    console.log(props)
+
+    let disabled = props.totalHints <= 0
+    let colr = disabled ? 'text-slate-400' : ''
+    let pointer = disabled ? '' : 'cursor-pointer'
+    let clik = disabled ? () => {} : props.hint
+    let hintLink = <PiSteps className={`${pointer} ${colr}`} onClick={clik} title="show the steps" />
+
+    colr = props.hasNextProblem ? '' : 'text-slate-400'
+    pointer = props.hasNextProblem ? 'cursor-pointer' : ''
+    clik = props.hasNextProblem ? props.next : () => {}
+    let nextLink = props.hints === null ? '' : <MdNavigateNext className={`${pointer} ${colr}`} onClick={clik} title="next problem" />
+
+    colr = props.hasPrevProblem ? '' : 'text-slate-400'
+    pointer = props.hasPrevProblem ? 'cursor-pointer' : ''
+    clik = props.hasPrevProblem ? props.prev : () => {}
+    let prevLink = props.hints === null ? '' : <MdNavigateBefore className={`${pointer} ${colr}`} onClick={clik} title="previous problem" />
 
     if (props.problem.display_type === 'text') {
         problemSection = (
@@ -92,6 +107,7 @@ export default function ShowProblem(props) {
                 <div className="bg-white px-4 shadow sm:rounded-lg sm:px-8 sm:py-2">
                     { hintLink }
                     { nextLink }
+                    { prevLink }
                     <div className="py-2">
                         <div className="mx-auto space-y-6 sm:px-6 lg:px-8">
                             <div className="text-center bg-white p-1 shadow text-2xl sm:rounded-lg sm:p-8">

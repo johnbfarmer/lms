@@ -52,6 +52,7 @@ class LessonController extends Controller
         $p->problem_type_id = 1;
         $p->sequence_id = 10;
         $p->problem_text = '';            
+        $p->display_type = 'latex';            
         $p->save();
         return redirect()->route(
             'problem.edit', ['id' => $p->id]
