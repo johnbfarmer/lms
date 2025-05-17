@@ -19,7 +19,7 @@ console.log(props)
                 <div className={`${bgColor} p-12 shadow sm:rounded-lg`}>
                     <div className="flex justify-between">
                         { textToShow }
-                        <div className="flex justify-between">
+                        <div className="flex justify-col">
                         {
                             props.hasHints &&
                             <div className="cursor-pointer bg-white p-2 m-2 rounded-lg" onClick={props.hint}>hint</div>

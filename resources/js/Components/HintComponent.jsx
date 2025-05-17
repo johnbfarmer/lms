@@ -29,11 +29,11 @@ export default function HintComponent(props) {
     return (
         <div className="mx-auto my-6 max-w-7xl space-y-6 sm:px-6 lg:px-8">
             <Modal show={props.show} onClose={props.onClose} >
-                <div className={`bg-white p-12 shadow sm:rounded-lg flex flex-col`}>
+                <div className={`bg-white p-12 shadow sm:rounded-lg flex flex-row justify-between w-full`}>
                     <div className="">
                         {xxx}
                     </div>
-                    <div className="flex justify-end">
+                    <div className="flex flex-col">
                         {nextHintBtn}
                         <div className="cursor-pointer bg-white p-2 m-2 rounded-lg" onClick={props.next}>next problem</div>
                     </div>
