@@ -2,8 +2,9 @@ import { useState, useEffect } from 'react';
 import { PiSteps } from "react-icons/pi";
 import { MdNavigateNext, MdNavigateBefore } from "react-icons/md";
 import AnswersComponent from '@/Components/AnswersComponent';
-import HybridDisplay from '@/Components/HybridDisplay';
 import MultiAnswersComponent from '@/Components/MultiAnswersComponent';
+import OpenAnswerComponent from '@/Components/OpenAnswerComponent';
+import HybridDisplay from '@/Components/HybridDisplay';
 import 'katex/dist/katex.min.css';
 import Latex from 'react-latex-next';
 
@@ -43,16 +44,31 @@ export default function ShowProblem(props) {
             pts = 0
              msg = ('Not quite!')
         }
-        // setHasAnswered(true)
         setPoints(pts)
         fetch(route('results.recordanswer', { id: props.problem.id, answers: [ans.id], score: pts} ))
         props.handleAnswer(props.problem.id, pts, msg)
     }
 
-    let problemSection, answerComponent, answersType = 'latex'
+    const openAnswerSelect = (ans) => {
+        let pts, msg
+        let houseAnswer = parseFloat(props.answers[0].answer);
+        let tolerance = parseFloat(props.answers[0].pct_tolerance);
+        let ansMin = (1 -tolerance) * houseAnswer;
+        let ansMax = (1 +tolerance) * houseAnswer;
+        if (ans >= ansMin && ans <= ansMax) {
+            pts = 100
+            msg = ('Correct!')
+        } else {
+            pts = 0
+            msg = ('Not quite!')
+        }
+        setPoints(pts)
+        fetch(route('results.recordanswer', { id: props.problem.id, answers: ans, score: pts} ))
+        console.log(pts, msg)
+        props.handleAnswer(props.problem.id, pts, msg)
+    }
 
-    console.log(props.totalHints)
-    console.log(props)
+    let problemSection, answerComponent, answersType = 'latex'
 
     let disabled = props.totalHints <= 0
     let colr = disabled ? 'text-slate-400' : ''
@@ -99,6 +115,11 @@ export default function ShowProblem(props) {
     if (props.problem.problem_type_id === 2) {
         answerComponent = (
             <MultiAnswersComponent answers={ props.answers } answerSelect={ multiAnswerSelect } />
+        )
+    }
+    if (props.problem.problem_type_id === 3 || props.problem.problem_type_id === 4) {
+        answerComponent = (
+            <OpenAnswerComponent answers={ props.answers } answerSelect={ openAnswerSelect } />
         )
     }
     return (

@@ -52,13 +52,11 @@ class ProblemController extends Controller
         }
     }
 
-    /**
-     * Display the specified resource.
-     */
     public function show(Request $request, $id)
     {
         $prob = Problem::find($id);
-        $answers = AnswerSet::where(['problem_id' => $id])->get()->toArray();
+        // $answers = AnswerSet::where(['problem_id' => $id])->get()->toArray();
+        $answers = $prob->getAnswers();
         shuffle($answers);
         $nextProblemId = $prob->getNextProblemId();
         $lesson = Lesson::find($prob->lesson_id);

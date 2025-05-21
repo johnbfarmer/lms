@@ -17,14 +17,40 @@ const Index = ({ auth, problems, lesson, answers, hints }) => {
     const [hintsToShow, setHintsToShow] = useState(1)
     const [showEndOfSet, setShowEndOfSet] = useState(false)
 
-    const title = `${ lesson.name } Problems`
+    const handleKeyDown = (event) => {
+        console.log('Key pressed:', event.key, 'idx: ', currentProblemIdx);
+        switch(event.key) {
+            case 'n':
+            case 'ArrowRight':
+                nextProblem()
+                break
+            case 'ArrowLeft':
+            case 'p':
+                prevProblem()
+                break
+            case 'Enter':
+                console.log('enter')
+            default:
+                // nothing
+        }
+    };
+
+    useEffect(() => {
+        document.addEventListener('keydown', handleKeyDown);
+
+        return () => {
+            document.removeEventListener('keydown', handleKeyDown);
+        };
+    }, [handleKeyDown]);
+
+    const title = `${ lesson.name } Ejercicios`
 
     let topMenu = (
         <TopMenu auth={auth} title={ title } lessonId={ lesson.id } problemId={ currentProblem != null ? currentProblem.id : null } show={['home', 'lesson', 'prob-edit']} />
     )
 
     const toggleEndOfSet = () => {
-        console.log('toggleEndOfSet')
+        // console.log('toggleEndOfSet')
         setShowEndOfSet(!showEndOfSet)
     }
 
@@ -33,6 +59,7 @@ const Index = ({ auth, problems, lesson, answers, hints }) => {
     }
 
     const nextProblem = () => {
+        // console.log(currentProblemIdx)
         if (problems.length <= currentProblemIdx + 1) {
             setCurrentProblem(null)
             return toggleEndOfSet()
@@ -46,11 +73,15 @@ const Index = ({ auth, problems, lesson, answers, hints }) => {
     }
 
     const prevProblem = () => {
-        let prevIdx = currentProblemIdx - 1
+        // console.log(currentProblemIdx)
+        let prevIdx = Math.max(currentProblemIdx - 1, 0)
+        // console.log('why doesnt work')
         setCurrentProblemIdx(prevIdx)
         setCurrentProblem(problems[prevIdx])
+        // console.log(problems[prevIdx])
         setShowFeedback(false)
         setShowHint(false)
+        setHintsToShow(1)
     }
 
     const toggleShowHint = () => {
@@ -75,9 +106,9 @@ const Index = ({ auth, problems, lesson, answers, hints }) => {
     const closeHintModal = () => {
         setShowHint(false)
     }
-console.log(currentProblem, showEndOfSet)
+
     return (
-        <AuthenticatedLayout auth={auth} user={auth.user} header={ false } topMenu={ topMenu }>
+        <AuthenticatedLayout auth={auth} user={auth.user} header={ false } topMenu={ topMenu } onKeyDown={handleKeyDown}>
             <Head title={title} />
             {
                 currentProblem === null && 

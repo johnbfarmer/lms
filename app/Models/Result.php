@@ -23,4 +23,13 @@ class Result extends Model
             DB::insert($sql, [$userId, $problemId, $answerId]);
         }
     }
+
+    public static function insertOpenAnswer($userId, $problemId, $answers)
+    {
+        $sql = 'DELETE FROM results WHERE user_id = ? AND problem_id = ?';
+        DB::delete($sql, [$userId, $problemId]);
+
+        $sql = 'INSERT INTO results (user_id, problem_id, open_answer_result) VALUES (?, ?, ?)';
+        DB::insert($sql, [$userId, $problemId, $answers]);
+    }
 }

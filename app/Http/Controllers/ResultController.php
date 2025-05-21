@@ -15,8 +15,15 @@ class ResultController extends Controller
         $data = $request->all();
         $userId = $request->user()->id;
         $prob = Problem::find($data['id']);
+        if (!$prob) {
+            return;
+        }
         $prob->ensureUserInCourse($userId);
-        Result::insert($userId, $prob->id, $data['answers']);
+        if (in_array($prob->problem_type_id, [1,2])) {
+            Result::insert($userId, $prob->id, $data['answers']);
+        } else {
+            Result::insertOpenAnswer($userId, $prob->id, $data['answers']);
+        }
         ProblemScore::insert($userId, $prob->id, $data['score']);
     }
 }

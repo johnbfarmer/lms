@@ -19,9 +19,15 @@ class Problem extends Model
 
     public function getAnswers()
     {
-        $sql = '
-        SELECT * FROM answer_sets
-        WHERE problem_id = ?';
+        if (in_array($this->problem_type_id,[1,2])) {
+            $sql = '
+            SELECT * FROM answer_sets
+            WHERE problem_id = ?';
+        } else {
+            $sql = '
+            SELECT * FROM open_answers_numeric
+            WHERE problem_id = ?';
+        }
         $rec = DB::select($sql, [$this->id]);
         if (empty($rec)) {
             return [];

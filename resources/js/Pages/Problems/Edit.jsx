@@ -190,7 +190,7 @@ console.log(data)
         )
     })
 
-    let problemTypeSelector = ['single MC', 'multiple MC', 'text'].map((t,k) => {
+    let problemTypeSelector = ['single MC', 'multiple MC', 'text', 'numeric'].map((t,k) => {
         let key = k + 1
         let sel = key === problem.problem_type_id ? 'font-bold' : 'text-slate-500'
         return (
