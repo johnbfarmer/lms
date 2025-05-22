@@ -29,9 +29,7 @@ const Edit = ({ auth, origProblem, origAnswers, origHints, courses, origCourseId
         hints: hints || [],
         lessonId: lessonId
     })
-console.log(hints)
-console.log(origHints)
-console.log(data)
+
     const title = `${ problem.id }`
     const nextProblem = () => {
         setProblem(problem)
@@ -269,7 +267,7 @@ console.log(data)
                         hints.map((h, k) => {
                             let hintTxt = h.hint
                             return (
-                                <div className="flex">
+                                <div key={`hnt_${k}`} className="flex">
                                 <input
                                     key={k}
                                     type="text"

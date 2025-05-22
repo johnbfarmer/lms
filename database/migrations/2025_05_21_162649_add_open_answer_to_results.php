@@ -12,7 +12,8 @@ return new class extends Migration
     public function up(): void
     {
         Schema::table('results', function (Blueprint $table) {
-            $table->integer('open_answer_result')->after('answer_id');
+            $table->decimal('open_answer_numeric', total: 12, places: 6)->after('answer_id');
+            $table->string('open_answer_alpha')->after('answer_id');
         });
     }
 
@@ -22,7 +23,8 @@ return new class extends Migration
     public function down(): void
     {
         Schema::table('results', function (Blueprint $table) {
-            $table->dropColumn('open_answer_result');
+            $table->dropColumn('open_answer_numeric');
+            $table->dropColumn('open_answer_alpha');
         });
     }
 };

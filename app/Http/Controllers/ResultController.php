@@ -19,10 +19,16 @@ class ResultController extends Controller
             return;
         }
         $prob->ensureUserInCourse($userId);
-        if (in_array($prob->problem_type_id, [1,2])) {
-            Result::insert($userId, $prob->id, $data['answers']);
-        } else {
-            Result::insertOpenAnswer($userId, $prob->id, $data['answers']);
+        switch ($prob->problem_type_id) {
+            case 1:
+            case 2:
+                Result::insert($userId, $prob->id, $data['answers']);
+            case 3:
+                Result::insertOpenAnswerAlpha($userId, $prob->id, $data['answers']);
+            case 4:
+                Result::insertOpenAnswerNumeric($userId, $prob->id, $data['answers']);
+            default:
+                throw new \Exception('Undefined Problem Type Id');
         }
         ProblemScore::insert($userId, $prob->id, $data['score']);
     }

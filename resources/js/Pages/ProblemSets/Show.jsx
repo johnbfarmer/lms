@@ -50,12 +50,13 @@ const Index = ({ auth, problems, lesson, answers, hints }) => {
     )
 
     const toggleEndOfSet = () => {
-        // console.log('toggleEndOfSet')
         setShowEndOfSet(!showEndOfSet)
     }
 
     const closeEndOfSet = () => {
         setShowEndOfSet(false)
+        setCurrentProblem(null)
+        setCurrentProblemIdx(-1)
     }
 
     const nextProblem = () => {

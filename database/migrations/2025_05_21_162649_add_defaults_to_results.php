@@ -13,6 +13,8 @@ return new class extends Migration
     {
         Schema::table('results', function (Blueprint $table) {
             $table->integer('answer_id')->default(0)->change();
+            $table->integer('open_answer_numeric')->default(null)->change();
+            $table->string('open_answer_alpha')->default(null)->change();
         });
     }
 
