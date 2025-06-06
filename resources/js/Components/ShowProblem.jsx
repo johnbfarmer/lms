@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import { PiSteps } from "react-icons/pi";
-import { MdNavigateNext, MdNavigateBefore } from "react-icons/md";
+import { IoPlaySkipBack, IoCaretBack, IoCaretForward } from "react-icons/io5";
+
 import AnswersComponent from '@/Components/AnswersComponent';
 import MultiAnswersComponent from '@/Components/MultiAnswersComponent';
 import OpenAnswerComponent from '@/Components/OpenAnswerComponent';
@@ -79,12 +80,17 @@ export default function ShowProblem(props) {
     colr = props.hasNextProblem ? '' : 'text-slate-400'
     pointer = props.hasNextProblem ? 'cursor-pointer' : ''
     clik = props.hasNextProblem ? props.next : () => {}
-    let nextLink = props.hints === null ? '' : <MdNavigateNext className={`${pointer} ${colr}`} onClick={clik} title="next problem" />
+    let nextLink = props.hints === null ? '' : <IoCaretForward className={`${pointer} ${colr}`} onClick={clik} title="next problem" />
 
     colr = props.hasPrevProblem ? '' : 'text-slate-400'
     pointer = props.hasPrevProblem ? 'cursor-pointer' : ''
     clik = props.hasPrevProblem ? props.prev : () => {}
-    let prevLink = props.hints === null ? '' : <MdNavigateBefore className={`${pointer} ${colr}`} onClick={clik} title="previous problem" />
+    let prevLink = props.hints === null ? '' : <IoCaretBack className={`${pointer} ${colr}`} onClick={clik} title="previous problem" />
+
+    colr = props.problem != null ? '' : 'text-slate-400'
+    pointer = props.problem != null ? 'cursor-pointer' : ''
+    clik = props.problem != null ? props.restart : () => {}
+    let restartLink = props.hints === null ? '' : <IoPlaySkipBack className={`${pointer} ${colr} text-sm`} onClick={clik} title="restart" />
 
     if (props.problem.display_type === 'text') {
         problemSection = (
@@ -129,6 +135,7 @@ export default function ShowProblem(props) {
                     { hintLink }
                     { nextLink }
                     { prevLink }
+                    { restartLink }
                     <div className="py-2">
                         <div className="mx-auto space-y-6 sm:px-6 lg:px-8">
                             <div className="text-center bg-white p-1 shadow text-2xl sm:rounded-lg sm:p-8">

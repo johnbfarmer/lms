@@ -18,7 +18,6 @@ const Index = ({ auth, problems, lesson, answers, hints }) => {
     const [showEndOfSet, setShowEndOfSet] = useState(false)
 
     const handleKeyDown = (event) => {
-        console.log('Key pressed:', event.key, 'idx: ', currentProblemIdx);
         switch(event.key) {
             case 'n':
             case 'ArrowRight':
@@ -46,7 +45,7 @@ const Index = ({ auth, problems, lesson, answers, hints }) => {
     const title = `${ lesson.name } Ejercicios`
 
     let topMenu = (
-        <TopMenu auth={auth} title={ title } lessonId={ lesson.id } problemId={ currentProblem != null ? currentProblem.id : null } show={['home', 'lesson', 'prob-edit']} />
+        <TopMenu auth={auth} title={ title } lessonId={ lesson.id } problemId={ currentProblem != null ? currentProblem.id : null } show={['home', 'lesson', 'prob-edit', 'prob-add']} />
     )
 
     const toggleEndOfSet = () => {
@@ -60,7 +59,6 @@ const Index = ({ auth, problems, lesson, answers, hints }) => {
     }
 
     const nextProblem = () => {
-        // console.log(currentProblemIdx)
         if (problems.length <= currentProblemIdx + 1) {
             setCurrentProblem(null)
             return toggleEndOfSet()
@@ -74,12 +72,18 @@ const Index = ({ auth, problems, lesson, answers, hints }) => {
     }
 
     const prevProblem = () => {
-        // console.log(currentProblemIdx)
         let prevIdx = Math.max(currentProblemIdx - 1, 0)
-        // console.log('why doesnt work')
         setCurrentProblemIdx(prevIdx)
         setCurrentProblem(problems[prevIdx])
-        // console.log(problems[prevIdx])
+        setShowFeedback(false)
+        setShowHint(false)
+        setHintsToShow(1)
+    }
+
+    const restartProblems = () => {
+        let prevIdx = -1
+        setCurrentProblemIdx(prevIdx)
+        setCurrentProblem(null)
         setShowFeedback(false)
         setShowHint(false)
         setHintsToShow(1)
@@ -132,6 +136,7 @@ const Index = ({ auth, problems, lesson, answers, hints }) => {
                         totalHints={!hints[currentProblem.id] ? 0 : hints[currentProblem.id].length}
                         next={nextProblem}
                         prev={prevProblem}
+                        restart={restartProblems}
                         hasNextProblem={true}
                         hasPrevProblem={currentProblemIdx > 0}
                     />

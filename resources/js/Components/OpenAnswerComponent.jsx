@@ -22,6 +22,7 @@ export default function OpenAnswerComponent(props) {
                             className="mt-1 block w-full"
                             isFocused={true}
                             onChange={(e) => setAnswer(e.target.value)}
+                            onKeyDown={e => {if (e.key === 'Enter') {props.answerSelect(answer); setHasAnswered(false)}}}
                         />
 
                         <InputError message='' className="mt-2" />
