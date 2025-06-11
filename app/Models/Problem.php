@@ -15,6 +15,7 @@ class Problem extends Model
         'sequence_id',
         'problem_text',
         'display_type',
+        'active',
     ];
 
     public function getAnswers()
@@ -22,7 +23,7 @@ class Problem extends Model
         if (in_array($this->problem_type_id,[1,2])) {
             $sql = '
             SELECT * FROM answer_sets
-            WHERE problem_id = ?';
+            WHERE problem_id = ? and active = 1';
         } else {
             $sql = '
             SELECT * FROM open_answers_numeric
@@ -82,7 +83,7 @@ class Problem extends Model
 
     public function getNextProblemId()
     {
-        $sql = 'SELECT id FROM problems WHERE (sequence_id > ? OR id > ?) AND lesson_id = ? ORDER BY id';
+        $sql = 'SELECT id FROM problems WHERE (sequence_id > ? OR id > ?) AND lesson_id = ? and active = 1 ORDER BY id';
         $rec = DB::select($sql, [$this->sequence_id, $this->id, $this->lesson_id]);
         if (empty($rec)) {
             return null;
@@ -93,10 +94,10 @@ class Problem extends Model
 
     public function getNeighboringProblemIds()
     {
-        $sql = 'SELECT id FROM problems WHERE (sequence_id > ? OR sequence_id = ? AND id > ?) AND lesson_id = ? ORDER BY sequence_id, id';
+        $sql = 'SELECT id FROM problems WHERE (sequence_id > ? OR sequence_id = ? AND id > ?) AND lesson_id = ? and active = 1 ORDER BY sequence_id, id';
         $rec = DB::select($sql, [$this->sequence_id, $this->sequence_id, $this->id, $this->lesson_id]);
         $nextProblemId = empty($rec) ? null :  $rec[0]->id;
-        $sql = 'SELECT id FROM problems WHERE (sequence_id < ? OR sequence_id = ? AND id < ?) AND lesson_id = ? ORDER BY sequence_id desc, id desc';
+        $sql = 'SELECT id FROM problems WHERE (sequence_id < ? OR sequence_id = ? AND id < ?) AND lesson_id = ? and active = 1 ORDER BY sequence_id desc, id desc';
         $rec = DB::select($sql, [$this->sequence_id, $this->sequence_id, $this->id, $this->lesson_id]);
         $previousProblemId = empty($rec) ? null : $rec[0]->id;
 

@@ -90,7 +90,7 @@ export default function ShowProblem(props) {
     colr = props.problem != null ? '' : 'text-slate-400'
     pointer = props.problem != null ? 'cursor-pointer' : ''
     clik = props.problem != null ? props.restart : () => {}
-    let restartLink = props.hints === null ? '' : <IoPlaySkipBack className={`${pointer} ${colr} text-sm`} onClick={clik} title="restart" />
+    let restartLink = props.hints === null ? '' : <IoPlaySkipBack className={`${pointer} ${colr} text-sm37`} onClick={clik} title="restart" />
 
     if (props.problem.display_type === 'text') {
         problemSection = (

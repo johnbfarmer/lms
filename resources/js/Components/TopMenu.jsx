@@ -42,6 +42,20 @@ export default function TopMenu(props) {
             </a>
         </div>
     )
+    let addCourseLink = (
+        <div className="mx-1" title="add a course">
+            <a href={`/course/0/edit`}>
+                <FaPlus />
+            </a>
+        </div>
+    )
+    let editCourseLink = (
+        <div className="mx-1" title="edit this course">
+            <a href={`/course/${ props.courseId }/edit`}>
+                <FaPencilAlt />
+            </a>
+        </div>
+    )
     let problemNav = (
         <div className="mx-auto space-y-6 sm:px-6 lg:px-8">
             <div className="p-4 text-base sm:rounded-lg sm:p-1">
@@ -73,6 +87,8 @@ export default function TopMenu(props) {
             { props.show.indexOf('prob-add') >= 0 && props.lessonId !== null && editMode && addProblemLink }
             { props.show.indexOf('prob-edit') >= 0 && props.problemId !== null && editMode && editProblemLink }
             { props.show.indexOf('prob-nav') >= 0 && props.neighboringProblems !== null  && problemNav }
+            { props.show.indexOf('course-add') >= 0 && editMode && addCourseLink }
+            { props.show.indexOf('course-edit') >= 0 && props.courseId !== null && editMode && editCourseLink }
             { props.show.indexOf('lesson-nav') >= 0 && props.neighboringLessons !== null  && lessonNav }
             { props.show.indexOf('chapter-nav') >= 0 && props.neighboringChapters !== null  && chapterNav }
         </div>

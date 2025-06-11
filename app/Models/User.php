@@ -64,7 +64,7 @@ class User extends Authenticatable
             INNER JOIN lesson_sets LS ON C.id = LS.course_id
             INNER JOIN lessons L ON LS.id = L.lesson_set_id
             INNER JOIN problems P ON L.id = P.lesson_id
-            WHERE C.id = ?';
+            WHERE C.id = ? AND P.active = 1 AND LS.active = 1 AND L.active = 1';
         $rec = DB::select($sql, [$courseId]);
         $totalProbs = $rec[0]->ct;
 
@@ -77,7 +77,7 @@ class User extends Authenticatable
             INNER JOIN lessons L ON LS.id = L.lesson_set_id
             INNER JOIN problems P ON L.id = P.lesson_id
             INNER JOIN problem_scores S ON P.id = S.problem_id
-            WHERE E.user_id = ? and C.id = ?';
+            WHERE E.user_id = ? and C.id = ? AND P.active = 1 AND LS.active = 1 AND L.active = 1';
         $rec = DB::select($sql, [$this->id, $courseId]);
         $probsDone = $rec[0]->ct;
         $pctDone = !$totalProbs ? 0 : round(100*($probsDone/$totalProbs));
@@ -103,7 +103,7 @@ class User extends Authenticatable
                 INNER JOIN lesson_sets LS ON C.id = LS.course_id
                 INNER JOIN lessons L ON LS.id = L.lesson_set_id
                 INNER JOIN problems P ON L.id = P.lesson_id
-                WHERE C.id = ?
+                WHERE C.id = ? AND P.active = 1 AND LS.active = 1 AND L.active = 1
                 GROUP BY LS.id
             ) T1
             LEFT JOIN (
@@ -113,7 +113,7 @@ class User extends Authenticatable
                 INNER JOIN lessons L ON LS.id = L.lesson_set_id
                 INNER JOIN problems P ON L.id = P.lesson_id
                 INNER JOIN problem_scores S ON P.id = S.problem_id
-                WHERE C.id = ? AND user_id = ?
+                WHERE C.id = ? AND user_id = ? AND P.active = 1 AND LS.active = 1 AND L.active = 1
                 GROUP BY LS.id
             ) T2 ON T1.id = T2.id;';
         $recs = DB::select($sql, [$courseId, $courseId, $this->id]);
@@ -140,7 +140,7 @@ class User extends Authenticatable
                 INNER JOIN lesson_sets LS ON C.id = LS.course_id
                 INNER JOIN lessons L ON LS.id = L.lesson_set_id
                 INNER JOIN problems P ON L.id = P.lesson_id
-                WHERE LS.id = ?
+                WHERE LS.id = ? AND P.active = 1 AND LS.active = 1 AND L.active = 1
                 GROUP BY L.id
             ) T1
             LEFT JOIN (
@@ -150,7 +150,7 @@ class User extends Authenticatable
                 INNER JOIN lessons L ON LS.id = L.lesson_set_id
                 INNER JOIN problems P ON L.id = P.lesson_id
                 INNER JOIN problem_scores S ON P.id = S.problem_id
-                WHERE LS.id = ? AND user_id = ?
+                WHERE LS.id = ? AND user_id = ? AND P.active = 1 AND LS.active = 1 AND L.active = 1
                 GROUP BY L.id
             ) T2 ON T1.id = T2.id;';
         $recs = DB::select($sql, [$lessonSetId, $lessonSetId, $this->id]);
@@ -163,7 +163,6 @@ class User extends Authenticatable
             $progress[$rec->id] = [
                 'total' => $totalProbs,
                 'right' => $score,
-                // 'pct' => !$totalProbs ? 0 : round(100*($probsDone/$totalProbs)),
                 'pct' => !$totalProbs ? 0 : round(100*($score/$totalProbs)),
             ];
         }

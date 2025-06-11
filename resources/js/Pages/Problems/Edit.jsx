@@ -171,6 +171,15 @@ const Edit = ({ auth, origProblem, origAnswers, origHints, courses, origCourseId
         setData(data)
     }
 
+    const togglePublish = () => {
+        let p = { ...problem }
+        console.log(p.active)
+        p.active = !p.active
+        setProblem(p)
+        data.problem = p
+        setData(data)
+    }
+
     const deleteProblem = () => {
         if (confirm('Really delete this problem?')) {
             console.log('mkay')
@@ -209,7 +218,17 @@ const Edit = ({ auth, origProblem, origAnswers, origHints, courses, origCourseId
                         <div className="flex items-center mx-2">
                             {problemTypeSelector}
                         </div>
-                        <FaTrash className="text-base ml-2 cursor-pointer" onClick={deleteProblem} />
+                        <div className="flex items-center mx-2">
+                            <Checkbox
+                                checked={ problem.active }
+                                onChange={ togglePublish }
+                                className='border border-black border-1'
+                            />
+                            <div className="text-sm ml-1 mr-2">
+                                Publish
+                            </div>
+                            <FaTrash className="text-base ml-2 cursor-pointer" onClick={deleteProblem} />
+                        </div>
                     </div>
                         <input
                             type="text"

@@ -16,7 +16,7 @@ class LessonSetController extends Controller
      */
     public function index(Request $request, $id)
     {
-        $chapters = LessonSet::where(['course_id' => $id])->orderBy('sequence_id', 'asc')->orderBy('id', 'asc')->get();
+        $chapters = LessonSet::where(['course_id' => $id, 'active' => 1])->orderBy('sequence_id', 'asc')->orderBy('id', 'asc')->get();
         $course = Course::find($id);
         $user = $request->user();
         $myProgress = $user->getCourseLessonSetProgress($id);
@@ -27,7 +27,7 @@ class LessonSetController extends Controller
 
     public function showSet(Request $request, $id)
     {
-        $lessons = Lesson::where(['lesson_set_id' => $id])->orderBy('sequence_id', 'asc')->orderBy('id', 'asc')->get();
+        $lessons = Lesson::where(['lesson_set_id' => $id, 'active' => 1])->orderBy('sequence_id', 'asc')->orderBy('id', 'asc')->get();
         $lessonSet = LessonSet::find($id);
         $user = $request->user();
         $myProgress = $user->getLessonSetProgressByLesson($id);

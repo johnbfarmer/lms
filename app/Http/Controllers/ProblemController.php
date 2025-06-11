@@ -30,6 +30,7 @@ class ProblemController extends Controller
         $problem->display_type = $p['display_type'];
         $problem->sequence_id = $p['sequence_id'];
         $problem->problem_text = $p['problem_text'];
+        $problem->active = $p['active'];
         $problem->save();
         $problem->deleteAnswers();
         $answers = $data['answers'];
@@ -89,7 +90,7 @@ class ProblemController extends Controller
         }
         $answers = $p->getAnswers();
         $hints = $p->getHints();
-        $courses = Course::all();
+        $courses = Course::where(['active' => 1])->get();
         return Inertia::render('Problems/Edit', ['origProblem' => $p, 'origAnswers' => $answers, 'origHints' => $hints, 'courses' => $courses, 'origCourseId' => $courseId, 'origChapterId' => $chapterId, 'origLessonId' => $lessonId]);
     }
 }

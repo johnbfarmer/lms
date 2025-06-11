@@ -14,7 +14,7 @@ class LessonController extends Controller
     public function show(Request $request, $id)
     {
         $lesson = Lesson::find($id);
-        $problemSet = Problem::where(['lesson_id' => $id])->get();
+        $problemSet = Problem::where(['lesson_id' => $id, 'active' => 1])->get();
         if (!$problemSet || $problemSet->count() < 1) {
             $problemSet = null;
         }
@@ -30,7 +30,7 @@ class LessonController extends Controller
 
     public function showProblemSet($id)
     {
-        $problems = Problem::where(['lesson_id' => $id])->get();
+        $problems = Problem::where(['lesson_id' => $id, 'active' => 1])->get();
         $lesson = Lesson::find($id);
         $problems->shuffle();
         $answers = [];

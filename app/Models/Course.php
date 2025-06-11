@@ -7,9 +7,16 @@ use Illuminate\Support\Facades\DB;
 
 class Course extends Model
 {
-    public function getMyChapters()
+    protected $fillable = [
+        'name',
+        'description',
+        'active',
+    ];
+
+    public function getMyChapters($activeOnly = true)
     {
-        $sql = 'SELECT * FROM lesson_sets where course_id = ?';
+        $activeClause = $activeOnly ? 'and active = 1' : '';
+        $sql = 'SELECT * FROM lesson_sets where course_id = ? ' . $activeClause;
         $recs = DB::select($sql, [$this->id]);
         return $recs;
     }

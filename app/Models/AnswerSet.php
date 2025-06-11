@@ -11,5 +11,6 @@ class AnswerSet extends Model
         'display_type',
         'is_correct',
         'answer_text',
+        'active',
     ];
 }
