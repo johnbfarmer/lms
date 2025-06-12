@@ -4,11 +4,11 @@ import LessonDescription from '@/Components/LessonDescription';
 import TopMenu from '@/Components/TopMenu';
 import { router, Link, Head } from '@inertiajs/react';
 
-const Index = ({ auth, lessons, lessonSet, progress, chapterIds }) => {
+const Show = ({ auth, lessons, lessonSet, progress, chapterIds }) => {
     const title = `${lessonSet.name}`
 
     let topMenu = (
-        <TopMenu auth={auth} title={ title } neighboringChapters={ chapterIds } show={['chapter-nav']} />
+        <TopMenu auth={auth} title={ title } neighboringChapters={ chapterIds } courseId={lessonSet.course_id} show={['chapter-nav', 'course']} />
     )
 
     return (
@@ -24,4 +24,4 @@ const Index = ({ auth, lessons, lessonSet, progress, chapterIds }) => {
     )
 }
 
-export default Index;
+export default Show;

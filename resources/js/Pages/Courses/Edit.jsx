@@ -18,7 +18,7 @@ const Index = ({ auth, origCourse, origChapters }) => {
     const title = 'Cursos'
 
     let topMenu = (
-        <TopMenu auth={auth} title={ title } show={['home', 'course-add']} />
+        <TopMenu auth={auth} title={ title } courseId={course.id} show={['home', 'course', 'course-add']} />
     )
 
     const deleteCourse = () => {
@@ -145,14 +145,14 @@ const Index = ({ auth, origCourse, origChapters }) => {
                     <div className="flex items-center"> Capítulos: <FaPlus className="text-base ml-2 cursor-pointer" onClick={addChapter} /></div>
                     {
                         chapters.map((c, k) => {
-                            let ansTxt = c.name
+                            let chapName = c.name
                             return (
                                 <div key={k} className="flex">
                                 <input
                                     key={k}
                                     type="text"
                                     onChange={(e) => changeChapterName(e, k)}
-                                    value={ansTxt}
+                                    value={chapName}
                                     className="w-full"
                                 />
                                 <Checkbox
@@ -163,7 +163,9 @@ const Index = ({ auth, origCourse, origChapters }) => {
                                 <div className="text-sm ml-1 mr-2">
                                     P
                                 </div>
-                                <FaPencilAlt className="text-base ml-2 cursor-pointer" onClick={(e) => console.log(e, k)} />
+                                <a href={`/chapter/${c.id}/edit`}>
+                                    <FaPencilAlt className="text-base ml-2" />
+                                </a>
                                 <FaTrash className="text-base ml-2 cursor-pointer" onClick={(e) => deleteChapter(e, k)} />
                                 </div>
                             )

@@ -1,4 +1,4 @@
-import { FaHome, FaGraduationCap, FaPlus, FaPencilAlt  } from 'react-icons/fa';
+import { FaHome, FaGraduationCap, FaPlus, FaPencilAlt, FaBook, FaBookOpen } from 'react-icons/fa';
 import { BiMath } from 'react-icons/bi';
 import ProblemNav from '@/Components/ProblemNav';
 import LessonNav from '@/Components/LessonNav';
@@ -11,6 +11,22 @@ export default function TopMenu(props) {
         <div className="mx-1" title="all courses">
             <a href="/courses/all">
                 <FaHome />
+            </a>
+        </div>
+    )
+
+    let courseLink = (
+        <div className="mx-1" title="back to course start">
+            <a href={`/course/${ props.courseId }`}>
+                <FaBook />
+            </a>
+        </div>
+    )
+
+    let chapterLink = (
+        <div className="mx-1" title="back to chapter start">
+            <a href={`/chapter/${ props.chapterId }`}>
+                <FaBookOpen />
             </a>
         </div>
     )
@@ -82,6 +98,8 @@ export default function TopMenu(props) {
         <div className="flex justify-start w-full">
             <h2>{ props.title }</h2>
             { props.show.indexOf('home') >= 0 && courseListLink }
+            { props.show.indexOf('course') >= 0 && props.courseId !== null && courseLink }
+            { props.show.indexOf('chapter') >= 0 && props.chapterId !== null && chapterLink }
             { props.show.indexOf('lesson') >= 0 && props.lessonId !== null && lessonLink }
             { props.show.indexOf('prob-set') >= 0 && props.lessonId !== null && problemsLink }
             { props.show.indexOf('prob-add') >= 0 && props.lessonId !== null && editMode && addProblemLink }

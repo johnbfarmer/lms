@@ -40,6 +40,7 @@ Route::middleware('auth')->group(function () {
     Route::get('/problem-set/{id}', [LessonController::class, 'showProblemSet'])->name('problemset.showset');
     Route::get('/problem/{id}', [ProblemController::class, 'show'])->name('problem.show');
     Route::get('/problem/{id}/edit', [ProblemController::class, 'editProblem'])->name('problem.edit');
+    Route::get('/chapter/{id}/edit', [LessonSetController::class, 'editChapter'])->name('chapter.edit');
     Route::get('/course/{id}/edit', [CourseController::class, 'editCourse'])->name('course.edit');
     Route::get('/lesson/{id}/add-problem', [LessonController::class, 'addProblem'])->name('lesson.addProblem');
     Route::post('/problem/save', [ProblemController::class, 'saveProblem'])->name('problem.save');

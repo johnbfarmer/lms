@@ -36,6 +36,21 @@ class LessonSetController extends Controller
         return Inertia::render('LessonSets/Show', ['lessons' => $lessons, 'lessonSet' => $lessonSet, 'progress' => $myProgress, 'chapterIds' => $chapterIds]);
     }
 
+    public function editChapter(Request $request, $id)
+    {
+        $chapter = LessonSet::find($id);
+        if ($chapter === null) {
+            $chapter = new LessonSet();
+            $chapter->name = '';   
+            $chapter->description = '';   
+            $lessons = [];
+        } else {
+            $lessons = $chapter->getMyLessons(false);
+        }
+
+        return Inertia::render('LessonSets/Edit', ['origLessons' => $lessons, 'origChapter' => $chapter]);
+    }
+
     public function lessons(Request $request, $id)
     {
         $user = $request->user();
