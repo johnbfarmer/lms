@@ -33,13 +33,24 @@ class ProblemController extends Controller
         $problem->save();
         $problem->deleteAnswers();
         $answers = $data['answers'];
-        foreach ($answers as $a) {
-            $answer = new AnswerSet();
-            $answer->problem_id = $a['problem_id'];
-            $answer->display_type = $a['display_type'];
-            $answer->is_correct = $a['is_correct'];
-            $answer->answer_text = $a['answer_text'];
-            $answer->save();
+        switch ($problem->problem_type_id) {
+            case 1:
+            case 2:
+                foreach ($answers as $a) {
+                    $answer = new AnswerSet();
+                    $answer->problem_id = $a['problem_id'];
+                    $answer->display_type = $a['display_type'];
+                    $answer->is_correct = $a['is_correct'];
+                    $answer->answer_text = $a['answer_text'];
+                    $answer->save();
+                }
+                break;
+            case 3:
+            case 4:
+                $problem->saveOpenAnswer($answers[0]['answer_text']);
+                break;
+            default:
+                throw new \Exception("unknown answer type in save prob");
         }
         $problem->deleteHints();
         $hints = $data['hints'];

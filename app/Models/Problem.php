@@ -126,4 +126,15 @@ class Problem extends Model
             Enrollment::enroll($userId, $courseId);
         }
     }
+
+    public function saveOpenAnswer($ans)
+    {
+        $sql = '
+        INSERT INTO open_answers_numeric
+        (problem_id, answer)
+        VALUES 
+        (?, ?);';
+
+        DB::insert($sql, [$this->id, $ans]);
+    }
 }
