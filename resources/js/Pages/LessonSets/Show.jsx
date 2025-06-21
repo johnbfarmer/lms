@@ -8,7 +8,7 @@ const Show = ({ auth, lessons, lessonSet, progress, chapterIds }) => {
     const title = `${lessonSet.name}`
 
     let topMenu = (
-        <TopMenu auth={auth} title={ title } neighboringChapters={ chapterIds } courseId={lessonSet.course_id} show={['chapter-nav', 'course']} />
+        <TopMenu auth={auth} title={ title } neighboringChapters={ chapterIds } courseId={lessonSet.course_id} chapterId={lessonSet.id} show={['chapter-nav', 'course', 'chapter-edit']} />
     )
 
     return (

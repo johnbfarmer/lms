@@ -16,7 +16,7 @@ export default function TopMenu(props) {
     )
 
     let courseLink = (
-        <div className="mx-1" title="back to course start">
+        <div className="mx-1" title="back to course">
             <a href={`/course/${ props.courseId }`}>
                 <FaBook />
             </a>
@@ -24,7 +24,7 @@ export default function TopMenu(props) {
     )
 
     let chapterLink = (
-        <div className="mx-1" title="back to chapter start">
+        <div className="mx-1" title="back to chapter">
             <a href={`/chapter/${ props.chapterId }`}>
                 <FaBookOpen />
             </a>
@@ -65,9 +65,23 @@ export default function TopMenu(props) {
             </a>
         </div>
     )
+    let editChapterLink = (
+        <div className="mx-1" title="edit this chapter">
+            <a href={`/chapter/${ props.chapterId }/edit`}>
+                <FaPencilAlt />
+            </a>
+        </div>
+    )
     let editCourseLink = (
         <div className="mx-1" title="edit this course">
             <a href={`/course/${ props.courseId }/edit`}>
+                <FaPencilAlt />
+            </a>
+        </div>
+    )
+    let editLessonLink = (
+        <div className="mx-1" title="edit this lesson">
+            <a href={`/lesson/${ props.lessonId }/edit`}>
                 <FaPencilAlt />
             </a>
         </div>
@@ -107,6 +121,8 @@ export default function TopMenu(props) {
             { props.show.indexOf('prob-nav') >= 0 && props.neighboringProblems !== null  && problemNav }
             { props.show.indexOf('course-add') >= 0 && editMode && addCourseLink }
             { props.show.indexOf('course-edit') >= 0 && props.courseId !== null && editMode && editCourseLink }
+            { props.show.indexOf('chapter-edit') >= 0 && props.chapterId !== null && editMode && editChapterLink }
+            { props.show.indexOf('lesson-edit') >= 0 && props.lessonid !== null && editMode && editLessonLink }
             { props.show.indexOf('lesson-nav') >= 0 && props.neighboringLessons !== null  && lessonNav }
             { props.show.indexOf('chapter-nav') >= 0 && props.neighboringChapters !== null  && chapterNav }
         </div>

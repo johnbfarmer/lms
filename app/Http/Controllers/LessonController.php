@@ -58,4 +58,15 @@ class LessonController extends Controller
             'problem.edit', ['id' => $p->id]
         );
     }
+
+    public function editLesson($id)
+    {
+        $lesson = Lesson::find($id);
+        if ($lesson === null) {
+            $lesson = new Lesson();
+            $lesson->name = '';
+        }
+
+        return Inertia::render('Lessons/Edit', ['origLesson' => $lesson]);
+    }
 }

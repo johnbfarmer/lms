@@ -16,7 +16,6 @@ class ProblemController extends Controller
 {
     public function saveProblem(Request $request)
     {
-        OmniHelper::log($request->all());
         $data = $request->all();
         $p = $data['problem'];
         if ($p['id']) {
