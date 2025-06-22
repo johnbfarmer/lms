@@ -111,7 +111,7 @@ const Index = ({ auth, problems, lesson, answers, hints }) => {
     const closeHintModal = () => {
         setShowHint(false)
     }
-
+console.log(currentProblem?.id)
     return (
         <AuthenticatedLayout auth={auth} user={auth.user} header={ false } topMenu={ topMenu } onKeyDown={handleKeyDown}>
             <Head title={title} />

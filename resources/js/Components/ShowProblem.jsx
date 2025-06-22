@@ -94,7 +94,7 @@ export default function ShowProblem(props) {
 
     if (props.problem.display_type === 'text') {
         problemSection = (
-            <div dangerouslySetInnerHTML={{ __html: htmlContent }} />
+            <div dangerouslySetInnerHTML={{ __html: props.problem.problem_text }} />
         )
     }
     if (props.problem.display_type === 'latex') {
@@ -128,6 +128,10 @@ export default function ShowProblem(props) {
             <OpenAnswerComponent answers={ props.answers } answerSelect={ openAnswerSelect } />
         )
     }
+console.log(props.answers)
+console.log(props.problem.problem_text)
+console.log(htmlContent)
+console.log(props.problem.display_type)
     return (
         <div className="py-2" >
             <div className="mx-auto max-w-7xl space-y-1 sm:px-6 lg:px-8">

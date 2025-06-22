@@ -4,7 +4,7 @@ import InputLabel from '@/Components/InputLabel';
 import InputError from '@/Components/InputError';
 
 export default function OpenAnswerComponent(props) {
-    const [answer, setAnswer] = useState(null)
+    const [answer, setAnswer] = useState('')
     const [hasAnswered, setHasAnswered] = useState(false)
 
     return (
