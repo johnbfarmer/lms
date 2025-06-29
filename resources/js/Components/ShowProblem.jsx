@@ -52,7 +52,8 @@ export default function ShowProblem(props) {
 
     const openAnswerSelect = (ans) => {
         let pts, msg
-        let houseAnswer = parseFloat(props.answers[0].answer);
+        console.log(props.answers)
+        let houseAnswer = parseFloat(props.answers[0].answer_text);
         let tolerance = parseFloat(props.answers[0].pct_tolerance);
         let ansMin = (1 - tolerance) * houseAnswer;
         let ansMax = (1 + tolerance) * houseAnswer;
