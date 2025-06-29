@@ -173,7 +173,7 @@ const Edit = ({ auth, origProblem, origAnswers, origHints, courses, origCourseId
 
     const togglePublish = () => {
         let p = { ...problem }
-        console.log(p.active)
+        // console.log(p.active)
         p.active = !p.active
         setProblem(p)
         data.problem = p
@@ -254,7 +254,10 @@ const Edit = ({ auth, origProblem, origAnswers, origHints, courses, origCourseId
                     <div className="flex items-center"> Answers: <FaPlus className="text-base ml-2 cursor-pointer" onClick={addAns} /></div>
                     {
                         answers.map((a, k) => {
-                            let ansTxt = a.answer_text
+                            let ansTxt = problem.problem_type_id < 3 ? a.answer_text : a.answer_text * 1.0
+                            // let isRight = prolem.problem_type_id < 3 ? a.answer_text : a.answer
+                            // let ansTxt =  a.answer_text 
+                            let isRight =  a.is_correct 
                             return (
                                 <div key={k} className="flex">
                                 <input
@@ -265,7 +268,7 @@ const Edit = ({ auth, origProblem, origAnswers, origHints, courses, origCourseId
                                     className="w-full"
                                 />
                                 <Checkbox
-                                    checked={ a.is_correct }
+                                    checked={ isRight }
                                     onChange={(e) => chgAnsCorrect(e, k)}
                                     className='border border-black border-1'
                                 />

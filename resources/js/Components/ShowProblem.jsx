@@ -54,8 +54,14 @@ export default function ShowProblem(props) {
         let pts, msg
         let houseAnswer = parseFloat(props.answers[0].answer);
         let tolerance = parseFloat(props.answers[0].pct_tolerance);
-        let ansMin = (1 -tolerance) * houseAnswer;
-        let ansMax = (1 +tolerance) * houseAnswer;
+        let ansMin = (1 - tolerance) * houseAnswer;
+        let ansMax = (1 + tolerance) * houseAnswer;
+        if (ansMax < ansMin) {
+            let tmp = ansMax
+            ansMax = ansMin
+            ansMin  = tmp
+        }
+        console.log(ans, houseAnswer, tolerance, ansMax, ansMin)
         if (ans >= ansMin && ans <= ansMax) {
             pts = 100
             msg = ('Correct!')
