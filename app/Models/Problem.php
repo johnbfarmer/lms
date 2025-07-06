@@ -133,7 +133,10 @@ class Problem extends Model
         INSERT INTO open_answers_numeric
         (problem_id, answer)
         VALUES 
-        (?, ?);';
+        (?, ?)
+        ON DUPLICATE KEY UPDATE
+        answer = VALUES(answer)
+        ;';
 
         DB::insert($sql, [$this->id, $ans]);
     }

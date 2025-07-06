@@ -37,11 +37,11 @@ class ProblemController extends Controller
         $problem->problem_text = $p['problem_text'];
         $problem->active = $p['active'];
         $problem->save();
-        $problem->deleteAnswers();
         $answers = $data['answers'];
         switch ($problem->problem_type_id) {
             case 1:
             case 2:
+                $problem->deleteAnswers();
                 foreach ($answers as $a) {
                     $answer = new AnswerSet();
                     $answer->problem_id = $problem->id;
