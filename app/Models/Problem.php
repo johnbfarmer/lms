@@ -26,7 +26,7 @@ class Problem extends Model
             WHERE problem_id = ? and active = 1';
         } else {
             $sql = '
-            SELECT id, answer as answer_text, 1 as is_correct, pct_tolerance, problem_id FROM open_answers_numeric
+            SELECT id, TRIM(TRAILING "0" FROM answer) AS answer_text, 1 as is_correct, pct_tolerance, problem_id FROM open_answers_numeric
             WHERE problem_id = ?';
         }
         $rec = DB::select($sql, [$this->id]);

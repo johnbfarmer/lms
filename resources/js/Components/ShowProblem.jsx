@@ -14,7 +14,7 @@ export default function ShowProblem(props) {
     const [hasAnswered, setHasAnswered] = useState(false)
     const [points, setPoints] = useState(null)
     const [feedbackMessage, setFeedbackMessage] = useState('right')
-
+console.log(props.answers)
     const multiAnswerSelect = (ans) => {
         let score = 0, total = props.answers.length
         props.answers.forEach(r => {
@@ -50,7 +50,7 @@ export default function ShowProblem(props) {
         props.handleAnswer(props.problem.id, pts, msg)
     }
 
-    const openAnswerSelect = (ans) => {
+    const openAnswerSubmit = (ans) => {
         let pts, msg
         console.log(props.answers)
         let houseAnswer = parseFloat(props.answers[0].answer_text);
@@ -132,13 +132,10 @@ export default function ShowProblem(props) {
     }
     if (props.problem.problem_type_id === 3 || props.problem.problem_type_id === 4) {
         answerComponent = (
-            <OpenAnswerComponent answers={ props.answers } answerSelect={ openAnswerSelect } />
+            <OpenAnswerComponent answers={ props.answers } answerSelect={ openAnswerSubmit } />
         )
     }
-console.log(props.answers)
-console.log(props.problem.problem_text)
-console.log(htmlContent)
-console.log(props.problem.display_type)
+
     return (
         <div className="py-2" >
             <div className="mx-auto max-w-7xl space-y-1 sm:px-6 lg:px-8">

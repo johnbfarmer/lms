@@ -79,10 +79,12 @@ const Edit = ({ auth, origProblem, origAnswers, origHints, courses, origCourseId
     const chgAnsTxt = (e, k) => {
         let txt = e.target.value
         let a = [...answers]
+    console.log(a)
         a[k].answer_text = txt
         setAnswers(a)
         data.answers = a
         setData(data)
+    console.log('2', a)
     }
 
     const chgAnsCorrect = (e, k) => {
@@ -246,9 +248,7 @@ const Edit = ({ auth, origProblem, origAnswers, origHints, courses, origCourseId
                     <div className="flex items-center"> Answers: <FaPlus className="text-base ml-2 cursor-pointer" onClick={addAns} /></div>
                     {
                         answers.map((a, k) => {
-                            let ansTxt = problem.problem_type_id < 3 ? a.answer_text : a.answer_text * 1.0
-                            // let isRight = prolem.problem_type_id < 3 ? a.answer_text : a.answer
-                            // let ansTxt =  a.answer_text 
+                            let ansTxt = a.answer_text
                             let isRight =  a.is_correct 
                             return (
                                 <div key={k} className="flex">
