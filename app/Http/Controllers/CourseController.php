@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Course;
 use App\Models\LessonSet;
 use App\Models\Enrollment;
+use App\Helpers\OmniHelper;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
 
@@ -80,8 +81,8 @@ class CourseController extends Controller
             $course = Course::find($c['id']);
         }
         $course->name = $c['name'];
-        $course->description = $c['description'];
-        $course->active = $c['active'];
+        $course->description = empty($c['description']) ? '' : $c['description'];
+        $course->active = !empty($c['active']) ? 1 : 0;
         $course->save();
         $chapters = $data['chapters'];
         $deletedChapters = $data['deletedChapters'];
@@ -103,6 +104,13 @@ class CourseController extends Controller
         foreach ($deletedChapters as $idx) {
             $chapter = LessonSet::find($idx);
             $chapter->delete();
+        }
+        // OmniHelper::log(__DIR__);
+        $dataDir = implode(DIRECTORY_SEPARATOR, [__DIR__, '..', '..', '..', 'storage', 'app', 'public', $course->id]);
+        // OmniHelper::log($dataDir);
+        if (!file_exists($dataDir)) {
+            mkdir($dataDir);
+            mkdir($dataDir . DIRECTORY_SEPARATOR . 'pdf');
         }
         return redirect()->route(
             'course.edit', ['id' => $course->id]
