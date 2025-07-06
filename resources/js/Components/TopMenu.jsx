@@ -1,4 +1,4 @@
-import { FaHome, FaGraduationCap, FaPlus, FaPencilAlt, FaBook, FaBookOpen } from 'react-icons/fa';
+import { FaHome, FaGraduationCap, FaPlus, FaPencilAlt, FaBook, FaBookOpen, FaRegCopy  } from 'react-icons/fa';
 import { BiMath } from 'react-icons/bi';
 import ProblemNav from '@/Components/ProblemNav';
 import LessonNav from '@/Components/LessonNav';
@@ -41,6 +41,13 @@ export default function TopMenu(props) {
         <div className="mx-1" title="go to problems">
             <a href={`/problem-set/${ props.lessonId }`}>
                 <BiMath />
+            </a>
+        </div>
+    )
+    let duplicateProblemLink = (
+        <div className="mx-1" title="duplicate problem">
+            <a href={`/problem/${ props.problemId }/duplicate`}>
+                <FaRegCopy />
             </a>
         </div>
     )
@@ -117,6 +124,7 @@ export default function TopMenu(props) {
             { props.show.indexOf('lesson') >= 0 && props.lessonId !== null && lessonLink }
             { props.show.indexOf('prob-set') >= 0 && props.lessonId !== null && problemsLink }
             { props.show.indexOf('prob-add') >= 0 && props.lessonId !== null && editMode && addProblemLink }
+            { props.show.indexOf('prob-dup') >= 0 && props.problemId !== null && editMode && duplicateProblemLink }
             { props.show.indexOf('prob-edit') >= 0 && props.problemId !== null && editMode && editProblemLink }
             { props.show.indexOf('prob-nav') >= 0 && props.neighboringProblems !== null  && problemNav }
             { props.show.indexOf('course-add') >= 0 && editMode && addCourseLink }

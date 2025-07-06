@@ -30,7 +30,8 @@ const Edit = ({ auth, origProblem, origAnswers, origHints, courses, origCourseId
         lessonId: lessonId
     })
 
-    const title = `${ problem.id }`
+    const title = 'id' in problem ?`${ problem.id }` : 'New Problem'
+
     const nextProblem = () => {
         setProblem(problem)
         setShowFeedback(false)
@@ -187,7 +188,7 @@ const Edit = ({ auth, origProblem, origAnswers, origHints, courses, origCourseId
     }
 
     let topMenu = (
-        <TopMenu auth={auth} title={ title } lessonId={lessonId} show={['home', 'prob-set', 'prob-add']} />
+        <TopMenu auth={auth} title={ title } lessonId={lessonId} problemId={problem.id} show={['home', 'prob-set', 'prob-add', 'prob-dup']} />
     )
 
     let problemDisplayTypeSelector = ['latex', 'text', 'hybrid'].map(t => {
@@ -239,15 +240,6 @@ const Edit = ({ auth, origProblem, origAnswers, origHints, courses, origCourseId
                     </div>
                 </div>
             </div>
-            <CourseSelect
-                courses={courses}
-                selected={courseId}
-                onSelectCourse={selectCourse}
-                onSelectChapter={selectChapter}
-                onSelectLesson={selectLesson}
-                chapterId={chapterId}
-                lessonId={lessonId}
-            />
             <div className="py-2">
                 <div className="mx-auto max-w-7xl space-y-6 sm:px-6 lg:px-8">
                     <div className="text-center bg-white p-1 shadow text-2xl sm:rounded-lg sm:p-8">
@@ -355,6 +347,15 @@ const Edit = ({ auth, origProblem, origAnswers, origHints, courses, origCourseId
                     />
                 )
             }
+            <CourseSelect
+                courses={courses}
+                selected={courseId}
+                onSelectCourse={selectCourse}
+                onSelectChapter={selectChapter}
+                onSelectLesson={selectLesson}
+                chapterId={chapterId}
+                lessonId={lessonId}
+            />
         </AuthenticatedLayout>
     )
 }

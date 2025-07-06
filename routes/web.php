@@ -45,6 +45,7 @@ Route::middleware('auth')->group(function () {
     Route::get('/lesson/{id}/edit', [LessonController::class, 'editLesson'])->name('lesson.edit');
     Route::get('/lesson/{id}/add-problem', [LessonController::class, 'addProblem'])->name('lesson.addProblem');
     Route::post('/problem/save', [ProblemController::class, 'saveProblem'])->name('problem.save');
+    Route::get('/problem/{id}/duplicate', [ProblemController::class, 'duplicateProblem'])->name('problem.duplicate');
     Route::post('/course/save', [CourseController::class, 'saveCourse'])->name('course.save');
     Route::get('/problems', [ProblemController::class, 'home'])->name('problem.home');
     Route::get('/course/{id}/chapters', [CourseController::class, 'chapters'])->name('course.chapters');

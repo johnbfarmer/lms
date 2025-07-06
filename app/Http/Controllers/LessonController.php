@@ -3,7 +3,9 @@
 namespace App\Http\Controllers;
 
 use App\Models\Lesson;
+use App\Models\LessonSet;
 use App\Models\Problem;
+use App\Models\Course;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 use Inertia\Inertia;
@@ -52,11 +54,13 @@ class LessonController extends Controller
         $p->problem_type_id = 1;
         $p->sequence_id = 10;
         $p->problem_text = '';            
-        $p->display_type = 'latex';            
-        $p->save();
-        return redirect()->route(
-            'problem.edit', ['id' => $p->id]
-        );
+        $p->display_type = 'latex';
+        $courses = Course::where(['active' => 1])->get(); 
+        $lesson = Lesson::find($id);
+        $chapterId = $lesson->lesson_set_id;
+        $chapter = LessonSet::find($chapterId);
+        $courseId = $chapter->course_id;
+        return Inertia::render('Problems/Edit', ['origProblem' => $p, 'origAnswers' => [], 'origHints' => [], 'courses' => $courses, 'origCourseId' => $courseId, 'origChapterId' => $chapterId, 'origLessonId' => $id]);
     }
 
     public function editLesson($id)

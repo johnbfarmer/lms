@@ -6,7 +6,6 @@ import InputError from '@/Components/InputError';
 export default function OpenAnswerComponent(props) {
     const [answer, setAnswer] = useState('')
     const [hasAnswered, setHasAnswered] = useState(false)
-
     return (
         <>
             <div className="mx-auto space-y-6 sm:px-6 lg:px-8">
@@ -31,7 +30,7 @@ export default function OpenAnswerComponent(props) {
             </div>
             {
                 !hasAnswered &&
-                <div className="mx-auto w-48 text-center my-6 space-y-6 sm:px-6 lg:px-8 cursor-pointer" onClick={ () => { props.answerSelect(answer); setHasAnswered(false)}}>
+                <div className="mx-auto w-48 text-center my-6 space-y-6 sm:px-6 lg:px-8 cursor-pointer" onClick={ () => { props.answerSelect(answer); setAnswer(''); setHasAnswered(false)}}>
                     <div className="bg-white p-6 shadow sm:rounded-lg sm:p-4">
                         Submit
                     </div>
