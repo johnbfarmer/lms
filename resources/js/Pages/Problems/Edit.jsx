@@ -9,6 +9,7 @@ import TopMenu from '@/Components/TopMenu';
 import CourseSelect from '@/Components/CourseSelect';
 import FeedbackComponent from '@/Components/FeedbackComponent';
 import HintComponent from '@/Components/HintComponent';
+import InputError from '@/Components/InputError';
 
 const Edit = ({ auth, origProblem, origAnswers, origHints, courses, origCourseId, origChapterId, origLessonId }) => {
     const [probTxt, setProbTxt] = useState(origProblem.problem_text)
@@ -23,7 +24,7 @@ const Edit = ({ auth, origProblem, origAnswers, origHints, courses, origCourseId
     const [points, setPoints] = useState(0)
     const [showHint, setShowHint] = useState(false)
     const [hintsToShow, setHintsToShow] = useState(1)
-    const { data, setData, post } = useForm({
+    const { data, setData, post, errors } = useForm({
         problem: problem,
         answers: answers,
         hints: hints || [],
@@ -208,6 +209,13 @@ const Edit = ({ auth, origProblem, origAnswers, origHints, courses, origCourseId
         )
     })
 
+console.log(errors)
+    let errMsg = ''
+    for (let i in errors) {
+        errMsg = errMsg + errors[i]
+console.log(errMsg)
+    }
+
     return (
         <AuthenticatedLayout auth={auth} user={auth.user} header={ false } topMenu={ topMenu }>
             <div className="py-2">
@@ -240,6 +248,7 @@ const Edit = ({ auth, origProblem, origAnswers, origHints, courses, origCourseId
                             className="w-full"
                         />
                     </div>
+                    <InputError message={ errMsg } className="mt-2" />
                 </div>
             </div>
             <div className="py-2">

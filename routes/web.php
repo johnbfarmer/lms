@@ -37,7 +37,8 @@ Route::middleware('auth')->group(function () {
     Route::get('/course/{id}', [LessonSetController::class, 'index'])->name('lessonset.index');
     Route::get('/chapter/{id}', [LessonSetController::class, 'showSet'])->name('lessonset.showset');
     Route::get('/lesson/{id}', [LessonController::class, 'show'])->name('lesson.show');
-    Route::get('/problem-set/{id}', [LessonController::class, 'showProblemSet'])->name('problemset.showset');
+    Route::get('/problem-set-alt/{id}', [LessonController::class, 'showProblemSet'])->name('problemset.showset');
+    Route::get('/problem-set/{id}', [LessonController::class, 'showAltProblemSet'])->name('problemset.altshowset');
     Route::get('/problem/{id}', [ProblemController::class, 'show'])->name('problem.show');
     Route::get('/problem/{id}/edit', [ProblemController::class, 'editProblem'])->name('problem.edit');
     Route::get('/chapter/{id}/edit', [LessonSetController::class, 'editChapter'])->name('chapter.edit');

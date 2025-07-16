@@ -11,10 +11,11 @@ use App\Models\AnswerSet;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
 use App\Helpers\OmniHelper;
+use App\Http\Requests\ProblemUpdateRequest;
 
 class ProblemController extends Controller
 {
-    public function saveProblem(Request $request)
+    public function saveProblem(ProblemUpdateRequest $request)
     {
         $data = $request->all();
         $p = $data['problem'];
@@ -29,6 +30,11 @@ class ProblemController extends Controller
         } else {
             $problem = new Problem();
         }
+        $request->validate([
+            'problem.problem_text' => 'required|string',
+        ],[
+            'problem.problem_text.required' => 'El texto del problema no puede estar vacío',
+        ]);
         $problem->name = '';
         $problem->lesson_id = $p['lesson_id'];
         $problem->problem_type_id = $p['problem_type_id'];
@@ -99,12 +105,13 @@ class ProblemController extends Controller
         // $answers = AnswerSet::where(['problem_id' => $id])->get()->toArray();
         $answers = $prob->getAnswers();
         shuffle($answers);
+        $hints = $prob->getHints();
         $nextProblemId = $prob->getNextProblemId();
         $lesson = Lesson::find($prob->lesson_id);
         $lessonIds = $lesson->getNeighboringLessonIds();
         $problemIds = $prob->getNeighboringProblemIds();
 
-        return Inertia::render('Problems/Show', ['prob' => $prob, 'answers' => $answers, 'lesson' => $lesson, 'problemIds' => $problemIds, 'lessonIds' => $lessonIds]);
+        return Inertia::render('Problems/Show', ['prob' => $prob, 'answers' => $answers, 'hints' => $hints, 'lesson' => $lesson, 'problemIds' => $problemIds, 'lessonIds' => $lessonIds]);
     }
 
     public function editProblem($id)

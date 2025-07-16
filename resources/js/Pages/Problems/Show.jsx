@@ -1,21 +1,26 @@
 import { useState, useEffect } from 'react';
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout';
-import { useForm, Link, Head } from '@inertiajs/react';
+import { Head } from '@inertiajs/react';
 import AnswersComponent from '@/Components/AnswersComponent';
 import HybridDisplay from '@/Components/HybridDisplay';
 import MultiAnswersComponent from '@/Components/MultiAnswersComponent';
 import FeedbackComponent from '@/Components/FeedbackComponent';
+import HintComponent from '@/Components/HintComponent';
+import ShowProblem from '@/Components/ShowProblem';
 import LessonNav from '@/Components/LessonNav';
 import ProblemNav from '@/Components/ProblemNav';
 import TopMenu from '@/Components/TopMenu';
 import 'katex/dist/katex.min.css';
 import Latex from 'react-latex-next';
 
-const Index = ({ auth, prob, answers, lesson, problemIds, lessonIds }) => {
+const Show = ({ auth, prob, answers, hints, lesson, problemIds, lessonIds }) => {
     const [htmlContent, setHtmlContent] = useState(prob.problem_text)
     const [hasAnswered, setHasAnswered] = useState(false)
     const [points, setPoints] = useState(null)
+    const [showFeedback, setShowFeedback] = useState(false)
     const [feedbackMessage, setFeedbackMessage] = useState('right')
+    const [showHint, setShowHint] = useState(false)
+    const [hintsToShow, setHintsToShow] = useState(1)
     // const { data, setData, post, processing, reset, errors } = useForm(prob)
 
     const title = `${ lesson.name }`
@@ -55,66 +60,79 @@ const Index = ({ auth, prob, answers, lesson, problemIds, lessonIds }) => {
         fetch(route('results.recordanswer', { id: prob.id, answers: [ans.id], score: pts} ))
     }
 
-    let problemSection, answerComponent, answersType = 'latex'
-
-    if (prob.display_type === 'text') {
-        problemSection = (
-            <div dangerouslySetInnerHTML={{ __html: htmlContent }} />
-        )
-    }
-    if (prob.display_type === 'latex') {
-        problemSection = (
-            <Latex>{ prob.problem_text }</Latex>
-        )
-    }
-    if (prob.display_type === 'pdf') {
-        problemSection = (
-            <iframe src={`/storage/${pageAssets.pdf}.pdf`} style={{width:"900px", height:"1200px"}} frameBorder="0" />
-        )
-    }
-    if (prob.display_type === 'hybrid') {
-        problemSection = (
-            <HybridDisplay content={ prob.problem_text } />
-        )
+    const handleAnswer = (id, points, msg) => {
+        setFeedbackMessage(msg)
+        setShowFeedback(true)
+        setPoints(points)
     }
 
-    if (prob.problem_type_id === 1) {
-        answerComponent = (
-            <AnswersComponent answers={ answers } answerSelect={ answerSelect } />
-        )
+    const toggleShowHint = () => {
+        setShowFeedback(false)
+        setShowHint(!showHint)
     }
-    if (prob.problem_type_id === 2) {
-        answerComponent = (
-            <MultiAnswersComponent answers={ answers } answerSelect={ multiAnswerSelect } />
-        )
+
+    const nextHint = () => {
+        setHintsToShow(hintsToShow + 1)
+    }
+
+    const nextProblem = () => {
+        console.log('tbi')
+    }
+
+    const prevProblem = () => {
+        console.log('tbi')
+    }
+
+    const closeFeedbackModal = () => {
+        setShowFeedback(false)
+    }
+
+    const closeHintModal = () => {
+        setShowHint(false)
     }
 
     let topMenu = (
-        <TopMenu auth={auth} title={ title } lessonId={ lesson.id }  neighboringProblems={ problemIds } show={['home', 'lesson', 'prob-set', 'prob-nav']} />
+        <TopMenu auth={auth} title={ title } lessonId={ lesson.id } problemId={ prob.id } neighboringProblems={ problemIds } show={['home', 'lesson', 'prob-set', 'prob-nav', 'prob-edit']} />
     )
 
     return (
         <AuthenticatedLayout auth={auth} user={auth.user} header={ false } topMenu={ topMenu }>
             <Head title={ title } />
-            <div className="py-2">
-                <div className="mx-auto space-y-6 sm:px-6 lg:px-8">
-                    <div className="text-center bg-white p-1 shadow text-2xl sm:rounded-lg sm:p-8">
-                        { problemSection }
-                    </div>
-                </div>
-            </div>
-            { answerComponent }
-            {
-                points !== null &&
-                    <FeedbackComponent feedback={ feedbackMessage } points={points} />
-            }
-            <div className="mx-auto space-y-6 sm:px-6 lg:px-8">
-                <div className="p-4 text-base sm:rounded-lg sm:p-1">
-                    <LessonNav neighbors={ lessonIds } lesson={ lesson } showLessonLink={ true } />
-                </div>
-            </div>
+
+            <ShowProblem
+                problem={prob}
+                answers={answers}
+                handleAnswer={handleAnswer}
+                showHint={showHint} 
+                hint={toggleShowHint}
+                hintsToShow={hintsToShow}
+                nextHint={nextHint}
+                totalHints={!hints ? 0 : hints.length}
+                next={nextProblem}
+                prev={prevProblem}
+                // restart={restartProblems}
+                hasNextProblem={true}
+                hasPrevProblem={true}
+            />
+            <FeedbackComponent
+                show={showFeedback}
+                feedback={feedbackMessage}
+                points={points}
+                next={nextProblem}
+                hint={toggleShowHint}
+                hasHints={hints != null && hints.length > 0}
+                onClose={closeFeedbackModal}
+            />
+            <HintComponent
+                show={showHint}
+                hints={hints}
+                next={nextProblem}
+                onClose={closeHintModal}
+                hintsToShow={hintsToShow}
+                nextHint={nextHint}
+            />
         </AuthenticatedLayout>
     )
 }
 
-export default Index;
+export default Show;

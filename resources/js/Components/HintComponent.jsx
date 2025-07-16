@@ -16,9 +16,9 @@ export default function HintComponent(props) {
     })
     let xxx = jsxParts.map((p,k) => {
         return (
-            <Fragment key={ k }>
+            <div key={ k } className="my-8">
                 { p }
-            </Fragment>
+            </div>
         )
     })
     if (props.hintsToShow < hints.length) {
@@ -36,6 +36,7 @@ export default function HintComponent(props) {
                     <div className="flex flex-col">
                         {nextHintBtn}
                         <div className="cursor-pointer bg-white p-2 m-2 rounded-lg" onClick={props.next}>next problem</div>
+                        <div className="cursor-pointer bg-white p-2 m-2 rounded-lg" onClick={props.onClose}>close</div>
                     </div>
                 </div>
             </Modal>
