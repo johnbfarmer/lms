@@ -82,22 +82,22 @@ console.log(props.answers)
     let colr = disabled ? 'text-slate-400' : ''
     let pointer = disabled ? '' : 'cursor-pointer'
     let clik = disabled ? () => {} : props.hint
-    let hintLink = <PiSteps className={`${pointer} ${colr}`} onClick={clik} title="show the steps" />
+    let hintLink = <PiSteps className={`${pointer} ${colr}`} onClick={clik} title="enséñame los pasos" />
 
     colr = props.hasNextProblem ? '' : 'text-slate-400'
     pointer = props.hasNextProblem ? 'cursor-pointer' : ''
     clik = props.hasNextProblem ? props.next : () => {}
-    let nextLink = props.hints === null ? '' : <IoCaretForward className={`${pointer} ${colr}`} onClick={clik} title="next problem" />
+    let nextLink = props.hints === null ? '' : <IoCaretForward className={`${pointer} ${colr}`} onClick={clik} title="próximo problema" />
 
     colr = props.hasPrevProblem ? '' : 'text-slate-400'
     pointer = props.hasPrevProblem ? 'cursor-pointer' : ''
     clik = props.hasPrevProblem ? props.prev : () => {}
-    let prevLink = props.hints === null ? '' : <IoCaretBack className={`${pointer} ${colr}`} onClick={clik} title="previous problem" />
+    let prevLink = props.hints === null ? '' : <IoCaretBack className={`${pointer} ${colr}`} onClick={clik} title="problema anterior" />
 
     colr = props.problem != null ? '' : 'text-slate-400'
     pointer = props.problem != null ? 'cursor-pointer' : ''
     clik = props.problem != null ? props.restart : () => {}
-    let restartLink = props.hints === null ? '' : <IoPlaySkipBack className={`${pointer} ${colr} text-sm37`} onClick={clik} title="restart" />
+    let restartLink = props.hints === null ? '' : <IoPlaySkipBack className={`${pointer} ${colr} text-sm37`} onClick={clik} title="reiniciar" />
 
     if (props.problem.display_type === 'text') {
         problemSection = (

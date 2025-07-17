@@ -22,7 +22,7 @@ export default function MultiAnswersComponent(props) {
             <div className="mx-auto space-y-6 sm:px-6 lg:px-8">
                 <div className="text-center bg-white p-4 shadow text-2xl sm:rounded-lg sm:p-8">
                     <div className="mx-auto max-w-7xl space-y-6 sm:px-6 lg:px-8 text-center pt-2 text-base">
-                        Select all correct answers then click Submit:
+                        Escoge todas las respuestas correctas y luego haz clic en Enviar:
                     </div>
                     <div className="flex justify-center">
                     { props.answers.map((r, k) => {
@@ -38,7 +38,7 @@ export default function MultiAnswersComponent(props) {
                 !hasAnswered &&
                 <div className="mx-auto w-48 text-center my-6 space-y-6 sm:px-6 lg:px-8 cursor-pointer" onClick={ () => { props.answerSelect(selectedAnswers); setHasAnswered(false)}}>
                     <div className="bg-white p-6 shadow sm:rounded-lg sm:p-4">
-                        Submit
+                        Enviar
                     </div>
                 </div>
             }

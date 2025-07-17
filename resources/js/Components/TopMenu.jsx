@@ -8,7 +8,7 @@ export default function TopMenu(props) {
     let editMode = props.auth.edit_mode
 
     let courseListLink = (
-        <div className="mx-1" title="all courses">
+        <div className="mx-1" title="lista de cursos">
             <a href="/courses/all">
                 <FaHome />
             </a>
@@ -16,7 +16,7 @@ export default function TopMenu(props) {
     )
 
     let courseLink = (
-        <div className="mx-1" title="back to course">
+        <div className="mx-1" title="regresa al curso">
             <a href={`/course/${ props.courseId }`}>
                 <FaBook />
             </a>
@@ -24,70 +24,70 @@ export default function TopMenu(props) {
     )
 
     let chapterLink = (
-        <div className="mx-1" title="back to chapter">
+        <div className="mx-1" title="regresa al capítulo">
             <a href={`/chapter/${ props.chapterId }`}>
                 <FaBookOpen />
             </a>
         </div>
     )
     let lessonLink = (
-        <div className="mx-1" title="back to lesson">
+        <div className="mx-1" title="regresa a la lección">
             <a href={`/lesson/${ props.lessonId }`}>
                 <FaGraduationCap />
             </a>
         </div>
     )
     let problemsLink = (
-        <div className="mx-1" title="go to problems">
+        <div className="mx-1" title="haz los problemas">
             <a href={`/problem-set/${ props.lessonId }`}>
                 <BiMath />
             </a>
         </div>
     )
     let duplicateProblemLink = (
-        <div className="mx-1" title="duplicate problem">
+        <div className="mx-1" title="duplica problema">
             <a href={`/problem/${ props.problemId }/duplicate`}>
                 <FaRegCopy />
             </a>
         </div>
     )
     let addProblemLink = (
-        <div className="mx-1" title="add a problem">
+        <div className="mx-1" title="agrega un problema">
             <a href={`/lesson/${ props.lessonId }/add-problem`}>
                 <FaPlus />
             </a>
         </div>
     )
     let editProblemLink = (
-        <div className="mx-1" title="edit this problem">
+        <div className="mx-1" title="edita este problema">
             <a href={`/problem/${ props.problemId }/edit`}>
                 <FaPencilAlt />
             </a>
         </div>
     )
     let addCourseLink = (
-        <div className="mx-1" title="add a course">
+        <div className="mx-1" title="agrega un curso">
             <a href={`/course/0/edit`}>
                 <FaPlus />
             </a>
         </div>
     )
     let editChapterLink = (
-        <div className="mx-1" title="edit this chapter">
+        <div className="mx-1" title="edita este capítulo">
             <a href={`/chapter/${ props.chapterId }/edit`}>
                 <FaPencilAlt />
             </a>
         </div>
     )
     let editCourseLink = (
-        <div className="mx-1" title="edit this course">
+        <div className="mx-1" title="edita este curso">
             <a href={`/course/${ props.courseId }/edit`}>
                 <FaPencilAlt />
             </a>
         </div>
     )
     let editLessonLink = (
-        <div className="mx-1" title="edit this lesson">
+        <div className="mx-1" title="edita esta lección">
             <a href={`/lesson/${ props.lessonId }/edit`}>
                 <FaPencilAlt />
             </a>

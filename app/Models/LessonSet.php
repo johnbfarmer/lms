@@ -24,7 +24,7 @@ class LessonSet extends Model
         $rec = DB::select($sql, [$this->sequence_id, $this->sequence_id, $this->id, $this->course_id]);
         $previousChapterId = empty($rec) ? null : $rec[0]->id;
 
-        return ['previous' => $previousChapterId, 'next' => $nextChapterId];
+        return ['anterior' => $previousChapterId, 'siguiente' => $nextChapterId];
     }
 
     public function getMyLessons()

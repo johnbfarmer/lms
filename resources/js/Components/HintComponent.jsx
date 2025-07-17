@@ -35,8 +35,8 @@ export default function HintComponent(props) {
                     </div>
                     <div className="flex flex-col">
                         {nextHintBtn}
-                        <div className="cursor-pointer bg-white p-2 m-2 rounded-lg" onClick={props.next}>next problem</div>
-                        <div className="cursor-pointer bg-white p-2 m-2 rounded-lg" onClick={props.onClose}>close</div>
+                        <div className="cursor-pointer bg-white p-2 m-2 rounded-lg" onClick={props.next}>siguiente problema</div>
+                        <div className="cursor-pointer bg-white p-2 m-2 rounded-lg" onClick={props.onClose}>cerrar</div>
                     </div>
                 </div>
             </Modal>

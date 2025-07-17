@@ -7,7 +7,7 @@ export default function LessonNav(props) {
         if (nbrs[i] !== null) {
             parts.push(
                 <div className="mx-auto max-w-7xl space-y-6 sm:px-6 lg:px-8">
-                    <a href={`/lesson/${ nbrs[i] }`}>{ i } lesson</a>
+                    <a href={`/lesson/${ nbrs[i] }`}>{ i } lección</a>
                 </div>
             )
         } else {

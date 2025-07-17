@@ -7,13 +7,13 @@ export default function ChapterNav(props) {
         if (nbrs[i] !== null) {
             parts.push(
                 <div className="mx-auto max-w-7xl space-y-6 sm:px-6 lg:px-8">
-                    <a href={`/chapter/${ nbrs[i] }`}>{ i } chapter</a>
+                    <a href={`/chapter/${ nbrs[i] }`}>{ i } capítulo</a>
                 </div>
             )
         } else {
             parts.push(
                 <div className="mx-auto max-w-7xl space-y-6 text-slate-200 sm:px-6 lg:px-8">
-                    { i } chapter
+                    { i } capítulo
                 </div>
             )
         }

@@ -101,7 +101,7 @@ class Problem extends Model
         $rec = DB::select($sql, [$this->sequence_id, $this->sequence_id, $this->id, $this->lesson_id]);
         $previousProblemId = empty($rec) ? null : $rec[0]->id;
 
-        return ['previous' => $previousProblemId, 'next' => $nextProblemId];
+        return ['anterior' => $previousProblemId, 'siguiente' => $nextProblemId];
     }
 
     public function ensureUserInCourse($userId)

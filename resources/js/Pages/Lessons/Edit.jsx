@@ -51,7 +51,7 @@ const Edit = ({ auth, origLesson }) => {
                                         className='border border-black border-1'
                                     />
                                     <div className="text-sm ml-1 mr-2">
-                                        Publish
+                                        Publicar
                                     </div>
                                     <FaTrash className="text-base ml-2 cursor-pointer" onClick={deleteChapter} />
                                 </div>
