@@ -6,6 +6,7 @@ import ChapterNav from '@/Components/ChapterNav';
 
 export default function TopMenu(props) {
     let editMode = props.auth.edit_mode
+    console.log(props.auth)
 
     let courseListLink = (
         <div className="mx-1" title="lista de cursos">

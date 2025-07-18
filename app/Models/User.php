@@ -8,6 +8,7 @@ use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Support\Facades\DB;
 use App\Helpers\OmniHelper;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 
 class User extends Authenticatable
 {
@@ -34,6 +35,34 @@ class User extends Authenticatable
         'password',
         'remember_token',
     ];
+
+    public function roles(): BelongsToMany
+    {
+        return $this->belongsToMany(Role::class);
+    }
+
+    public function isAdmin()
+    {
+        foreach ($this->roles() ->get() as $role) {
+            if ($role->role === 'admin') {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    public function isTeacher()
+    {
+        foreach ($this->roles() ->get() as $role) {
+            OmniHelper::log($role);
+            if ($role->role === 'teacher') {
+                return true;
+            }
+        }
+
+        return false;
+    }
 
     /**
      * Get the attributes that should be cast.

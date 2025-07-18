@@ -61,7 +61,7 @@ class LessonController extends Controller
             $hints[$p->id] = $p->getHints();
         }
 
-        return Inertia::render('ProblemSets/ShowAlt', ['problems' => $problems->shuffle(), 'lesson' => $lesson, 'answers' => $answers, 'hints' => $hints]);
+        return Inertia::render('ProblemSets/ShowAltStu', ['problems' => $problems->shuffle(), 'lesson' => $lesson, 'answers' => $answers, 'hints' => $hints]);
     }
 
     public function addProblem($id)

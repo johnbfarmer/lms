@@ -29,11 +29,17 @@ class HandleInertiaRequests extends Middleware
      */
     public function share(Request $request): array
     {
+        $user = $request->user();
+        $isAdmin = !empty($user) && $user->isAdmin();
+        $isTeacher = !empty($user) && $user->isTeacher();
+        $editMode = ($isAdmin || $isTeacher) && config('app.edit_mode');
         return [
             ...parent::share($request),
             'auth' => [
-                'user' => $request->user(),
-                'edit_mode' => config('app.edit_mode'),
+                'user' => $user,
+                'edit_mode' => $editMode,
+                'is_admin' => $isAdmin,
+                'is_teacher' => $isTeacher,
             ],
         ];
     }
