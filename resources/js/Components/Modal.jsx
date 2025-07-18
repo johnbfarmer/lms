@@ -8,7 +8,7 @@ import {
 export default function Modal({
     children,
     show = false,
-    maxWidth = '3xl',
+    maxWidth = '5xl',
     closeable = true,
     onClose = () => {},
 }) {
