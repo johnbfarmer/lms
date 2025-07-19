@@ -30,6 +30,9 @@ Route::middleware('auth')->group(function () {
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
     Route::get('/courses/all', [CourseController::class, 'all'])->name('course.all');
     Route::get('/courses', [CourseController::class, 'courses'])->name('course.ajax');
+    Route::get('/course/{id}/groups', [CourseController::class, 'groups'])->name('course.groups');
+    Route::get('/course/{id}/group/add', [CourseController::class, 'addGroup'])->name('course.addGroup');
+    Route::get('/group/{groupId}', [CourseController::class, 'groupShow'])->name('course.groupShow');
     Route::get('/enroll/{id}', [CourseController::class, 'enroll'])->name('course.enroll');
     Route::get('/enroll-action/{id}', [CourseController::class, 'enrollAction'])->name('course.enrollaction');
     Route::get('/upgrade/{id}', [CourseController::class, 'upgrade'])->name('course.upgrade');
@@ -48,6 +51,7 @@ Route::middleware('auth')->group(function () {
     Route::post('/problem/save', [ProblemController::class, 'saveProblem'])->name('problem.save');
     Route::get('/problem/{id}/duplicate', [ProblemController::class, 'duplicateProblem'])->name('problem.duplicate');
     Route::post('/course/save', [CourseController::class, 'saveCourse'])->name('course.save');
+    Route::post('/group/save', [CourseController::class, 'saveGroup'])->name('group.save');
     Route::get('/problems', [ProblemController::class, 'home'])->name('problem.home');
     Route::get('/course/{id}/chapters', [CourseController::class, 'chapters'])->name('course.chapters');
     Route::get('/chapter/{id}/lessons', [LessonSetController::class, 'lessons'])->name('chapter.lessons');

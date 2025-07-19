@@ -28,7 +28,7 @@ export default function HintComponent(props) {
     }
     return (
         <div className="mx-auto my-6 max-w-5xl space-y-6 sm:px-6 lg:px-8">
-            <Modal show={props.show} onClose={props.onClose} >
+            <Modal show={props.show} onClose={props.onClose} maxWidth="5xl">
                 <div className={`bg-white p-1 shadow sm:rounded-lg flex flex-row max-w-5xl`}>
                     <div className="flex flex-col min-w-[20%]">
                         {nextHintBtn}

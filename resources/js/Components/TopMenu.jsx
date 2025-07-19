@@ -1,4 +1,6 @@
-import { FaHome, FaGraduationCap, FaPlus, FaPencilAlt, FaBook, FaBookOpen, FaRegCopy  } from 'react-icons/fa';
+import { FaHome, FaGraduationCap, FaPlus, FaPencilAlt, FaBook, FaBookOpen, FaRegCopy } from 'react-icons/fa';
+import { FaUserGroup } from "react-icons/fa6";
+
 import { BiMath } from 'react-icons/bi';
 import ProblemNav from '@/Components/ProblemNav';
 import LessonNav from '@/Components/LessonNav';
@@ -115,6 +117,20 @@ export default function TopMenu(props) {
             </div>
         </div>
     )
+    let groupMg = (
+        <div className="mx-1" title="Grupos">
+            <a href={`/course/${ props.courseId }/groups`}>
+                <FaUserGroup />
+            </a>
+        </div>
+    )
+    let groupAdd = (
+        <div className="mx-1" title="Agregar Grupos">
+            <a href={`/course/${ props.courseId }/group/add`}>
+                <FaPlus />
+            </a>
+        </div>
+    )
 
     return (
         <div className="flex justify-start w-full">
@@ -134,6 +150,8 @@ export default function TopMenu(props) {
             { props.show.indexOf('lesson-edit') >= 0 && props.lessonid !== null && editMode && editLessonLink }
             { props.show.indexOf('lesson-nav') >= 0 && props.neighboringLessons !== null  && lessonNav }
             { props.show.indexOf('chapter-nav') >= 0 && props.neighboringChapters !== null  && chapterNav }
+            { props.show.indexOf('group-mg') >= 0 && props.courseId !== null && editMode && groupMg }
+            { props.show.indexOf('add-group') >= 0 && props.courseId !== null && editMode && groupAdd }
         </div>
     );
 }

@@ -8,7 +8,7 @@ const Index = ({ auth, lessonSets, course, progress }) => {
     const title = `Capítulos ${course.name}`
 
     let topMenu = (
-        <TopMenu auth={auth} title={ title } courseId={course.id} show={['home', 'course-edit']} />
+        <TopMenu auth={auth} title={ title } courseId={course.id} show={['home', 'course-edit', 'group-mg']} />
     )
 
     return (

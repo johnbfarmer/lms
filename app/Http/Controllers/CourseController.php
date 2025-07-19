@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Course;
+use App\Models\StudentGroup;
 use App\Models\LessonSet;
 use App\Models\Enrollment;
 use App\Helpers\OmniHelper;
@@ -55,6 +56,53 @@ class CourseController extends Controller
         $user = $request->user();
         $course = Course::find($id);
         return $course->getMyChapters();
+    }
+
+    public function groups(Request $request, $id)
+    {
+        $user = $request->user();
+        $course = Course::find($id);
+        $groups = $course->getGroups($user->isAdmin() ? null : $user->id);
+        OmniHelper::log($groups);
+        return Inertia::render('Groups/Index', ['course' => $course, 'groups' => $groups]);
+    }
+
+    public function addGroup(Request $request, $id)
+    {
+        $user = $request->user();
+        $course = Course::find($id);
+        return Inertia::render('Groups/Edit', ['course' => $course, 'group' => null]);
+    }
+
+    public function groupShow(Request $request, $id)
+    {
+        $user = $request->user();
+        $group = StudentGroup::find($id);
+        $course = Course::find($group->course_id);
+        return Inertia::render('Groups/Edit', ['course' => $course, 'group' => $group]);
+    }
+
+    public function saveGroup(Request $request)
+    {
+        $user = $request->user();
+        $request->validate([
+            'id' => 'nullable|integer',
+            'name' => 'required|string|max:255',
+            'course_id' => 'required|integer',
+        ]);
+        if ($request->id) {
+            $group = StudentGroup::find($request->id);
+            $group->name = $request->name;
+            $group->save();
+        } else {
+            $group = new StudentGroup();
+            $group->name = $request->name;
+            $group->course_id = $request->course_id;
+            $group->owner_id = $user->id;
+            $group->save();
+        }
+
+        return to_route('course.groups', [$group->id]);
     }
 
     public function editCourse(Request $request, $id)
