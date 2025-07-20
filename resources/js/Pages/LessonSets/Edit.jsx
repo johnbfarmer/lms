@@ -15,14 +15,60 @@ const Edit = ({ auth, origLessons, origChapter }) => {
         deletedLessons: [],
     })
 
-    const title = `Capítulo ${chapter.name}`
+    const title = `Edita Capítulo ${chapter.name}`
 
-    const changeChapterName = () => {}
-    const togglePublishChapter = () => {}
+    const changeChapterName = () => {
+        let nm = e.target.value
+        let c = { ...chapter }
+        c.name = nm
+        setChapter(c)
+        data.chapter = c
+        setData(data)
+    }
+    const togglePublishChapter = () => {
+        let c = { ...chapter }
+        c.active = !c.active
+        setChapter(c)
+        data.chapter = c
+        setData(data)
+    }
     const deleteChapter = () => {}
-    const changeLessonName = () => {}
-    const deleteLesson = () => {}
-    const addLesson = () => {}
+    const changeLessonName = (e, k) => {
+        let nm = e.target.value
+        let c = [...lessons]
+        c[k].name = nm
+        c[k].changed = true
+        setLessons(c)
+        data.lessons = c
+        setData(data)
+    }
+    const togglePublishLesson = (e, k) => {
+        let c = [ ...lessons ]
+        c[k].active = !c[k].active
+        c[k].changed = true
+        setLessons(c)
+        data.lessons = c
+        setData(data)
+    }
+    const deleteLesson = (e, k) => {
+        let c = [...lessons]
+        let r = c.splice(k, 1)
+        setLessons(c)
+        data.lessons = c
+        data.deletedLessons.push(r[0].id)
+        setData(data)
+    }
+    const addLesson = () => {
+        let c = [...lessons]
+        c.push({lesson_set_id: chapter.id, sequence_id: (c.length + 1) * 10, name:'', active: 0})
+        setLessons(c)
+        data.lessons = c
+        setData(data)
+    }
+
+    const save = () => {
+        post(route('chapter.save'), { data: data })
+    }
 
     let topMenu = (
         <TopMenu auth={auth} title={ title } chapterId={chapter.id} show={['home', 'course', 'chapter']} />
@@ -77,20 +123,34 @@ const Edit = ({ auth, origLessons, origChapter }) => {
                                     />
                                     <Checkbox
                                         checked={ c.active }
-                                        onChange={(e) => togglePublishChapter(e, k)}
+                                        onChange={(e) => togglePublishLesson(e, k)}
                                         className='border border-black border-1'
                                     />
                                     <div className="text-sm ml-1 mr-2">
                                         P
                                     </div>
-                                    <a href={`/lesson/${c.id}/edit`}>
-                                        <FaPencilAlt className="text-base ml-2" />
-                                    </a>
+                                    {
+                                        c.id &&
+                                        <a href={`/lesson/${c.id}/edit`}>
+                                            <FaPencilAlt className="text-base ml-2" />
+                                        </a>
+                                    }
+                                    {
+                                        c.id == null &&
+                                        <FaPencilAlt className="text-base ml-2 text-slate-400" />
+                                    }
                                     <FaTrash className="text-base ml-2 cursor-pointer" onClick={(e) => deleteLesson(e, k)} />
                                     </div>
                                 )
                             })
                         }
+                    </div>
+                </div>
+            </div>
+            <div className="py-2">
+                <div className="mx-auto max-w-7xl space-y-6 sm:px-6 lg:px-8">
+                    <div className="text-center bg-white p-1 shadow text-2xl sm:rounded-lg sm:p-8 cursor-pointer" onClick={save}>
+                        SAVE
                     </div>
                 </div>
             </div>

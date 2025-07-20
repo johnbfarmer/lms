@@ -21,7 +21,7 @@ export default function AnswersComponent(props) {
                     <div className="mx-auto max-w-7xl space-y-6 sm:px-6 lg:px-8 text-center pt-2 text-base">
                         Escoge la respuesta correcta:
                     </div>
-                    <div className="flex justify-center">
+                    <div className="flex justify-center flex-wrap">
                     { props.answers.map((r, k) => {
                         return (
                             <AnswerChoice key={ k } answer={ r } select={ selectAnswer } selected={ r.id === selectedAnswer} selectable= { !hasAnswered } />

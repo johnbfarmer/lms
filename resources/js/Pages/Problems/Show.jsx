@@ -21,10 +21,9 @@ const Show = ({ auth, prob, answers, hints, lesson, problemIds, lessonIds }) => 
     const [feedbackMessage, setFeedbackMessage] = useState('right')
     const [showHint, setShowHint] = useState(false)
     const [hintsToShow, setHintsToShow] = useState(1)
-    // const { data, setData, post, processing, reset, errors } = useForm(prob)
 
     const title = `${ lesson.name }`
-
+console.log(problemIds)
     const multiAnswerSelect = (ans) => {
         let score = 0, total = answers.length
         answers.forEach(r => {
@@ -76,11 +75,11 @@ const Show = ({ auth, prob, answers, hints, lesson, problemIds, lessonIds }) => 
     }
 
     const nextProblem = () => {
-        console.log('tbi')
+        window.location.href = '/problem/' + problemIds.siguiente
     }
 
     const prevProblem = () => {
-        console.log('tbi')
+        window.location.href = '/problem/' + problemIds.anterior
     }
 
     const closeFeedbackModal = () => {
@@ -98,7 +97,6 @@ const Show = ({ auth, prob, answers, hints, lesson, problemIds, lessonIds }) => 
     return (
         <AuthenticatedLayout auth={auth} user={auth.user} header={ false } topMenu={ topMenu }>
             <Head title={ title } />
-
             <ShowProblem
                 problem={prob}
                 answers={answers}
@@ -111,8 +109,8 @@ const Show = ({ auth, prob, answers, hints, lesson, problemIds, lessonIds }) => 
                 next={nextProblem}
                 prev={prevProblem}
                 // restart={restartProblems}
-                hasNextProblem={true}
-                hasPrevProblem={true}
+                hasNextProblem={problemIds.siguiente !== null}
+                hasPrevProblem={problemIds.anterior !== null}
             />
             <FeedbackComponent
                 show={showFeedback}

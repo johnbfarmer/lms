@@ -96,6 +96,13 @@ export default function TopMenu(props) {
             </a>
         </div>
     )
+    let editProblemSetLink = (
+        <div className="mx-1" title="edita los problemas de esta lección">
+            <a href={`/problem-set/${ props.lessonId }/edit`}>
+                <FaPencilAlt />
+            </a>
+        </div>
+    )
     let problemNav = (
         <div className="mx-auto space-y-6 sm:px-6 lg:px-8">
             <div className="p-4 text-base sm:rounded-lg sm:p-1">
@@ -140,6 +147,7 @@ export default function TopMenu(props) {
             { props.show.indexOf('chapter') >= 0 && props.chapterId !== null && chapterLink }
             { props.show.indexOf('lesson') >= 0 && props.lessonId !== null && lessonLink }
             { props.show.indexOf('prob-set') >= 0 && props.lessonId !== null && problemsLink }
+            { props.show.indexOf('prob-set-edit') >= 0 && props.lessonId !== null && editProblemSetLink }
             { props.show.indexOf('prob-add') >= 0 && props.lessonId !== null && editMode && addProblemLink }
             { props.show.indexOf('prob-dup') >= 0 && props.problemId !== null && editMode && duplicateProblemLink }
             { props.show.indexOf('prob-edit') >= 0 && props.problemId !== null && editMode && editProblemLink }

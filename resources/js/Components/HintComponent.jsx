@@ -24,6 +24,7 @@ export default function HintComponent(props) {
     })
 
     const scrollToBottom = () => {
+        console.log('scrollin')
         bottomRef.current?.scrollIntoView({ behavior: 'smooth' });
     };
 
@@ -46,7 +47,6 @@ export default function HintComponent(props) {
                 <div className={`bg-white p-1 shadow sm:rounded-lg flex flex-row max-w-5xl h-[400px] overflow-hidden`}>
                     <div className="flex flex-col min-w-[20%] h-full">
                         <div className={`${nextHntCls} cursor-pointer bg-white p-2 m-2 rounded-lg`} onClick={ onClk }>siguiente paso</div>
-                        <div className="cursor-pointer bg-white p-2 m-2 rounded-lg" onClick={props.next}>siguiente problema</div>
                         <div className="cursor-pointer bg-white p-2 m-2 rounded-lg" onClick={props.onClose}>cerrar</div>
                     </div>
                     <div className="w-full">

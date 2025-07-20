@@ -25,7 +25,7 @@ const Index = ({ auth, problems, lesson, answers, hints }) => {
     const title = `${ lesson.name } Ejercicios`
 
     let topMenu = (
-        <TopMenu auth={auth} title={ title } lessonId={ lesson.id } problemId={ currentProblem != null ? currentProblem.id : null } show={['home', 'lesson', 'prob-edit', 'prob-add']} />
+        <TopMenu auth={auth} title={ title } lessonId={ lesson.id } problemId={ currentProblem != null ? currentProblem.id : null } show={['home', 'lesson', 'prob-edit', 'prob-add', 'prob-set-edit']} />
     )
 
     const deleteProblem = () => {

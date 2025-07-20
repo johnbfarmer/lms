@@ -40,7 +40,7 @@ Route::middleware('auth')->group(function () {
     Route::get('/course/{id}', [LessonSetController::class, 'index'])->name('lessonset.index');
     Route::get('/chapter/{id}', [LessonSetController::class, 'showSet'])->name('lessonset.showset');
     Route::get('/lesson/{id}', [LessonController::class, 'show'])->name('lesson.show');
-    Route::get('/problem-set-alt/{id}', [LessonController::class, 'showProblemSet'])->name('problemset.showset');
+    Route::get('/problem-set/{id}/edit', [LessonController::class, 'showProblemSet'])->name('problemset.showset');
     Route::get('/problem-set/{id}', [LessonController::class, 'showAltProblemSet'])->name('problemset.altshowset');
     Route::get('/problem/{id}', [ProblemController::class, 'show'])->name('problem.show');
     Route::get('/problem/{id}/edit', [ProblemController::class, 'editProblem'])->name('problem.edit');
@@ -51,6 +51,8 @@ Route::middleware('auth')->group(function () {
     Route::post('/problem/save', [ProblemController::class, 'saveProblem'])->name('problem.save');
     Route::get('/problem/{id}/duplicate', [ProblemController::class, 'duplicateProblem'])->name('problem.duplicate');
     Route::post('/course/save', [CourseController::class, 'saveCourse'])->name('course.save');
+    Route::post('/chapter/save', [LessonSetController::class, 'saveChapter'])->name('chapter.save');
+    Route::post('/lesson/save', [LessonController::class, 'saveLesson'])->name('lesson.save');
     Route::post('/group/save', [CourseController::class, 'saveGroup'])->name('group.save');
     Route::get('/problems', [ProblemController::class, 'home'])->name('problem.home');
     Route::get('/course/{id}/chapters', [CourseController::class, 'chapters'])->name('course.chapters');

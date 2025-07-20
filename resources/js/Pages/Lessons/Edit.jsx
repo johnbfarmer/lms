@@ -14,14 +14,44 @@ const Edit = ({ auth, origLesson }) => {
 
     const title = `Capítulo ${lesson.name}`
 
-    const changeChapterName = () => {}
-    const togglePublishChapter = () => {}
-    const deleteChapter = () => {}
-    const changeLessonName = () => {}
+    const changeLessonName = (e) => {
+        let nm = e.target.value
+        let c = { ...lesson }
+        c.name = nm
+        setLesson(c)
+        data.lesson = c
+        setData(data)
+    }
+    const togglePublishLesson = () => {
+        let c = { ...lesson }
+        c.active = !c.active
+        setLesson(c)
+        data.lesson = c
+        setData(data)
+    }
     const deleteLesson = () => {}
-    const addLesson = () => {}
-    const changeLessonText = () => {}
-    const changeLessonDisplayType = () => {}
+    const changeLessonText = (e) => {
+        let c = { ...lesson }
+        c.lesson_text = e.target.value
+        setLesson(c)
+        data.lesson = c
+        setData(data)
+    }
+    const changeLessonFile = (e) => {
+        let c = { ...lesson }
+        c.lesson_page = e.target.value
+        setLesson(c)
+        data.lesson = c
+        setData(data)
+    }
+    const changeLessonDisplayType = (t) => {
+        let val = t
+        let c = { ...lesson }
+        c.lesson_type = val
+        setLesson(c)
+        data.lesson = c
+        setData(data)
+    }
 
     let lessonDisplayTypeSelector = ['text', 'pdf', 'hybrid', 'latex'].map(t => {
         let sel = t === lesson.lesson_type ? 'font-bold' : 'text-slate-500'
@@ -31,6 +61,10 @@ const Edit = ({ auth, origLesson }) => {
     })
 
     console.log(lesson)
+
+    const save = () => {
+        post(route('lesson.save'), { data: data })
+    }
 
     let topMenu = (
         <TopMenu auth={auth} title={ title } lessonId={lesson.id} chapterId={lesson.chapter_id} show={['home', 'lesson', 'chapter']} />
@@ -47,19 +81,19 @@ const Edit = ({ auth, origLesson }) => {
                                 <div className="flex items-center mx-2">
                                     <Checkbox
                                         checked={ lesson.active }
-                                        onChange={ togglePublishChapter }
+                                        onChange={ togglePublishLesson }
                                         className='border border-black border-1'
                                     />
                                     <div className="text-sm ml-1 mr-2">
                                         Publicar
                                     </div>
-                                    <FaTrash className="text-base ml-2 cursor-pointer" onClick={deleteChapter} />
+                                    <FaTrash className="text-base ml-2 cursor-pointer" onClick={deleteLesson} />
                                 </div>
                             </div>
                         <div>
                             <input
                                 type="text"
-                                onChange={changeChapterName}
+                                onChange={changeLessonName}
                                 value={lesson.name}
                                 className="w-full"
                             />
@@ -77,13 +111,33 @@ const Edit = ({ auth, origLesson }) => {
                             </div>
                         </div>
                         <div>
-                            <textarea
-                                rows="15"
-                                onChange={ changeLessonText }
-                                className="w-full"
-                                value={lesson.lesson_text}
-                            />
+                            {
+                                lesson.lesson_type !== 'pdf' &&
+                                <textarea
+                                    rows="15"
+                                    onChange={ changeLessonText }
+                                    className="w-full"
+                                    value={lesson.lesson_text}
+                                />
+                            }
+                            {
+                                lesson.lesson_type === 'pdf' &&
+                                <input
+                                    type="file"
+                                    value={lesson.pdf}
+                                    className="w-full"
+                                    placeholder="pdf"
+                                    onChange={ changeLessonFile }
+                                />
+                            }
                         </div>
+                    </div>
+                </div>
+            </div>
+            <div className="py-2">
+                <div className="mx-auto max-w-7xl space-y-6 sm:px-6 lg:px-8">
+                    <div className="text-center bg-white p-1 shadow text-2xl sm:rounded-lg sm:p-8 cursor-pointer" onClick={save}>
+                        SAVE
                     </div>
                 </div>
             </div>

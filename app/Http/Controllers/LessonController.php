@@ -44,14 +44,13 @@ class LessonController extends Controller
             $hints[$p->id] = $p->getHints();
         }
 
-        return Inertia::render('ProblemSets/Show', ['problems' => $problems->shuffle(), 'lesson' => $lesson, 'answers' => $answers, 'hints' => $hints]);
+        return Inertia::render('ProblemSets/ShowAlt', ['problems' => $problems, 'lesson' => $lesson, 'answers' => $answers, 'hints' => $hints]);
     }
 
     public function showAltProblemSet($id)
     {
         $problems = Problem::where(['lesson_id' => $id])->get();
         $lesson = Lesson::find($id);
-        $problems->shuffle();
         $answers = [];
         foreach ($problems as $p) {
             $answers[$p->id] = $p->getAnswers();
@@ -61,7 +60,7 @@ class LessonController extends Controller
             $hints[$p->id] = $p->getHints();
         }
 
-        return Inertia::render('ProblemSets/ShowAltStu', ['problems' => $problems->shuffle(), 'lesson' => $lesson, 'answers' => $answers, 'hints' => $hints]);
+        return Inertia::render('ProblemSets/ShowAltStu', ['problems' => $problems, 'lesson' => $lesson, 'answers' => $answers, 'hints' => $hints]);
     }
 
     public function addProblem($id)
@@ -90,5 +89,33 @@ class LessonController extends Controller
         }
 
         return Inertia::render('Lessons/Edit', ['origLesson' => $lesson]);
+    }
+
+    public function saveLesson(Request $request)
+    {
+        $data = $request->all();
+        $c = $data['lesson'];
+        if (empty($c['id'])) {
+            $lesson = new lesson();
+        } else {
+            $lesson = Lesson::find($c['id']);
+        }
+        if (!empty($c['lesson_page'])) {
+            $f = $c['lesson_page'];
+        }
+        $lesson->name = $c['name'];
+        $lesson->lesson_set_id = $c['lesson_set_id'];
+        $lesson->lesson_text = $c['lesson_text'];
+        $lesson->lesson_type = $c['lesson_type'];
+        $lesson->sequence_id = $c['sequence_id'];
+        $lesson->active = !empty($c['active']) ? 1 : 0;
+        $lesson->save();
+        OmniHelper::log($f);
+        OmniHelper::log($data);
+        OmniHelper::log($lesson);
+
+        return redirect()->route(
+            'lesson.edit', ['id' => $lesson->id]
+        );
     }
 }

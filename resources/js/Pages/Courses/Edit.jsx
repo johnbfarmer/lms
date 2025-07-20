@@ -59,7 +59,6 @@ const Index = ({ auth, origCourse, origChapters }) => {
         setChapters(c)
         data.chapters = c
         setData(data)
-        console.log(c)
     }
 
     const changeChapterName = (e, k) => {

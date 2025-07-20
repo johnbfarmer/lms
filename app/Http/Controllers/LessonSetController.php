@@ -51,6 +51,50 @@ class LessonSetController extends Controller
         return Inertia::render('LessonSets/Edit', ['origLessons' => $lessons, 'origChapter' => $chapter]);
     }
 
+    public function saveChapter(Request $request)
+    {
+        $data = $request->all();
+        $c = $data['chapter'];
+        if (empty($c['id'])) {
+            $chapter = new LessonSet();
+        } else {
+            $chapter = LessonSet::find($c['id']);
+        }
+        $chapter->name = $c['name'];
+        $chapter->course_id = $c['course_id'];
+        $chapter->sequence_id = $c['sequence_id'];
+        $chapter->active = !empty($c['active']) ? 1 : 0;
+        $chapter->save();
+        $lessons = $data['lessons'];
+        $deletedLessons = $data['deletedLessons'];
+        foreach ($lessons as $a) {
+            if (empty($a['id'])) {
+                $lesson = new Lesson();
+            } else {
+                if (empty($c['changed'])) {
+                    continue;
+                }
+                $lesson = Lesson::find($a['id']);
+            }
+            $lesson->lesson_set_id = $a['lesson_set_id'];
+            $lesson->sequence_id = $a['sequence_id'];
+            $lesson->name = $a['name'];
+            $lesson->active = $a['active'];
+            $lesson->lesson_text = '';
+            $lesson->lesson_page = '';
+            OmniHelper::log($lesson);
+            $lesson->save();
+        }
+        foreach ($deletedLessons as $idx) {
+            $lesson = Lesson::find($idx);
+            $lesson->delete();
+        }
+
+        return redirect()->route(
+            'chapter.edit', ['id' => $chapter->id]
+        );
+    }
+
     public function lessons(Request $request, $id)
     {
         $user = $request->user();

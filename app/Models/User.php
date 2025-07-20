@@ -55,7 +55,6 @@ class User extends Authenticatable
     public function isTeacher()
     {
         foreach ($this->roles() ->get() as $role) {
-            OmniHelper::log($role);
             if ($role->role === 'teacher') {
                 return true;
             }
