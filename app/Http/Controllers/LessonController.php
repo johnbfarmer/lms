@@ -10,6 +10,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 use Inertia\Inertia;
 use App\Helpers\OmniHelper;
+use Illuminate\Http\File;
 
 class LessonController extends Controller
 {
@@ -101,21 +102,23 @@ class LessonController extends Controller
             $lesson = Lesson::find($c['id']);
         }
         if (!empty($c['lesson_page'])) {
-            $f = $c['lesson_page'];
+            $chapter = LessonSet::find($c['lesson_set_id']);
+            $courseId = $chapter->course_id;
+            $f = $data['file'];
+            $folder = $courseId . "/pdf";
+            $path = Storage::disk('public')->putFileAs($folder, new File($f), $c['lesson_page']);
         }
         $lesson->name = $c['name'];
         $lesson->lesson_set_id = $c['lesson_set_id'];
-        $lesson->lesson_text = $c['lesson_text'];
+        $lesson->lesson_text = !empty($c['lesson_text']) ? $c['lesson_text'] : '';
         $lesson->lesson_type = $c['lesson_type'];
+        $lesson->lesson_page = !empty($c['lesson_page']) ? $folder . '/' . str_replace('.pdf', '', $c['lesson_page']) : '';
         $lesson->sequence_id = $c['sequence_id'];
         $lesson->active = !empty($c['active']) ? 1 : 0;
         $lesson->save();
-        OmniHelper::log($f);
-        OmniHelper::log($data);
-        OmniHelper::log($lesson);
 
         return redirect()->route(
-            'lesson.edit', ['id' => $lesson->id]
+            'lesson.show', ['id' => $lesson->id]
         );
     }
 }

@@ -10,6 +10,7 @@ const Edit = ({ auth, origLesson }) => {
     const [lesson, setLesson] = useState(origLesson)
     const { data, setData, post } = useForm({
         lesson: origLesson,
+        file: null,
     })
 
     const title = `Capítulo ${lesson.name}`
@@ -30,6 +31,14 @@ const Edit = ({ auth, origLesson }) => {
         setData(data)
     }
     const deleteLesson = () => {}
+    const deleteLessonPage = () => {
+        let c = { ...lesson }
+        c.lesson_page = ''
+        setLesson(c)
+        data.lesson = c
+        data.file = null
+        setData(data)
+    }
     const changeLessonText = (e) => {
         let c = { ...lesson }
         c.lesson_text = e.target.value
@@ -39,9 +48,10 @@ const Edit = ({ auth, origLesson }) => {
     }
     const changeLessonFile = (e) => {
         let c = { ...lesson }
-        c.lesson_page = e.target.value
+        c.lesson_page = e.target.files[0].name
         setLesson(c)
         data.lesson = c
+        data.file = e.target.files[0]
         setData(data)
     }
     const changeLessonDisplayType = (t) => {
@@ -60,10 +70,8 @@ const Edit = ({ auth, origLesson }) => {
         )
     })
 
-    console.log(lesson)
-
     const save = () => {
-        post(route('lesson.save'), { data: data })
+        post(route('lesson.save'))
     }
 
     let topMenu = (
@@ -110,7 +118,7 @@ const Edit = ({ auth, origLesson }) => {
                                 { lessonDisplayTypeSelector }
                             </div>
                         </div>
-                        <div>
+                        <div className="">
                             {
                                 lesson.lesson_type !== 'pdf' &&
                                 <textarea
@@ -121,14 +129,26 @@ const Edit = ({ auth, origLesson }) => {
                                 />
                             }
                             {
-                                lesson.lesson_type === 'pdf' &&
-                                <input
-                                    type="file"
-                                    value={lesson.pdf}
-                                    className="w-full"
-                                    placeholder="pdf"
-                                    onChange={ changeLessonFile }
-                                />
+                                lesson.lesson_type === 'pdf' && lesson.lesson_page &&
+                                <div className="flex flex-row justify-center">
+                                    <div>
+                                        { lesson.lesson_page }
+                                    </div>
+                                    <FaTrash className="text-base ml-2 cursor-pointer" onClick={deleteLessonPage} />
+                                </div>
+                            }
+                            {
+                                lesson.lesson_type === 'pdf' && !lesson.lesson_page &&
+                                <div className="flex flex-row justify-center">
+                                    <div>
+                                        <input
+                                            type="file"
+                                            className="w-full"
+                                            placeholder="pdf"
+                                            onChange={ changeLessonFile }
+                                        />
+                                    </div>
+                                </div>
                             }
                         </div>
                     </div>

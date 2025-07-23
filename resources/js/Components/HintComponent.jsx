@@ -28,8 +28,8 @@ export default function HintComponent(props) {
         bottomRef.current?.scrollIntoView({ behavior: 'smooth' });
     };
 
-    const nextHint = () => {
-        props.nextHint();
+    async function nextHint() {
+        await props.nextHint();
         scrollToBottom();
     }
 

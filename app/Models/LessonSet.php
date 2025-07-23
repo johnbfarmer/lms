@@ -27,9 +27,10 @@ class LessonSet extends Model
         return ['anterior' => $previousChapterId, 'siguiente' => $nextChapterId];
     }
 
-    public function getMyLessons()
+    public function getMyLessons($publishedOnly = true)
     {
-        $sql = 'SELECT * FROM lessons where lesson_set_id = ? and active = 1';
+        $activeClause = $publishedOnly ? 'and active = 1' : '';
+        $sql = 'SELECT * FROM lessons where lesson_set_id = ? ' . $activeClause;
         $recs = DB::select($sql, [$this->id]);
         return $recs;
     }

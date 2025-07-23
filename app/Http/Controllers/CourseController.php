@@ -143,7 +143,7 @@ class CourseController extends Controller
                 }
                 $chapter = LessonSet::find($a['id']);
             }
-            $chapter->course_id = $a['course_id'];
+            $chapter->course_id = $course->id;
             $chapter->sequence_id = $a['sequence_id'];
             $chapter->name = $a['name'];
             $chapter->active = $a['active'];
@@ -153,15 +153,14 @@ class CourseController extends Controller
             $chapter = LessonSet::find($idx);
             $chapter->delete();
         }
-        // OmniHelper::log(__DIR__);
         $dataDir = implode(DIRECTORY_SEPARATOR, [__DIR__, '..', '..', '..', 'storage', 'app', 'public', $course->id]);
-        // OmniHelper::log($dataDir);
         if (!file_exists($dataDir)) {
             mkdir($dataDir);
             mkdir($dataDir . DIRECTORY_SEPARATOR . 'pdf');
+            mkdir($dataDir . DIRECTORY_SEPARATOR . 'img');
         }
         return redirect()->route(
-            'course.edit', ['id' => $course->id]
+            'course.show', ['id' => $course->id]
         );
     }
 }
