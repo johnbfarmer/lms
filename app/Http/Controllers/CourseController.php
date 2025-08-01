@@ -72,7 +72,8 @@ class CourseController extends Controller
     {
         $user = $request->user();
         $course = Course::find($id);
-        return Inertia::render('Groups/Edit', ['course' => $course, 'group' => null]);
+        $students = User::allStudentsWithGroupMembership(0);
+        return Inertia::render('Groups/Edit', ['course' => $course, 'group' => null, 'allStudents' => $students]);
     }
 
     public function groupShow(Request $request, $id)
