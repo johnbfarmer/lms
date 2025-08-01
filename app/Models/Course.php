@@ -30,7 +30,25 @@ class Course extends Model
             $args[] = $userId;
         }
         $sql = '
-        SELECT * FROM student_groups G
+        SELECT * FROM student_groups 
+        WHERE course_id = ? ' . $userFilter .'
+        ORDER BY name desc
+        ';
+
+        $recs = DB::select($sql, $args);
+
+        return $recs;
+    }
+
+    public function getGroupsAndStudents($userId = null)
+    {
+        $userFilter = $userId ? ' AND owner_id = ? ' : '';
+        $args = [$this->id];
+        if ($userId) {
+            $args[] = $userId;
+        }
+        $sql = '
+        SELECT G.* FROM student_groups G
         LEFT JOIN student_group_user U ON U.student_group_id = G.id
         WHERE G.course_id = ? ' . $userFilter .'
         ORDER BY name desc

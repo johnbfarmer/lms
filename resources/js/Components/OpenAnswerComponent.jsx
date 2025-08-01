@@ -2,10 +2,15 @@ import { useState } from 'react';
 import TextInput from '@/Components/TextInput';
 import InputLabel from '@/Components/InputLabel';
 import InputError from '@/Components/InputError';
+import { handleFraction } from '@/Helpers/Utilities';
 
 export default function OpenAnswerComponent(props) {
     const [answer, setAnswer] = useState('')
     const [hasAnswered, setHasAnswered] = useState(false)
+    const validateAnswer = (e) => {
+        let ans = e.target.value
+        setAnswer(handleFraction(ans))
+    }
     return (
         <>
             <div className="mx-auto space-y-6 sm:px-6 lg:px-8">
@@ -21,6 +26,7 @@ export default function OpenAnswerComponent(props) {
                             className="mt-1 block w-full"
                             isFocused={true}
                             onChange={(e) => setAnswer(e.target.value)}
+                            onBlur={validateAnswer}
                             onKeyDown={e => {if (e.key === 'Enter') {props.answerSelect(answer); setHasAnswered(false)}}}
                         />
 

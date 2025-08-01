@@ -6,6 +6,7 @@ use App\Models\Course;
 use App\Models\StudentGroup;
 use App\Models\LessonSet;
 use App\Models\Enrollment;
+use App\Models\User;
 use App\Helpers\OmniHelper;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
@@ -63,7 +64,7 @@ class CourseController extends Controller
         $user = $request->user();
         $course = Course::find($id);
         $groups = $course->getGroups($user->isAdmin() ? null : $user->id);
-        OmniHelper::log($groups);
+
         return Inertia::render('Groups/Index', ['course' => $course, 'groups' => $groups]);
     }
 
@@ -79,7 +80,9 @@ class CourseController extends Controller
         $user = $request->user();
         $group = StudentGroup::find($id);
         $course = Course::find($group->course_id);
-        return Inertia::render('Groups/Edit', ['course' => $course, 'group' => $group]);
+        $students = User::allStudentsWithGroupMembership($id);
+
+        return Inertia::render('Groups/Edit', ['course' => $course, 'group' => $group, 'allStudents' => $students]);
     }
 
     public function saveGroup(Request $request)
@@ -102,7 +105,9 @@ class CourseController extends Controller
             $group->save();
         }
 
-        return to_route('course.groups', [$group->id]);
+        $group->saveUsers($request->students);
+
+        return to_route('course.groups', [$group->course_id]);
     }
 
     public function editCourse(Request $request, $id)
@@ -160,7 +165,7 @@ class CourseController extends Controller
             mkdir($dataDir . DIRECTORY_SEPARATOR . 'img');
         }
         return redirect()->route(
-            'course.show', ['id' => $course->id]
+            'lessonset.index', ['id' => $course->id]
         );
     }
 }

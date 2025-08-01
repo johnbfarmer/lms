@@ -10,6 +10,7 @@ import CourseSelect from '@/Components/CourseSelect';
 import FeedbackComponent from '@/Components/FeedbackComponent';
 import HintComponent from '@/Components/HintComponent';
 import InputError from '@/Components/InputError';
+import { handleFraction } from '@/Helpers/Utilities';
 
 const Edit = ({ auth, origProblem, origAnswers, origHints, courses, origCourseId, origChapterId, origLessonId }) => {
     const [probTxt, setProbTxt] = useState(origProblem.problem_text)
@@ -79,13 +80,14 @@ const Edit = ({ auth, origProblem, origAnswers, origHints, courses, origCourseId
 
     const chgAnsTxt = (e, k) => {
         let txt = e.target.value
+        if (problem.problem_type_id === 4) {
+            txt = handleFraction(txt)
+        }
         let a = [...answers]
-    console.log(a)
         a[k].answer_text = txt
         setAnswers(a)
         data.answers = a
         setData(data)
-    console.log('2', a)
     }
 
     const chgAnsCorrect = (e, k) => {
