@@ -3,6 +3,7 @@ import Select from 'react-select';
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout';
 import { useForm, Link, Head } from '@inertiajs/react';
 import { FaTrash, FaPlus } from "react-icons/fa";
+import { GrGallery } from "react-icons/gr";
 import Checkbox from '@/Components/Checkbox';
 import ShowProblem from '@/Components/ShowProblem';
 import TopMenu from '@/Components/TopMenu';
@@ -10,6 +11,7 @@ import CourseSelect from '@/Components/CourseSelect';
 import FeedbackComponent from '@/Components/FeedbackComponent';
 import HintComponent from '@/Components/HintComponent';
 import InputError from '@/Components/InputError';
+import ImageGalleryComponent from '@/Components/ImageGalleryComponent';
 import { handleFraction } from '@/Helpers/Utilities';
 
 const Edit = ({ auth, origProblem, origAnswers, origHints, courses, origCourseId, origChapterId, origLessonId }) => {
@@ -24,6 +26,7 @@ const Edit = ({ auth, origProblem, origAnswers, origHints, courses, origCourseId
     const [showFeedback, setShowFeedback] = useState(false)
     const [points, setPoints] = useState(0)
     const [showHint, setShowHint] = useState(false)
+    const [showGallery, setShowGallery] = useState(false)
     const [hintsToShow, setHintsToShow] = useState(1)
     const { data, setData, post, errors } = useForm({
         problem: problem,
@@ -66,6 +69,10 @@ const Edit = ({ auth, origProblem, origAnswers, origHints, courses, origCourseId
 
     const closeHintModal = () => {
         setShowHint(false)
+    }
+
+    const closeGalleryModal = () => {
+        setShowGallery(false)
     }
 
     const chgProbTxt = (e) => {
@@ -186,6 +193,10 @@ const Edit = ({ auth, origProblem, origAnswers, origHints, courses, origCourseId
         setData(data)
     }
 
+    const toggleShowGallery = () => {
+        setShowGallery(!showGallery)
+    }
+
     const deleteProblem = () => {
         if (confirm('Really delete this problem?')) {
             console.log('mkay')
@@ -240,7 +251,9 @@ console.log(errMsg)
                             <div className="text-sm ml-1 mr-2">
                                 Publicar
                             </div>
-                            <FaTrash className="text-base ml-2 cursor-pointer" onClick={deleteProblem} />
+
+                            <GrGallery className="text-base mx-2 cursor-pointer" onClick={toggleShowGallery} title="galería de imágenes"/>
+                            <FaTrash className="text-base ml-2 cursor-pointer" onClick={deleteProblem} title="borrar problema"/>
                         </div>
                     </div>
                         <input
@@ -310,6 +323,14 @@ console.log(errMsg)
                 </div>
             </div>
             <div className="py-2">
+                <input
+                    type="file"
+                    onChange={() => {}}
+                    className="w-full"
+                    placeholder="upload image..."
+                />
+            </div>
+            <div className="py-2">
                 <div className="mx-auto max-w-7xl space-y-6 sm:px-6 lg:px-8">
                     <div className="text-center bg-white p-1 shadow text-2xl sm:rounded-lg sm:p-8 cursor-pointer" onClick={save}>
                         SAVE
@@ -358,6 +379,11 @@ console.log(errMsg)
                     />
                 )
             }
+            <ImageGalleryComponent
+                show={showGallery}
+                onClose={closeGalleryModal}
+                courseId={courseId}
+            />
             <CourseSelect
                 courses={courses}
                 selected={courseId}

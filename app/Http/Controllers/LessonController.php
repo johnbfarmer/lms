@@ -16,7 +16,7 @@ class LessonController extends Controller
 {
     public function show(Request $request, $id)
     {
-        $lesson = Lesson::find($id);
+        extract($this->getHierarchy($id));
         $problemSet = Problem::where(['lesson_id' => $id, 'active' => 1])->get();
         if (!$problemSet || $problemSet->count() < 1) {
             $problemSet = null;
@@ -28,7 +28,7 @@ class LessonController extends Controller
 
         $lessonIds = $lesson->getNeighboringLessonIds();
 
-        return Inertia::render('Lessons/Show', ['lesson' => $lesson, 'lessonIds' => $lessonIds, 'problemSet' => $problemSet, 'pageAssets' => $pageAssets]);
+        return Inertia::render('Lessons/Show', ['lesson' => $lesson, 'chapter' => $chapter, 'course' => $course, 'lessonIds' => $lessonIds, 'problemSet' => $problemSet, 'pageAssets' => $pageAssets]);
     }
 
     public function showProblemSet($id)
@@ -51,7 +51,7 @@ class LessonController extends Controller
     public function showAltProblemSet($id)
     {
         $problems = Problem::where(['lesson_id' => $id])->get();
-        $lesson = Lesson::find($id);
+        extract($this->getHierarchy($id));
         $answers = [];
         foreach ($problems as $p) {
             $answers[$p->id] = $p->getAnswers();
@@ -61,7 +61,7 @@ class LessonController extends Controller
             $hints[$p->id] = $p->getHints();
         }
 
-        return Inertia::render('ProblemSets/ShowAltStu', ['problems' => $problems, 'lesson' => $lesson, 'answers' => $answers, 'hints' => $hints]);
+        return Inertia::render('ProblemSets/ShowAltStu', ['problems' => $problems, 'lesson' => $lesson, 'chapter' => $chapter, 'course' => $course, 'answers' => $answers, 'hints' => $hints]);
     }
 
     public function addProblem($id)
@@ -83,13 +83,14 @@ class LessonController extends Controller
 
     public function editLesson($id)
     {
-        $lesson = Lesson::find($id);
+        // $lesson = Lesson::find($id);
+        extract($this->getHierarchy($id));
         if ($lesson === null) {
             $lesson = new Lesson();
             $lesson->name = '';
         }
 
-        return Inertia::render('Lessons/Edit', ['origLesson' => $lesson]);
+        return Inertia::render('Lessons/Edit', ['origLesson' => $lesson ,'chapter' => $chapter, 'course' => $course]);
     }
 
     public function saveLesson(Request $request)
@@ -120,5 +121,17 @@ class LessonController extends Controller
         return redirect()->route(
             'lesson.show', ['id' => $lesson->id]
         );
+    }
+
+    public function getHierarchy($id) {
+            $lesson = Lesson::find($id);
+            $chapter = LessonSet::find($lesson->lesson_set_id);
+            $course = Course::find($chapter->course_id);
+
+        return [
+            'lesson' => $lesson,
+            'chapter' => $chapter,
+            'course' => $course,
+        ];
     }
 }

@@ -67,8 +67,19 @@ const Groups = ({ auth, course, group, allStudents }) => {
         setData(d)
     }, [filter, inGroup, notInGroup])
 
+    const breadcrumbs = [
+        {name: 'Cursos', link: '/courses/all'}, 
+        {name: course.name, link: `/course/${course.id}`}
+    ]
+
     let topMenu = (
-            <TopMenu auth={auth} title={ title } show={['home']} />
+        <TopMenu
+            auth={auth}
+            title={ title }
+            courseId={ course.id }
+            show={['home', 'add-group']}
+            breadcrumbs={ breadcrumbs }
+        />
     )
 
     const remove = (id) => {

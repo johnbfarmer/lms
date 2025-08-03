@@ -6,7 +6,7 @@ import { router, Link, Head } from '@inertiajs/react';
 import 'katex/dist/katex.min.css';
 import Latex from 'react-latex-next';
 
-const Index = ({ auth, lesson, lessonIds, problemSet, pageAssets}) => {
+const Index = ({ auth, lesson, chapter, course, lessonIds, problemSet, pageAssets}) => {
     const [htmlContent, setHtmlContent] = useState(lesson.lesson_text);
     const title = `${ lesson.name }`
     let lessonSection, problemSection
@@ -32,8 +32,22 @@ const Index = ({ auth, lesson, lessonIds, problemSet, pageAssets}) => {
     }
     let showProblemLink = problemSet !== null
 
+    const breadcrumbs = [
+        {name: 'Cursos', link: '/courses/all'}, 
+        {name: course.name, link: `/course/${course.id}`},
+        {name: chapter.name, link: `/chapter/${chapter.id}`},
+    ]
+
     let topMenu = (
-        <TopMenu auth={auth} title={ title } lessonId={ lesson.id }  neighboringLessons={ lessonIds } chapterId={lesson.lesson_set_id} show={['home', 'prob-set', 'prob-add', 'lesson-nav', 'chapter', 'lesson-edit']} />
+        <TopMenu
+            auth={auth}
+            title={ title }
+            courseId={ course.id }
+            lessonId={lesson.id}
+            chapterId={lesson.lesson_set_id}
+            show={['home', 'prob-set', 'prob-add', 'chapter', 'lesson-edit']}
+            breadcrumbs={ breadcrumbs }
+        />
     )
 
     return (

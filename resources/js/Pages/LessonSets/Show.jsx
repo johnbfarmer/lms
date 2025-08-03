@@ -4,11 +4,23 @@ import LessonDescription from '@/Components/LessonDescription';
 import TopMenu from '@/Components/TopMenu';
 import { router, Link, Head } from '@inertiajs/react';
 
-const Show = ({ auth, lessons, lessonSet, progress, chapterIds }) => {
-    const title = `${lessonSet.name}`
+const Show = ({ auth, lessons, chapter, course, progress, chapterIds }) => {
+    const title = `${chapter.name}`
+
+    const breadcrumbs = [
+        {name: 'Cursos', link: '/courses/all'}, 
+        {name: course.name, link: `/course/${course.id}`},
+    ]
 
     let topMenu = (
-        <TopMenu auth={auth} title={ title } neighboringChapters={ chapterIds } courseId={lessonSet.course_id} chapterId={lessonSet.id} show={['chapter-nav', 'course', 'chapter-edit']} />
+        <TopMenu
+            auth={auth}
+            title={ title }
+            courseId={chapter.course_id}
+            chapterId={chapter.id}
+            show={['home', 'course', 'chapter-edit']}
+            breadcrumbs={ breadcrumbs }
+        />
     )
 
     return (

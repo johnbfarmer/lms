@@ -6,7 +6,7 @@ import Checkbox from '@/Components/Checkbox';
 import { router, Link, Head, useForm } from '@inertiajs/react';
 import { FaTrash, FaPlus, FaPencilAlt } from "react-icons/fa";
 
-const Edit = ({ auth, origLessons, origChapter }) => {
+const Edit = ({ auth, origLessons, origChapter, course }) => {
     const [chapter, setChapter] = useState(origChapter)
     const [lessons, setLessons] = useState(origLessons)
     const { data, setData, post } = useForm({
@@ -70,8 +70,20 @@ const Edit = ({ auth, origLessons, origChapter }) => {
         post(route('chapter.save'), { data: data })
     }
 
+    const breadcrumbs = [
+        {name: 'Cursos', link: '/courses/all'}, 
+        {name: course.name, link: `/course/${course.id}`},
+    ]
+
     let topMenu = (
-        <TopMenu auth={auth} title={ title } chapterId={chapter.id} show={['home', 'course', 'chapter']} />
+        <TopMenu
+            auth={auth}
+            title={ title }
+            courseId={chapter.course_id}
+            chapterId={chapter.id}
+            show={['home', 'course', 'chapter']}
+            breadcrumbs={ breadcrumbs }
+        />
     )
 
     return (

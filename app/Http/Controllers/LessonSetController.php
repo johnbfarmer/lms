@@ -20,7 +20,6 @@ class LessonSetController extends Controller
         $course = Course::find($id);
         $user = $request->user();
         $myProgress = $user->getCourseLessonSetProgress($id);
-        OmniHelper::log(['lessonSets' => $chapters, 'course' => $course, 'progress' => $myProgress]);
 
         return Inertia::render('LessonSets/Index', ['lessonSets' => $chapters, 'course' => $course, 'progress' => $myProgress]);
     }
@@ -28,17 +27,17 @@ class LessonSetController extends Controller
     public function showSet(Request $request, $id)
     {
         $lessons = Lesson::where(['lesson_set_id' => $id, 'active' => 1])->orderBy('sequence_id', 'asc')->orderBy('id', 'asc')->get();
-        $lessonSet = LessonSet::find($id);
+        extract($this->getHierarchy($id));
         $user = $request->user();
         $myProgress = $user->getLessonSetProgressByLesson($id);
-        $chapterIds = $lessonSet->getNeighboringChapterIds();
+        $chapterIds = $chapter->getNeighboringChapterIds();
 
-        return Inertia::render('LessonSets/Show', ['lessons' => $lessons, 'lessonSet' => $lessonSet, 'progress' => $myProgress, 'chapterIds' => $chapterIds]);
+        return Inertia::render('LessonSets/Show', ['lessons' => $lessons, 'chapter' => $chapter, 'course' => $course, 'progress' => $myProgress, 'chapterIds' => $chapterIds]);
     }
 
     public function editChapter(Request $request, $id)
     {
-        $chapter = LessonSet::find($id);
+        extract($this->getHierarchy($id));
         if ($chapter === null) {
             $chapter = new LessonSet();
             $chapter->name = '';   
@@ -48,7 +47,7 @@ class LessonSetController extends Controller
             $lessons = $chapter->getMyLessons(false);
         }
 
-        return Inertia::render('LessonSets/Edit', ['origLessons' => $lessons, 'origChapter' => $chapter]);
+        return Inertia::render('LessonSets/Edit', ['origLessons' => $lessons, 'origChapter' => $chapter, 'course' => $course]);
     }
 
     public function saveChapter(Request $request)
@@ -100,5 +99,15 @@ class LessonSetController extends Controller
         $user = $request->user();
         $chapter = LessonSet::find($id);
         return $chapter->getMyLessons();
+    }
+
+    public function getHierarchy($id) {
+            $chapter = LessonSet::find($id);
+            $course = Course::find($chapter->course_id);
+
+        return [
+            'chapter' => $chapter,
+            'course' => $course,
+        ];
     }
 }

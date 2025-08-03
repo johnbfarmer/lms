@@ -9,8 +9,19 @@ const Groups = ({ auth, course, groups }) => {
 
     const title = 'Grupos'
 
+    const breadcrumbs = [
+        {name: 'Cursos', link: '/courses/all'}, 
+        {name: course.name, link: `/course/${course.id}`}
+    ]
+
     let topMenu = (
-        <TopMenu auth={auth} title={ title } courseId={ course.id } show={['home', 'add-group']} />
+        <TopMenu
+            auth={auth}
+            title={ title }
+            courseId={ course.id }
+            show={['home', 'add-group']}
+            breadcrumbs={ breadcrumbs }
+        />
     )
 
     const edit = (id) => {
