@@ -14,7 +14,7 @@ import 'katex/dist/katex.min.css';
 import Latex from 'react-latex-next';
 import { buildBreadCrumbs } from '@/Helpers/Utilities';
 
-const Show = ({ auth, prob, answers, hints, lesson, problemIds, lessonIds }) => {
+const Show = ({ auth, prob, answers, hints, lesson, course, chapter, problemIds, lessonIds }) => {
     const [htmlContent, setHtmlContent] = useState(prob.problem_text)
     const [hasAnswered, setHasAnswered] = useState(false)
     const [points, setPoints] = useState(null)
@@ -22,9 +22,8 @@ const Show = ({ auth, prob, answers, hints, lesson, problemIds, lessonIds }) => 
     const [feedbackMessage, setFeedbackMessage] = useState('right')
     const [showHint, setShowHint] = useState(false)
     const [hintsToShow, setHintsToShow] = useState(1)
-
     const title = `${ lesson.name }`
-console.log(problemIds)
+console.log(lesson, course, chapter)
     const multiAnswerSelect = (ans) => {
         let score = 0, total = answers.length
         answers.forEach(r => {
@@ -96,8 +95,8 @@ console.log(problemIds)
         <TopMenu 
             auth={auth}
             title={ title }
-            lessonId={lessonId}
-            problemId={problem.id}
+            lessonId={lesson.id}
+            problemId={prob.id}
             show={['home', 'prob-set', 'prob-add', 'prob-dup']}
             breadcrumbs={ breadcrumbs }
         />

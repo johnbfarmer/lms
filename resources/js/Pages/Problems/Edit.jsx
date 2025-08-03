@@ -14,7 +14,7 @@ import InputError from '@/Components/InputError';
 import ImageGalleryComponent from '@/Components/ImageGalleryComponent';
 import { handleFraction, buildBreadCrumbs } from '@/Helpers/Utilities';
 
-const Edit = ({ auth, origProblem, origAnswers, origHints, courses, origCourseId, origChapterId, origLessonId }) => {
+const Edit = ({ auth, origProblem, origAnswers, origHints, courses, origCourseId, origChapterId, origLessonId, lesson, chapter, course }) => {
     const [probTxt, setProbTxt] = useState(origProblem.problem_text)
     const [problem, setProblem] = useState(origProblem)
     const [answers, setAnswers] = useState(origAnswers)
@@ -203,7 +203,7 @@ const Edit = ({ auth, origProblem, origAnswers, origHints, courses, origCourseId
         }
     }
 
-    const breadcrumbs = buildBreadCrumbs({course, chapter}, 3)
+    const breadcrumbs = buildBreadCrumbs({course, chapter, lesson}, 4)
     let topMenu = (
         <TopMenu 
             auth={auth}

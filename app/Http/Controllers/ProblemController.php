@@ -107,11 +107,11 @@ class ProblemController extends Controller
         shuffle($answers);
         $hints = $prob->getHints();
         $nextProblemId = $prob->getNextProblemId();
-        $lesson = Lesson::find($prob->lesson_id);
+        extract($this->getHierarchy($prob->lesson_id));
         $lessonIds = $lesson->getNeighboringLessonIds();
         $problemIds = $prob->getNeighboringProblemIds();
 
-        return Inertia::render('Problems/Show', ['prob' => $prob, 'answers' => $answers, 'hints' => $hints, 'lesson' => $lesson, 'problemIds' => $problemIds, 'lessonIds' => $lessonIds]);
+        return Inertia::render('Problems/Show', ['prob' => $prob, 'answers' => $answers, 'hints' => $hints, 'lesson' => $lesson, 'problemIds' => $problemIds, 'lessonIds' => $lessonIds, 'chapter' => $chapter, 'course' => $course]);
     }
 
     public function editProblem($id)
@@ -128,16 +128,32 @@ class ProblemController extends Controller
             $courseId = 0;
             $chapterId = 0;
             $lessonId = 0;
+            $course = null;
+            $chapter = null;
+            $lesson = null;
         } else {
+            extract($this->getHierarchy($p->lesson_id));
+            OmniHelper::log('jbf');
+            OmniHelper::log($lesson);
             $lessonId = $p->lesson_id;
-            $lesson = Lesson::find($lessonId);
             $chapterId = $lesson->lesson_set_id;
-            $chapter = LessonSet::find($chapterId);
             $courseId = $chapter->course_id;
         }
         $answers = $p->getAnswers();
         $hints = $p->getHints();
         $courses = Course::where(['active' => 1])->get();
-        return Inertia::render('Problems/Edit', ['origProblem' => $p, 'origAnswers' => $answers, 'origHints' => $hints, 'courses' => $courses, 'origCourseId' => $courseId, 'origChapterId' => $chapterId, 'origLessonId' => $lessonId]);
+        return Inertia::render('Problems/Edit', ['origProblem' => $p, 'origAnswers' => $answers, 'origHints' => $hints, 'courses' => $courses, 'origCourseId' => $courseId, 'origChapterId' => $chapterId, 'origLessonId' => $lessonId, 'lesson' => $lesson, 'chapter' => $chapter, 'course' => $course]);
+    }
+
+    public function getHierarchy($id) {
+            $lesson = Lesson::find($id);
+            $chapter = LessonSet::find($lesson->lesson_set_id);
+            $course = Course::find($chapter->course_id);
+
+        return [
+            'lesson' => $lesson,
+            'chapter' => $chapter,
+            'course' => $course,
+        ];
     }
 }
