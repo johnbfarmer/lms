@@ -110,8 +110,14 @@ class ProblemController extends Controller
         extract($this->getHierarchy($prob->lesson_id));
         $lessonIds = $lesson->getNeighboringLessonIds();
         $problemIds = $prob->getNeighboringProblemIds();
-
-        return Inertia::render('Problems/Show', ['prob' => $prob, 'answers' => $answers, 'hints' => $hints, 'lesson' => $lesson, 'problemIds' => $problemIds, 'lessonIds' => $lessonIds, 'chapter' => $chapter, 'course' => $course]);
+        $numCorr = 0;
+        foreach($answers as $a) {
+            if ($a->is_correct) {
+                $numCorr++;
+            }
+        }
+OmniHelper::log('numCorr: '.$numCorr);
+        return Inertia::render('Problems/Show', ['prob' => $prob, 'answers' => $answers, 'hints' => $hints, 'lesson' => $lesson, 'problemIds' => $problemIds, 'lessonIds' => $lessonIds, 'chapter' => $chapter, 'course' => $course, 'numberCorrect' => $numCorr]);
     }
 
     public function editProblem($id)

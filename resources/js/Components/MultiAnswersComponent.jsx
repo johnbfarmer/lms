@@ -6,6 +6,7 @@ import Latex from 'react-latex-next';
 export default function MultiAnswersComponent(props) {
     const [selectedAnswers, setSelectedAnswers] = useState([])
     const [hasAnswered, setHasAnswered] = useState(false)
+    const pluralizer = props.numCorrect > 1 ? 's' : ''
     const selectAnswer = ( ans ) => {
         let ansrs = [ ...selectedAnswers ]
         let id = ans.id
@@ -15,14 +16,16 @@ export default function MultiAnswersComponent(props) {
         } else {
             ansrs.push(id)
         }
-        setSelectedAnswers(ansrs)
+        if (ansrs.length <= props.numCorrect) {
+            setSelectedAnswers(ansrs)
+        }
     }
     return (
         <>
             <div className="mx-auto space-y-6 sm:px-6 lg:px-8">
                 <div className="text-center bg-white p-4 shadow text-2xl sm:rounded-lg sm:p-8">
                     <div className="mx-auto max-w-7xl space-y-6 sm:px-6 lg:px-8 text-center pt-2 text-base">
-                        Escoge todas las respuestas correctas y luego haz clic en Enviar:
+                        Escoge todas las respuestas correctas y luego haz clic en Enviar. Hay { props.numCorrect } respuesta{pluralizer} correcta{pluralizer}.
                     </div>
                     <div className="flex justify-center flex-wrap">
                     { props.answers.map((r, k) => {

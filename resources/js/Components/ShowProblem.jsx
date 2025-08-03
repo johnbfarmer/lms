@@ -14,9 +14,10 @@ export default function ShowProblem(props) {
     const [hasAnswered, setHasAnswered] = useState(false)
     const [points, setPoints] = useState(null)
     const [feedbackMessage, setFeedbackMessage] = useState('right')
-console.log(props.answers)
+console.log(props)
     const multiAnswerSelect = (ans) => {
         let score = 0, total = props.answers.length
+        let numCorr = props.numberCorrect
         props.answers.forEach(r => {
             let didSubmit = ans.indexOf(r.id) >= 0
             if (r.is_correct) {
@@ -127,7 +128,7 @@ console.log(props.answers)
     }
     if (props.problem.problem_type_id === 2) {
         answerComponent = (
-            <MultiAnswersComponent answers={ props.answers } answerSelect={ multiAnswerSelect } />
+            <MultiAnswersComponent answers={ props.answers } answerSelect={ multiAnswerSelect } numCorrect={props.numberCorrect}/>
         )
     }
     if (props.problem.problem_type_id === 3 || props.problem.problem_type_id === 4) {
