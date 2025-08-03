@@ -8,6 +8,8 @@ use Illuminate\Support\Facades\DB;
 class Lesson extends Model
 {
     protected $fillable = [
+        'name',
+        'short_name',
         'lesson_type',
         'lesson_text',
         'lesson_page',

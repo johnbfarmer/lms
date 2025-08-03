@@ -12,6 +12,7 @@ import ProblemNav from '@/Components/ProblemNav';
 import TopMenu from '@/Components/TopMenu';
 import 'katex/dist/katex.min.css';
 import Latex from 'react-latex-next';
+import { buildBreadCrumbs } from '@/Helpers/Utilities';
 
 const Show = ({ auth, prob, answers, hints, lesson, problemIds, lessonIds }) => {
     const [htmlContent, setHtmlContent] = useState(prob.problem_text)
@@ -90,8 +91,16 @@ console.log(problemIds)
         setShowHint(false)
     }
 
+    const breadcrumbs = buildBreadCrumbs({course, chapter}, 3)
     let topMenu = (
-        <TopMenu auth={auth} title={ title } lessonId={ lesson.id } problemId={ prob.id } neighboringProblems={ problemIds } show={['home', 'lesson', 'prob-set', 'prob-nav', 'prob-edit']} />
+        <TopMenu 
+            auth={auth}
+            title={ title }
+            lessonId={lessonId}
+            problemId={problem.id}
+            show={['home', 'prob-set', 'prob-add', 'prob-dup']}
+            breadcrumbs={ breadcrumbs }
+        />
     )
 
     return (

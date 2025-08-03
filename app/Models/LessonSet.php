@@ -9,6 +9,7 @@ class LessonSet extends Model
 {
     protected $fillable = [
         'name',
+        'short_name',
         'is_premium',
         'course_id',
         'sequence_id',

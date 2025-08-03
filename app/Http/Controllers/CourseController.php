@@ -135,6 +135,7 @@ class CourseController extends Controller
             $course = Course::find($c['id']);
         }
         $course->name = $c['name'];
+        $course->short_name = $c['short_name'];
         $course->description = empty($c['description']) ? '' : $c['description'];
         $course->active = !empty($c['active']) ? 1 : 0;
         $course->save();

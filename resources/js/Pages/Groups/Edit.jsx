@@ -7,6 +7,7 @@ import PrimaryButton from '@/Components/PrimaryButton';
 import ObjContainer from '@/Components/ObjContainer';
 import { useForm, Link, Head } from '@inertiajs/react';
 import { MdClear } from "react-icons/md";
+import { buildBreadCrumbs } from '@/Helpers/Utilities';
 
 const Groups = ({ auth, course, group, allStudents }) => {  
     const [filter, setFilter] = useState('')
@@ -67,10 +68,7 @@ const Groups = ({ auth, course, group, allStudents }) => {
         setData(d)
     }, [filter, inGroup, notInGroup])
 
-    const breadcrumbs = [
-        {name: 'Cursos', link: '/courses/all'}, 
-        {name: course.name, link: `/course/${course.id}`}
-    ]
+    const breadcrumbs = buildBreadCrumbs({course}, 2)
 
     let topMenu = (
         <TopMenu

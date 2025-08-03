@@ -4,15 +4,13 @@ import CourseComponent from '@/Components/CourseComponent';
 import TopMenu from '@/Components/TopMenu';
 import { router, Link, Head } from '@inertiajs/react';
 import { FaTrash, FaPlus, FaPencilAlt } from "react-icons/fa";
+import { buildBreadCrumbs } from '@/Helpers/Utilities';
 
 const Groups = ({ auth, course, groups }) => {
 
     const title = 'Grupos'
 
-    const breadcrumbs = [
-        {name: 'Cursos', link: '/courses/all'}, 
-        {name: course.name, link: `/course/${course.id}`}
-    ]
+    const breadcrumbs = buildBreadCrumbs({course}, 2)
 
     let topMenu = (
         <TopMenu

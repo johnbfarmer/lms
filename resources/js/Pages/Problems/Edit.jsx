@@ -12,7 +12,7 @@ import FeedbackComponent from '@/Components/FeedbackComponent';
 import HintComponent from '@/Components/HintComponent';
 import InputError from '@/Components/InputError';
 import ImageGalleryComponent from '@/Components/ImageGalleryComponent';
-import { handleFraction } from '@/Helpers/Utilities';
+import { handleFraction, buildBreadCrumbs } from '@/Helpers/Utilities';
 
 const Edit = ({ auth, origProblem, origAnswers, origHints, courses, origCourseId, origChapterId, origLessonId }) => {
     const [probTxt, setProbTxt] = useState(origProblem.problem_text)
@@ -203,8 +203,16 @@ const Edit = ({ auth, origProblem, origAnswers, origHints, courses, origCourseId
         }
     }
 
+    const breadcrumbs = buildBreadCrumbs({course, chapter}, 3)
     let topMenu = (
-        <TopMenu auth={auth} title={ title } lessonId={lessonId} problemId={problem.id} show={['home', 'prob-set', 'prob-add', 'prob-dup']} />
+        <TopMenu 
+            auth={auth}
+            title={ title }
+            lessonId={lessonId}
+            problemId={problem.id}
+            show={['home', 'prob-set', 'prob-add', 'prob-dup']}
+            breadcrumbs={ breadcrumbs }
+        />
     )
 
     let problemDisplayTypeSelector = ['latex', 'text', 'hybrid'].map(t => {

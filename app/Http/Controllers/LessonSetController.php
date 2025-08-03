@@ -60,6 +60,7 @@ class LessonSetController extends Controller
             $chapter = LessonSet::find($c['id']);
         }
         $chapter->name = $c['name'];
+        $chapter->short_name = $c['short_name'];
         $chapter->course_id = $c['course_id'];
         $chapter->sequence_id = $c['sequence_id'];
         $chapter->active = !empty($c['active']) ? 1 : 0;

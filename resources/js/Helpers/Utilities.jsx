@@ -27,3 +27,20 @@ export function handleFraction(ans) {
         }
     }	
 }
+
+export function buildBreadCrumbs(data, level) {
+    // levels - 1 course, 2 chapter, 3 lesson, 4 problem
+    let {lesson, chapter, course} = data 
+    let bc = [{name: 'Cursos', link: '/courses/all'}]
+    if (level > 1) {
+        bc.push({name: course.short_name, link: `/course/${course.id}`})
+    }
+    if (level > 2) {
+        bc.push({name: chapter.short_name, link: `/chapter/${chapter.id}`})
+    }
+    if (level > 3) {
+        bc.push({name: lesson.short_name, link: `/lesson/${lesson.id}`})
+    }
+
+    return bc
+}

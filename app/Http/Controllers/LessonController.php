@@ -110,6 +110,7 @@ class LessonController extends Controller
             $path = Storage::disk('public')->putFileAs($folder, new File($f), $c['lesson_page']);
         }
         $lesson->name = $c['name'];
+        $lesson->short_name = $c['short_name'];
         $lesson->lesson_set_id = $c['lesson_set_id'];
         $lesson->lesson_text = !empty($c['lesson_text']) ? $c['lesson_text'] : '';
         $lesson->lesson_type = $c['lesson_type'];

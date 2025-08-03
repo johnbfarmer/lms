@@ -5,6 +5,7 @@ import TopMenu from '@/Components/TopMenu';
 import Checkbox from '@/Components/Checkbox';
 import { router, Link, Head, useForm } from '@inertiajs/react';
 import { FaTrash, FaPlus, FaPencilAlt } from "react-icons/fa";
+import { buildBreadCrumbs } from '@/Helpers/Utilities';
 
 const Edit = ({ auth, origLessons, origChapter, course }) => {
     const [chapter, setChapter] = useState(origChapter)
@@ -21,6 +22,15 @@ const Edit = ({ auth, origLessons, origChapter, course }) => {
         let nm = e.target.value
         let c = { ...chapter }
         c.name = nm
+        setChapter(c)
+        data.chapter = c
+        setData(data)
+    }
+
+    const changeChapterShortName = () => {
+        let nm = e.target.value
+        let c = { ...chapter }
+        c.short_name = nm
         setChapter(c)
         data.chapter = c
         setData(data)
@@ -70,10 +80,7 @@ const Edit = ({ auth, origLessons, origChapter, course }) => {
         post(route('chapter.save'), { data: data })
     }
 
-    const breadcrumbs = [
-        {name: 'Cursos', link: '/courses/all'}, 
-        {name: course.name, link: `/course/${course.id}`},
-    ]
+    const breadcrumbs = buildBreadCrumbs({course}, 2)
 
     let topMenu = (
         <TopMenu
@@ -112,6 +119,22 @@ const Edit = ({ auth, origLessons, origChapter, course }) => {
                                 onChange={changeChapterName}
                                 value={chapter.name}
                                 className="w-full"
+                            />
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div className="py-2">
+                <div className="mx-auto max-w-7xl space-y-6 sm:px-6 lg:px-8">
+                    <div className="text-center bg-white p-1 shadow text-2xl sm:rounded-lg sm:p-8">
+                        Nombre Corto
+                        <div>
+                            <input
+                                type="text"
+                                onChange={changeChapterShortName}
+                                value={chapter.short_name}
+                                className="w-full"
+                                maxLength={30}
                             />
                         </div>
                     </div>

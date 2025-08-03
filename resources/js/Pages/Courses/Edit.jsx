@@ -44,6 +44,15 @@ const Index = ({ auth, origCourse, origChapters }) => {
         setData(data)
     }
 
+    const changeCourseShortName = (e) => {
+        let nm = e.target.value
+        let c = { ...course }
+        c.short_name = nm
+        setCourse(c)
+        data.course = c
+        setData(data)
+    }
+
     const changeCourseDescription = (e) => {
         let d = e.target.value
         let c = { ...course }
@@ -118,6 +127,22 @@ const Index = ({ auth, origCourse, origChapters }) => {
                                 onChange={changeCourseName}
                                 value={course.name}
                                 className="w-full"
+                            />
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div className="py-2">
+                <div className="mx-auto max-w-7xl space-y-6 sm:px-6 lg:px-8">
+                    <div className="text-center bg-white p-1 shadow text-2xl sm:rounded-lg sm:p-8">
+                        Nombre Corto
+                        <div>
+                            <input
+                                type="text"
+                                onChange={changeCourseShortName}
+                                value={course.short_name}
+                                className="w-full"
+                                maxLength={30}
                             />
                         </div>
                     </div>

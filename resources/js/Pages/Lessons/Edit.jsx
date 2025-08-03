@@ -5,6 +5,7 @@ import TopMenu from '@/Components/TopMenu';
 import Checkbox from '@/Components/Checkbox';
 import { router, Link, Head, useForm } from '@inertiajs/react';
 import { FaTrash, FaPlus, FaPencilAlt } from "react-icons/fa";
+import { buildBreadCrumbs } from '@/Helpers/Utilities';
 
 const Edit = ({ auth, origLesson, chapter, course }) => {
     const [lesson, setLesson] = useState(origLesson)
@@ -19,6 +20,15 @@ const Edit = ({ auth, origLesson, chapter, course }) => {
         let nm = e.target.value
         let c = { ...lesson }
         c.name = nm
+        setLesson(c)
+        data.lesson = c
+        setData(data)
+    }
+
+    const changeLessonShortName = (e) => {
+        let nm = e.target.value
+        let c = { ...lesson }
+        c.short_name = nm
         setLesson(c)
         data.lesson = c
         setData(data)
@@ -74,11 +84,7 @@ const Edit = ({ auth, origLesson, chapter, course }) => {
         post(route('lesson.save'))
     }
 
-    const breadcrumbs = [
-        {name: 'Cursos', link: '/courses/all'}, 
-        {name: course.name, link: `/course/${course.id}`},
-        {name: chapter.name, link: `/course/${chapter.id}`},
-    ]
+    const breadcrumbs = buildBreadCrumbs({course, chapter}, 3)
 
     let topMenu = (
         <TopMenu
@@ -118,6 +124,22 @@ const Edit = ({ auth, origLesson, chapter, course }) => {
                                 onChange={changeLessonName}
                                 value={lesson.name}
                                 className="w-full"
+                            />
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div className="py-2">
+                <div className="mx-auto max-w-7xl space-y-6 sm:px-6 lg:px-8">
+                    <div className="text-center bg-white p-1 shadow text-2xl sm:rounded-lg sm:p-8">
+                        Nombre Corto
+                        <div>
+                            <input
+                                type="text"
+                                onChange={changeLessonShortName}
+                                value={lesson.short_name}
+                                className="w-full"
+                                maxLength={30}
                             />
                         </div>
                     </div>

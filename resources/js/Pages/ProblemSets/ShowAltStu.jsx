@@ -11,6 +11,7 @@ import 'katex/dist/katex.min.css';
 import Latex from 'react-latex-next';
 import { router, Link, Head } from '@inertiajs/react';
 import Checkbox from '@/Components/Checkbox';
+import { buildBreadCrumbs } from '@/Helpers/Utilities';
 
 const ShowAltStu = ({ auth, problems, lesson, chapter, course, answers, hints }) => {
     const [currentProblem, setCurrentProblem] = useState(null)
@@ -23,13 +24,7 @@ const ShowAltStu = ({ auth, problems, lesson, chapter, course, answers, hints })
     const [showEndOfSet, setShowEndOfSet] = useState(false)
 
     const title = `${ lesson.name } Ejercicios`
-
-    const breadcrumbs = [
-        {name: 'Cursos', link: '/courses/all'}, 
-        {name: course.name, link: `/course/${course.id}`},
-        {name: chapter.name, link: `/chapter/${chapter.id}`},
-        {name: lesson.name, link: `/lesson/${lesson.id}`},
-    ]
+    const breadcrumbs = buildBreadCrumbs({lesson, chapter, course}, 4)
 
     let topMenu = (
         <TopMenu

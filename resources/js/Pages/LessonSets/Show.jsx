@@ -3,14 +3,12 @@ import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout';
 import LessonDescription from '@/Components/LessonDescription';
 import TopMenu from '@/Components/TopMenu';
 import { router, Link, Head } from '@inertiajs/react';
+import { buildBreadCrumbs } from '@/Helpers/Utilities';
 
 const Show = ({ auth, lessons, chapter, course, progress, chapterIds }) => {
     const title = `${chapter.name}`
 
-    const breadcrumbs = [
-        {name: 'Cursos', link: '/courses/all'}, 
-        {name: course.name, link: `/course/${course.id}`},
-    ]
+    const breadcrumbs = buildBreadCrumbs({course}, 2)
 
     let topMenu = (
         <TopMenu

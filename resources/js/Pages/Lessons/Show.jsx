@@ -5,6 +5,7 @@ import TopMenu from '@/Components/TopMenu';
 import { router, Link, Head } from '@inertiajs/react';
 import 'katex/dist/katex.min.css';
 import Latex from 'react-latex-next';
+import { buildBreadCrumbs } from '@/Helpers/Utilities';
 
 const Index = ({ auth, lesson, chapter, course, lessonIds, problemSet, pageAssets}) => {
     const [htmlContent, setHtmlContent] = useState(lesson.lesson_text);
@@ -32,11 +33,7 @@ const Index = ({ auth, lesson, chapter, course, lessonIds, problemSet, pageAsset
     }
     let showProblemLink = problemSet !== null
 
-    const breadcrumbs = [
-        {name: 'Cursos', link: '/courses/all'}, 
-        {name: course.name, link: `/course/${course.id}`},
-        {name: chapter.name, link: `/chapter/${chapter.id}`},
-    ]
+    const breadcrumbs = buildBreadCrumbs({course, chapter}, 3)
 
     let topMenu = (
         <TopMenu
