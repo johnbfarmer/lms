@@ -18,7 +18,7 @@ const Edit = ({ auth, origLessons, origChapter, course }) => {
 
     const title = `Edita Capítulo ${chapter.name}`
 
-    const changeChapterName = () => {
+    const changeChapterName = (e) => {
         let nm = e.target.value
         let c = { ...chapter }
         c.name = nm
@@ -27,7 +27,7 @@ const Edit = ({ auth, origLessons, origChapter, course }) => {
         setData(data)
     }
 
-    const changeChapterShortName = () => {
+    const changeChapterShortName = (e) => {
         let nm = e.target.value
         let c = { ...chapter }
         c.short_name = nm
