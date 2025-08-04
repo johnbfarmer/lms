@@ -23,10 +23,9 @@ export default function HintComponent(props) {
         )
     })
 
-    // const scrollToBottom = () => {
-    //     console.log('scrollin')
-    //     bottomRef.current?.scrollIntoView({ behavior: 'smooth' });
-    // };
+    const scrollToBottom = () => {
+        bottomRef.current?.scrollIntoView();
+    };
 
     async function nextHint() {
         await props.nextHint();
