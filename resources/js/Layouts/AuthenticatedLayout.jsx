@@ -28,13 +28,13 @@ export default function AuthenticatedLayout({ header, topMenu, children }) {
                                     href={route('dashboard')}
                                     active={route().current('dashboard')}
                                 >
-                                    Home
+                                    Inicio
                                 </NavLink>
                                 <NavLink
                                     href={route('course.all')}
                                     active={route().current('course.all')}
                                 >
-                                    Courses
+                                    Cursos
                                 </NavLink>
                             </div>
                         </div>

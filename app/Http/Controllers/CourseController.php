@@ -8,7 +8,11 @@ use App\Models\LessonSet;
 use App\Models\Enrollment;
 use App\Models\User;
 use App\Helpers\OmniHelper;
+use Illuminate\Support\Facades\Storage;
+use Illuminate\Http\File;
 use Illuminate\Http\Request;
+use Illuminate\Http\Response;
+use Illuminate\Http\JsonResponse ;
 use Inertia\Inertia;
 
 class CourseController extends Controller
@@ -169,5 +173,17 @@ class CourseController extends Controller
         return redirect()->route(
             'lessonset.index', ['id' => $course->id]
         );
+    }
+
+    public function uploadImage(Request $request)
+    {
+        $data = $request->all();
+        $courseId = $data['courseId'];
+        $f = $data['file'];
+        $folder = $courseId;
+        $path = Storage::disk('public')->putFileAs($folder, new File($f), $data['imageName']);
+
+        // return response()->json(['success' => true, 'file' => $path]);
+        return redirect()->back()->with(['data' => 'Something you want to pass to front-end',]);
     }
 }

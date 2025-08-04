@@ -96,7 +96,7 @@ console.log(lesson, course, chapter)
             title={ title }
             lessonId={lesson.id}
             problemId={prob.id}
-            show={['home', 'prob-set', 'prob-add', 'prob-dup']}
+            show={['home', 'prob-set', 'prob-add', 'prob-dup', 'prob-edit']}
             breadcrumbs={ breadcrumbs }
         />
     )

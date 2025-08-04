@@ -1,16 +1,63 @@
 import Modal from '@/Components/Modal';
+import { useForm } from '@inertiajs/react';
+import { MdClear } from "react-icons/md";
 
 export default function ImageGalleryComponent(props) {
+    const {data, setData, post} = useForm({
+        courseId: props.course.id,
+        file: null,
+        imageName: null,
+    })
+
+    const submit = (e) => {
+        post(route('image.upload'), {data: data, onSuccess: (d) => { console.log(d) }})
+        e.preventDefault();
+    }
+
+    const setFileName = (e) => {
+        let c = { ...data }
+        c.file = e.target.files[0]
+        c.imageName = e.target.files[0].name
+        setData(c)
+    }
+
+    const images = props.images.map((im, k) => {
+        return (
+            <div key={k} className="m-2">
+                <div className="m-2">
+                    <img src={im} width={50} height={50} />
+                </div>
+                <div className="m-2">
+                    {im}
+                </div>
+            </div>
+        )
+    })
+
     return (
         <div className="mx-auto my-6 max-w-7xl space-y-6 sm:px-6 lg:px-8 h-screen">
             <Modal show={props.show} onClose={props.onClose} >
                 <div className={`bg-white p-4 shadow sm:rounded-lg`}>
+                    <MdClear className="float-right cursor-pointer" onClick={ props.onClose }/>
                     <div className="flex flex-col justify-between">
                         <div className="flex justify-col">
-                            Galería Curso {props.courseId}
+                            Galería Curso {props.course.name}
+                        </div>
+                        <div className="py-2">
+                            <input
+                                type="file"
+                                onChange={ setFileName }
+                                className="w-full"
+                                placeholder="upload image..."
+                            />
+                        </div>
+                        <div className="mx-auto w-24 text-center my-4 sm:px-4 space-y-6 lg:px-8 cursor-pointer border border-black bg-white px-6 shadow sm:rounded-lg" onClick={ submit }>
+                            <div className="">
+                                Subir
+                            </div>
                         </div>
                         <div className="flex justify-col">
-                            images here
+                            {images}
                         </div>
                     </div>
                 </div>

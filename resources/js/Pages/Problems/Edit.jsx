@@ -14,7 +14,7 @@ import InputError from '@/Components/InputError';
 import ImageGalleryComponent from '@/Components/ImageGalleryComponent';
 import { handleFraction, buildBreadCrumbs } from '@/Helpers/Utilities';
 
-const Edit = ({ auth, origProblem, origAnswers, origHints, courses, origCourseId, origChapterId, origLessonId, lesson, chapter, course }) => {
+const Edit = ({ auth, origProblem, origAnswers, origHints, courses, origCourseId, origChapterId, origLessonId, lesson, chapter, course, images }) => {
     const [probTxt, setProbTxt] = useState(origProblem.problem_text)
     const [problem, setProblem] = useState(origProblem)
     const [answers, setAnswers] = useState(origAnswers)
@@ -230,11 +230,9 @@ const Edit = ({ auth, origProblem, origAnswers, origHints, courses, origCourseId
         )
     })
 
-console.log(errors)
     let errMsg = ''
     for (let i in errors) {
         errMsg = errMsg + errors[i]
-console.log(errMsg)
     }
 
     return (
@@ -260,8 +258,14 @@ console.log(errMsg)
                                 Publicar
                             </div>
 
-                            <GrGallery className="text-base mx-2 cursor-pointer" onClick={toggleShowGallery} title="galería de imágenes"/>
-                            <FaTrash className="text-base ml-2 cursor-pointer" onClick={deleteProblem} title="borrar problema"/>
+                            <GrGallery 
+                                className="text-base mx-2 cursor-pointer"
+                                onClick={toggleShowGallery} title="galería de imágenes"
+                            />
+                            <FaTrash 
+                                className="text-base ml-2 cursor-pointer"
+                                onClick={deleteProblem} title="borrar problema"
+                            />
                         </div>
                     </div>
                         <input
@@ -331,14 +335,6 @@ console.log(errMsg)
                 </div>
             </div>
             <div className="py-2">
-                <input
-                    type="file"
-                    onChange={() => {}}
-                    className="w-full"
-                    placeholder="upload image..."
-                />
-            </div>
-            <div className="py-2">
                 <div className="mx-auto max-w-7xl space-y-6 sm:px-6 lg:px-8">
                     <div className="text-center bg-white p-1 shadow text-2xl sm:rounded-lg sm:p-8 cursor-pointer" onClick={save}>
                         SAVE
@@ -390,7 +386,8 @@ console.log(errMsg)
             <ImageGalleryComponent
                 show={showGallery}
                 onClose={closeGalleryModal}
-                courseId={courseId}
+                course={course}
+                images={images}
             />
             <CourseSelect
                 courses={courses}

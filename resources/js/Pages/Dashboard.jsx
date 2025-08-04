@@ -3,8 +3,8 @@ import { Head } from '@inertiajs/react';
 
 export default function Dashboard() {
     return (
-        <AuthenticatedLayout header='Home'>
-            <Head title="Home" />
+        <AuthenticatedLayout header='Inicio'>
+            <Head title="Inicio" />
 
             <div className="py-12">
                 <div className="mx-auto max-w-7xl sm:px-6 lg:px-8">

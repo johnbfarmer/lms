@@ -74,11 +74,11 @@ class LessonController extends Controller
         $p->problem_text = '';            
         $p->display_type = 'latex';
         $courses = Course::where(['active' => 1])->get(); 
-        $lesson = Lesson::find($id);
+        extract($this->getHierarchy($id));
         $chapterId = $lesson->lesson_set_id;
         $chapter = LessonSet::find($chapterId);
         $courseId = $chapter->course_id;
-        return Inertia::render('Problems/Edit', ['origProblem' => $p, 'origAnswers' => [], 'origHints' => [], 'courses' => $courses, 'origCourseId' => $courseId, 'origChapterId' => $chapterId, 'origLessonId' => $id]);
+        return Inertia::render('Problems/Edit', ['origProblem' => $p, 'origAnswers' => [], 'origHints' => [], 'courses' => $courses, 'origCourseId' => $courseId, 'origChapterId' => $chapterId, 'origLessonId' => $id, 'lesson' => $lesson, 'chapter' => $chapter, 'course' => $course, 'images' => []]);
     }
 
     public function editLesson($id)

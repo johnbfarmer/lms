@@ -12,6 +12,7 @@ use Illuminate\Http\Request;
 use Inertia\Inertia;
 use App\Helpers\OmniHelper;
 use App\Http\Requests\ProblemUpdateRequest;
+use Illuminate\Support\Facades\Storage;
 
 class ProblemController extends Controller
 {
@@ -92,11 +93,10 @@ class ProblemController extends Controller
         $answers = $p1->getAnswers();
         $hints = $p1->getHints();
         $courses = Course::where(['active' => 1])->get(); 
-        $lesson = Lesson::find($p1->lesson_id);
+        extract($this->getHierarchy($p->lesson_id));
         $chapterId = $lesson->lesson_set_id;
-        $chapter = LessonSet::find($chapterId);
         $courseId = $chapter->course_id;
-        return Inertia::render('Problems/Edit', ['origProblem' => $p, 'origAnswers' => $answers, 'origHints' => $hints, 'courses' => $courses, 'origCourseId' => $courseId, 'origChapterId' => $chapterId, 'origLessonId' => $id]);
+        return Inertia::render('Problems/Edit', ['origProblem' => $p, 'origAnswers' => $answers, 'origHints' => $hints, 'courses' => $courses, 'origCourseId' => $courseId, 'origChapterId' => $chapterId, 'origLessonId' => $id, 'lesson' => $lesson, 'chapter' => $chapter, 'course' => $course]);
     }
     
     public function show(Request $request, $id)
@@ -116,7 +116,7 @@ class ProblemController extends Controller
                 $numCorr++;
             }
         }
-OmniHelper::log('numCorr: '.$numCorr);
+
         return Inertia::render('Problems/Show', ['prob' => $prob, 'answers' => $answers, 'hints' => $hints, 'lesson' => $lesson, 'problemIds' => $problemIds, 'lessonIds' => $lessonIds, 'chapter' => $chapter, 'course' => $course, 'numberCorrect' => $numCorr]);
     }
 
@@ -148,7 +148,13 @@ OmniHelper::log('numCorr: '.$numCorr);
         $answers = $p->getAnswers();
         $hints = $p->getHints();
         $courses = Course::where(['active' => 1])->get();
-        return Inertia::render('Problems/Edit', ['origProblem' => $p, 'origAnswers' => $answers, 'origHints' => $hints, 'courses' => $courses, 'origCourseId' => $courseId, 'origChapterId' => $chapterId, 'origLessonId' => $lessonId, 'lesson' => $lesson, 'chapter' => $chapter, 'course' => $course]);
+        $filePaths = Storage::disk('public')->files($courseId);
+        $imageUrls = [];
+        foreach ($filePaths as $path) {
+            OmniHelper::log($path);
+            $imageUrls[] = '/storage/' . $path;
+        }
+        return Inertia::render('Problems/Edit', ['origProblem' => $p, 'origAnswers' => $answers, 'origHints' => $hints, 'courses' => $courses, 'origCourseId' => $courseId, 'origChapterId' => $chapterId, 'origLessonId' => $lessonId, 'lesson' => $lesson, 'chapter' => $chapter, 'course' => $course, 'images' => $imageUrls]);
     }
 
     public function getHierarchy($id) {
