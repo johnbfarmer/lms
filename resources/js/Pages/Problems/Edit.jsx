@@ -367,6 +367,7 @@ const Edit = ({ auth, origProblem, origAnswers, origHints, courses, origCourseId
                         points={points}
                         next={nextProblem}
                         hint={toggleShowHint}
+                        hasNextProblem={false}
                         onClose={closeFeedbackModal}
                     />
                 )

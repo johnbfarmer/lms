@@ -21,12 +21,12 @@ export default function FeedbackComponent(props) {
                         { textToShow }
                         <div className="flex justify-col">
                         {
-                            props.hasHints &&
-                            <div className="cursor-pointer bg-white p-2 m-2 rounded-lg" onClick={props.hint}>hint</div>
+                            props.hasNextProblem &&
+                            <div className="cursor-pointer bg-white p-2 m-2 rounded-lg" onClick={props.next}>siguiente</div>
                         }
                         {
-                            props.next &&
-                            <div className="cursor-pointer bg-white p-2 m-2 rounded-lg" onClick={props.next}>next</div>
+                            props.hasHints &&
+                            <div className="cursor-pointer bg-white p-2 m-2 rounded-lg" onClick={props.onClose}>cerrar</div>
                         }
                         </div>
                     </div>

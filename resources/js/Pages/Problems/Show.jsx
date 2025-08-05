@@ -126,6 +126,7 @@ console.log(lesson, course, chapter)
                 next={nextProblem}
                 hint={toggleShowHint}
                 hasHints={hints != null && hints.length > 0}
+                hasNextProblem={problemIds.siguiente !== null}
                 onClose={closeFeedbackModal}
             />
             <HintComponent
