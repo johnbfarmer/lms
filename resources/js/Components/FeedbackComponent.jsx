@@ -24,7 +24,10 @@ export default function FeedbackComponent(props) {
                             props.hasHints &&
                             <div className="cursor-pointer bg-white p-2 m-2 rounded-lg" onClick={props.hint}>hint</div>
                         }
+                        {
+                            props.next &&
                             <div className="cursor-pointer bg-white p-2 m-2 rounded-lg" onClick={props.next}>next</div>
+                        }
                         </div>
                     </div>
                 </div>
