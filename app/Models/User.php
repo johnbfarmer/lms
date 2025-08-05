@@ -203,10 +203,10 @@ class User extends Authenticatable
         $sql = '
         SELECT S.*, IFNULL(SGU.user_id, 0) AS is_member
         FROM users S
-        INNER JOIN role_user RU ON RU.user_id = S.id
-        INNER JOIN roles R ON R.id = RU.role_id
+        LEFT JOIN role_user RU ON RU.user_id = S.id
+        LEFT JOIN roles R ON R.id = RU.role_id
         LEFT JOIN student_group_user SGU ON SGU.user_id = S.id AND student_group_id = ?
-        WHERE role = "student"
+        WHERE role = "student" OR ISNULL(role)
         ';
         $recs = DB::select($sql, [$groupId]);
 
