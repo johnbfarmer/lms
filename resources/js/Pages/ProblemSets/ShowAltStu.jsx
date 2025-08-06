@@ -83,7 +83,22 @@ const ShowAltStu = ({ auth, problems, lesson, chapter, course, answers, hints })
     return (
         <AuthenticatedLayout auth={auth} user={auth.user} header={ false } topMenu={ topMenu } >
             <Head title={title} />
-            { probList }
+            <div className="py-2">
+                <div className="mx-auto max-w-7xl space-y-6 sm:px-6 lg:px-8">
+                    <div className="italic text-2xl">
+                        Haz clic en un problema para contestarlo:
+                        {
+                            (auth.is_admin || auth.is_teacher) &&
+                            <p className="not-italic text-lg text-green-600">
+                                <Link href={route("problemset.showset", lesson.id)}>Go to edit mode</Link>
+                            </p>
+                        }
+                    </div>
+                    <div className="text-center bg-white p-1 shadow text-2xl sm:rounded-lg sm:p-8">
+                        { probList }
+                    </div>
+                </div>
+            </div>
         </AuthenticatedLayout>
     )
 }
