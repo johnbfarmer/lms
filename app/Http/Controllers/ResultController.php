@@ -22,13 +22,13 @@ class ResultController extends Controller
         switch ($prob->problem_type_id) {
             case 1:
             case 2:
-                Result::insert($userId, $prob->id, $data['answers']);
+                Result::insert($userId, $prob->id, $data['answers'], $data['score']);
                 break;
             case 3:
-                Result::insertOpenAnswerAlpha($userId, $prob->id, $data['answers']);
+                Result::insertOpenAnswerAlpha($userId, $prob->id, $data['answers'], $data['score']);
                 break;
             case 4:
-                Result::insertOpenAnswerNumeric($userId, $prob->id, $data['answers']);
+                Result::insertOpenAnswerNumeric($userId, $prob->id, $data['answers'], $data['score']);
                 break;
             default:
                 throw new \Exception('Undefined Problem Type Id');

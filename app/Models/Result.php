@@ -13,32 +13,32 @@ class Result extends Model
         'problem_id',
     ];
 
-    public static function insert($userId, $problemId, $answers)
+    public static function insert($userId, $problemId, $answers, $score)
     {
         $sql = 'DELETE FROM results WHERE user_id = ? AND problem_id = ?';
         DB::delete($sql, [$userId, $problemId]);
 
         foreach ($answers as $answerId) {
-            $sql = 'INSERT INTO results (user_id, problem_id, answer_id) VALUES (?, ?, ?)';
-            DB::insert($sql, [$userId, $problemId, $answerId]);
+            $sql = 'INSERT INTO results (user_id, problem_id, answer_id, score) VALUES (?, ?, ?, ?)';
+            DB::insert($sql, [$userId, $problemId, $answerId, $score]);
         }
     }
 
-    public static function insertOpenAnswerNumeric($userId, $problemId, $answers)
+    public static function insertOpenAnswerNumeric($userId, $problemId, $answers, $score)
     {
         $sql = 'DELETE FROM results WHERE user_id = ? AND problem_id = ?';
         DB::delete($sql, [$userId, $problemId]);
 
-        $sql = 'INSERT INTO results (user_id, problem_id, open_answer_numeric) VALUES (?, ?, ?)';
-        DB::insert($sql, [$userId, $problemId, $answers]);
+        $sql = 'INSERT INTO results (user_id, problem_id, open_answer_numeric, score) VALUES (?, ?, ?, ?)';
+        DB::insert($sql, [$userId, $problemId, $answers, $score]);
     }
 
-    public static function insertOpenAnswerAlpha($userId, $problemId, $answers)
+    public static function insertOpenAnswerAlpha($userId, $problemId, $answers, $score)
     {
         $sql = 'DELETE FROM results WHERE user_id = ? AND problem_id = ?';
         DB::delete($sql, [$userId, $problemId]);
 
-        $sql = 'INSERT INTO results (user_id, problem_id, open_answer_alpha) VALUES (?, ?, ?)';
-        DB::insert($sql, [$userId, $problemId, $answers]);
+        $sql = 'INSERT INTO results (user_id, problem_id, open_answer_alpha, score) VALUES (?, ?, ?, ?)';
+        DB::insert($sql, [$userId, $problemId, $answers, $score]);
     }
 }

@@ -17,20 +17,17 @@ export default function ShowProblem(props) {
 
     const multiAnswerSelect = (ans) => {
         let numCorr = props.numberCorrect
-        let score = 0, total = props.answers.length
+        let score = 0, total = 0
         props.answers.forEach(r => {
             let didSubmit = ans.indexOf(r.id) >= 0
             if (r.is_correct) {
+                total++;
                 if (didSubmit) {
-                    score++;
-                }
-            } else {
-                if (!didSubmit) {
                     score++;
                 }
             }
         })
-        let pts = Math.floor(0.5 + 100 * (100 * score/total)) / 100
+        let pts = !total ? 1 : Math.floor(0.5 + 100 * (100 * score/total)) / 100
         setPoints(pts)
         let msg = ('you scored ' + score + ' out of ' + total + ' for ' + pts + '%')
         fetch(route('results.recordanswer', { id: props.problem.id, answers: ans, score: pts }))
@@ -53,7 +50,6 @@ export default function ShowProblem(props) {
 
     const openAnswerSubmit = (ans) => {
         let pts, msg
-        console.log(props.answers)
         let houseAnswer = parseFloat(props.answers[0].answer_text);
         let tolerance = parseFloat(props.answers[0].pct_tolerance);
         let ansMin = (1 - tolerance) * houseAnswer;

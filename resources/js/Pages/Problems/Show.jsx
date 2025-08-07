@@ -22,41 +22,6 @@ const Show = ({ auth, prob, answers, hints, lesson, course, chapter, problemIds,
     const [showHint, setShowHint] = useState(false)
     const [hintsToShow, setHintsToShow] = useState(1)
     const title = `${ lesson.name }`
-console.log(lesson, course, chapter)
-    const multiAnswerSelect = (ans) => {
-        let score = 0, total = answers.length
-        answers.forEach(r => {
-            let didSubmit = ans.indexOf(r.id) >= 0
-            if (r.is_correct) {
-                if (didSubmit) {
-                    score++;
-                }
-            } else {
-                if (!didSubmit) {
-                    score++;
-                }
-            }
-        })
-        let pts = Math.floor(0.5 + 100 * (100 * score/total)) / 100
-        setPoints(pts)
-        setHasAnswered(true)
-        setFeedbackMessage('you scored ' + score + ' out of ' + total + ' for ' + pts + '%')
-        fetch(route('results.recordanswer', { id: prob.id, answers: ans, score: pts }))
-    }
-
-    const answerSelect = (ans) => {
-        let pts
-        if (ans.is_correct) {
-            pts = 100
-            setFeedbackMessage('Correct!')
-        } else {
-            pts = 0
-            setFeedbackMessage('Not quite!')
-        }
-        setHasAnswered(true)
-        setPoints(pts)
-        fetch(route('results.recordanswer', { id: prob.id, answers: [ans.id], score: pts} ))
-    }
 
     const handleAnswer = (id, points, msg) => {
         setFeedbackMessage(msg)
