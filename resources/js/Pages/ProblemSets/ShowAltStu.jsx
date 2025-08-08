@@ -13,7 +13,7 @@ import { router, Link, Head } from '@inertiajs/react';
 import Checkbox from '@/Components/Checkbox';
 import { buildBreadCrumbs } from '@/Helpers/Utilities';
 
-const ShowAltStu = ({ auth, problems, lesson, chapter, course, answers, hints }) => {
+const ShowAltStu = ({ auth, problems, lesson, chapter, course, answers, hints, userScores }) => {
     const [currentProblem, setCurrentProblem] = useState(null)
     const [currentProblemIdx, setCurrentProblemIdx] = useState(-1)
     const [feedbackMessage, setFeedbackMessage] = useState('')
@@ -38,15 +38,12 @@ const ShowAltStu = ({ auth, problems, lesson, chapter, course, answers, hints })
         />
     )
 
-    const deleteProblem = () => {
-            console.log('tbi')
-    }
-
-    const togglePublish = () => {
-            console.log('tbi')
-    }
-
+    let userScore, bgCol, txtCol
     const probList = problems.map((p, k) => {
+        userScore = userScores[p.id]
+        bgCol = userScore === null ? 'bg-white' : (userScore >= 90 ? 'bg-green-100' : (userScore >= 50 ? 'bg-yellow-200' : 'bg-red-200'))
+        txtCol = userScore === null ? 'text-black' : 'text-slate-400'
+        
         if (!p.active) {
             return null
         }
@@ -73,8 +70,8 @@ const ShowAltStu = ({ auth, problems, lesson, chapter, course, answers, hints })
         }
         return (
             <div key={k}  className="flex flex-row justify-space">
-                <div className="text-center bg-white p-1 m-2 shadow text-2xl sm:rounded-lg sm:p-2 border border-slate-200">
-                    <Link href={ route('problem.show', p.id) }>{ problemSection }</Link>
+                <div className={`text-center ${bgCol} ${txtCol} w-full p-1 m-2 shadow text-2xl sm:rounded-lg sm:p-2 border border-slate-200`}>
+                    <Link as="button" disabled={userScore !== null} href={ route('problem.show', p.id) }>{ problemSection }</Link>
                 </div>
             </div>
         )

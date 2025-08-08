@@ -48,20 +48,20 @@ class LessonController extends Controller
         return Inertia::render('ProblemSets/ShowAlt', ['problems' => $problems, 'lesson' => $lesson, 'answers' => $answers, 'hints' => $hints]);
     }
 
-    public function showAltProblemSet($id)
+    public function showAltProblemSet(Request $request, $id)
     {
         $problems = Problem::where(['lesson_id' => $id])->get();
         extract($this->getHierarchy($id));
         $answers = [];
+        $hints = [];
+        $userScores = [];
         foreach ($problems as $p) {
             $answers[$p->id] = $p->getAnswers();
-        }
-        $hints = [];
-        foreach ($problems as $p) {
             $hints[$p->id] = $p->getHints();
+            $userScores[$p->id] = $p->getUserScore($request->user()->id);
         }
 
-        return Inertia::render('ProblemSets/ShowAltStu', ['problems' => $problems, 'lesson' => $lesson, 'chapter' => $chapter, 'course' => $course, 'answers' => $answers, 'hints' => $hints]);
+        return Inertia::render('ProblemSets/ShowAltStu', ['problems' => $problems, 'lesson' => $lesson, 'chapter' => $chapter, 'course' => $course, 'answers' => $answers, 'hints' => $hints, 'userScores' => $userScores]);
     }
 
     public function addProblem($id)

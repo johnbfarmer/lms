@@ -78,42 +78,48 @@ class User extends Authenticatable
 
     public function getCourseProgress($courseId)
     {
-        $sql = 'SELECT * FROM enrollments WHERE user_id = ? AND course_id = ?';
-        $rec = DB::select($sql, [$this->id, $courseId]);
-        if (empty($rec)) {
-            return null;
+        // $sql = 'SELECT * FROM enrollments WHERE user_id = ? AND course_id = ?';
+        // $rec = DB::select($sql, [$this->id, $courseId]);
+        // if (empty($rec)) {
+        //     return null;
+        // }
+        // $isPremium = $rec[0]->is_premium;
+
+        $sql = '
+            SELECT T1.id, ct, IF(ISNULL(done), 0, done) as done, IF(ISNULL(userScore), 0, userScore) as userScore FROM (
+                SELECT count(*) as ct, C.id
+                FROM courses C
+                INNER JOIN lesson_sets LS ON C.id = LS.course_id
+                INNER JOIN lessons L ON LS.id = L.lesson_set_id
+                INNER JOIN problems P ON L.id = P.lesson_id
+                WHERE C.id = ? AND P.active = 1 AND LS.active = 1 AND L.active = 1
+                GROUP BY C.id
+            ) T1
+            LEFT JOIN (
+                SELECT count(*) AS done, sum(score) as userScore, C.id
+                FROM courses C
+                INNER JOIN lesson_sets LS ON C.id = LS.course_id
+                INNER JOIN lessons L ON LS.id = L.lesson_set_id
+                INNER JOIN problems P ON L.id = P.lesson_id
+                INNER JOIN problem_scores S ON P.id = S.problem_id
+                WHERE C.id = ? AND user_id = ? AND P.active = 1 AND LS.active = 1 AND L.active = 1
+                GROUP BY C.id
+            ) T2 ON T1.id = T2.id;';
+        $recs = DB::select($sql, [$courseId, $courseId, $this->id]);
+        if (empty($recs)) {
+            return [];
         }
-        $isPremium = $rec[0]->is_premium;
-
-        // how many probs in course?
-        $sql = '
-            SELECT count(*) AS ct
-            FROM courses C
-            INNER JOIN lesson_sets LS ON C.id = LS.course_id
-            INNER JOIN lessons L ON LS.id = L.lesson_set_id
-            INNER JOIN problems P ON L.id = P.lesson_id
-            WHERE C.id = ? AND P.active = 1 AND LS.active = 1 AND L.active = 1';
-        $rec = DB::select($sql, [$courseId]);
-        $totalProbs = $rec[0]->ct;
-
-        // how many probs have I done in course?
-        $sql = '
-            SELECT count(*) AS ct
-            FROM enrollments E
-            INNER JOIN courses C ON C.id = E.course_id
-            INNER JOIN lesson_sets LS ON C.id = LS.course_id
-            INNER JOIN lessons L ON LS.id = L.lesson_set_id
-            INNER JOIN problems P ON L.id = P.lesson_id
-            INNER JOIN problem_scores S ON P.id = S.problem_id
-            WHERE E.user_id = ? and C.id = ? AND P.active = 1 AND LS.active = 1 AND L.active = 1';
-        $rec = DB::select($sql, [$this->id, $courseId]);
-        $probsDone = $rec[0]->ct;
-        $pctDone = !$totalProbs ? 0 : round(100*($probsDone/$totalProbs));
-
-        return [
-            'is_premium' => $isPremium,
-            'pct_done' => $pctDone,
+        $rec = $recs[0];
+        $totalProbs = $rec->ct;
+        $probsDone = $rec->done;
+        $userScore = $rec->userScore;
+        $progress = [
+            'total' => $totalProbs,
+            'pct_done' => !$totalProbs ? 0 : round(100*($probsDone/$totalProbs)),
+            'score' => !$probsDone ? 0 : round(1*($userScore/$probsDone)),
         ];
+
+        return $progress;
     }
 
     public function getCourseLessonSetProgress($courseId)
@@ -125,7 +131,7 @@ class User extends Authenticatable
         }
 
         $sql = '
-            SELECT T1.id, ct, IF(ISNULL(done), 0, done) as done FROM (
+            SELECT T1.id, ct, IF(ISNULL(done), 0, done) as done, IF(ISNULL(userScore), 0, userScore) as userScore FROM (
                 SELECT count(*) as ct, LS.id
                 FROM courses C
                 INNER JOIN lesson_sets LS ON C.id = LS.course_id
@@ -135,7 +141,7 @@ class User extends Authenticatable
                 GROUP BY LS.id
             ) T1
             LEFT JOIN (
-                SELECT count(*) AS done, LS.id
+                SELECT count(*) AS done, sum(score) as userScore, LS.id
                 FROM courses C
                 INNER JOIN lesson_sets LS ON C.id = LS.course_id
                 INNER JOIN lessons L ON LS.id = L.lesson_set_id
@@ -145,14 +151,18 @@ class User extends Authenticatable
                 GROUP BY LS.id
             ) T2 ON T1.id = T2.id;';
         $recs = DB::select($sql, [$courseId, $courseId, $this->id]);
+        // if (empty($recs)) {
+        //     return [];
+        // }
         $progress = [];
-        OmniHelper::log($recs);
         foreach ($recs as $rec) {
             $totalProbs = $rec->ct;
             $probsDone = $rec->done;
+            $userScore = $rec->userScore;
             $progress[$rec->id] = [
-                'is_premium' => 1, // will not use but want to reuse component
+                'total' => $totalProbs,
                 'pct_done' => !$totalProbs ? 0 : round(100*($probsDone/$totalProbs)),
+                'score' => !$probsDone ? 0 : round(1*($userScore/$probsDone)),
             ];
         }
 
@@ -162,7 +172,7 @@ class User extends Authenticatable
     public function getLessonSetProgressByLesson($lessonSetId)
     {
         $sql = '
-            SELECT T1.id, ct, IF(ISNULL(done), 0, done) as done, IF(ISNULL(score), 0, score/100) as score FROM (
+            SELECT T1.id, ct, IF(ISNULL(done), 0, done) as done, IF(ISNULL(userScore), 0, userScore) as userScore FROM (
                 SELECT count(*) as ct, L.id
                 FROM courses C
                 INNER JOIN lesson_sets LS ON C.id = LS.course_id
@@ -172,7 +182,7 @@ class User extends Authenticatable
                 GROUP BY L.id
             ) T1
             LEFT JOIN (
-                SELECT count(*) AS done, sum(S.score) as score, L.id
+                SELECT count(*) AS done, sum(S.score) as userScore, L.id
                 FROM courses C
                 INNER JOIN lesson_sets LS ON C.id = LS.course_id
                 INNER JOIN lessons L ON LS.id = L.lesson_set_id
@@ -183,15 +193,17 @@ class User extends Authenticatable
             ) T2 ON T1.id = T2.id;';
         $recs = DB::select($sql, [$lessonSetId, $lessonSetId, $this->id]);
         $progress = [];
-        OmniHelper::log($recs);
+        // if (empty($recs)) {
+        //     return [];
+        // }
         foreach ($recs as $rec) {
             $totalProbs = $rec->ct;
             $probsDone = $rec->done;
-            $score = round($rec->score, 2);
+            $userScore = $rec->userScore;
             $progress[$rec->id] = [
                 'total' => $totalProbs,
-                'right' => $score,
-                'pct' => !$totalProbs ? 0 : round(100*($score/$totalProbs)),
+                'pct_done' => !$totalProbs ? 0 : round(100*($probsDone/$totalProbs)),
+                'score' => !$probsDone ? 0 : round(1*($userScore/$probsDone)),
             ];
         }
 

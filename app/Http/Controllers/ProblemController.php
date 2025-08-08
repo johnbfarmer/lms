@@ -102,14 +102,12 @@ class ProblemController extends Controller
     public function show(Request $request, $id)
     {
         $prob = Problem::find($id);
-        // $answers = AnswerSet::where(['problem_id' => $id])->get()->toArray();
         $answers = $prob->getAnswers();
         shuffle($answers);
         $hints = $prob->getHints();
-        $nextProblemId = $prob->getNextProblemId();
         extract($this->getHierarchy($prob->lesson_id));
         $lessonIds = $lesson->getNeighboringLessonIds();
-        $problemIds = $prob->getNeighboringProblemIds();
+        $problemIds = $prob->getNeighboringProblemIds($request->user()->id);
         $numCorr = 0;
         foreach($answers as $a) {
             if ($a->is_correct) {

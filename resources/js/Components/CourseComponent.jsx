@@ -1,4 +1,6 @@
 import StudentCourseProgress from '@/Components/StudentCourseProgress';
+import { Link } from '@inertiajs/react';
+import { FaBook } from 'react-icons/fa';
 
 export default function CourseDescription(props) {
     let progressComponent = ''
@@ -16,8 +18,9 @@ export default function CourseDescription(props) {
                             </a>
                         </div>
                         { progressComponent }
+                        <Link href={`/course/${ props.course.id }`} className="pt-2"><FaBook title="ir al curso"/></Link>
                     </div>
-                    <div className="m-1">
+                    <div className="m-1 ">
                         { props.course.description }
                     </div>
                 </div>

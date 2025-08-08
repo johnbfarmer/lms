@@ -1,4 +1,7 @@
 import StudentLessonResults from '@/Components/StudentLessonResults';
+import { Link } from '@inertiajs/react';
+import { FaGraduationCap } from 'react-icons/fa';
+import { BiMath } from 'react-icons/bi';
 
 export default function LessonDescription(props) {
     return (
@@ -12,6 +15,8 @@ export default function LessonDescription(props) {
                             </a>
                         </div>
                         <StudentLessonResults progress={ props.progress }/>
+                        <Link href={`/lesson/${ props.lesson.id }`}><FaGraduationCap title="ir a la lección"/></Link>
+                        <Link href={`/problem-set/${ props.lesson.id }`}><BiMath title="ir a los problemas" /></Link>
                     </div>
                 </div>
             </div>

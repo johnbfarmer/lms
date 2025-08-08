@@ -67,6 +67,19 @@ class Problem extends Model
         $rec = DB::delete($sql, [$this->id]);
     }
 
+    public function getUserScore($userId)
+    {
+        $sql = '
+        SELECT * FROM problem_scores
+        WHERE problem_id = ? AND user_id = ?';
+        $rec = DB::select($sql, [$this->id, $userId]);
+        if (empty($rec)) {
+            return null;
+        }
+
+        return (float)$rec[0]->score;
+    }
+
     public function getLessonTitle()
     {
         $sql = '
@@ -92,16 +105,67 @@ class Problem extends Model
         return $rec[0]->id;
     }
 
-    public function getNeighboringProblemIds()
+    public function getNeighboringProblemIds($userId)
     {
-        $sql = 'SELECT id FROM problems WHERE (sequence_id > ? OR sequence_id = ? AND id > ?) AND lesson_id = ? and active = 1 ORDER BY sequence_id, id';
-        $rec = DB::select($sql, [$this->sequence_id, $this->sequence_id, $this->id, $this->lesson_id]);
+        $sql = '
+        SELECT P.id 
+        FROM problems P
+        LEFT JOIN problem_scores S ON S.problem_id = P.id AND S.user_id = ?
+        WHERE S.id IS NULL
+            AND (sequence_id > ? OR sequence_id = ? AND P.id > ?) 
+            AND lesson_id = ? and active = 1
+        ORDER BY sequence_id, id
+        ';
+        $rec = DB::select($sql, [$userId, $this->sequence_id, $this->sequence_id, $this->id, $this->lesson_id]);
         $nextProblemId = empty($rec) ? null :  $rec[0]->id;
-        $sql = 'SELECT id FROM problems WHERE (sequence_id < ? OR sequence_id = ? AND id < ?) AND lesson_id = ? and active = 1 ORDER BY sequence_id desc, id desc';
-        $rec = DB::select($sql, [$this->sequence_id, $this->sequence_id, $this->id, $this->lesson_id]);
+
+        if (!$nextProblemId) {
+            $nextProblemId = $this->getFirstProblemId($userId);
+        }
+        $sql = '
+        SELECT P.id
+        FROM problems P
+        LEFT JOIN problem_scores S ON S.problem_id = P.id AND S.user_id = ?
+        WHERE S.id IS NULL
+            AND  (sequence_id < ? OR sequence_id = ? AND P.id < ?)
+            AND lesson_id = ? and active = 1
+        ORDER BY sequence_id desc, id desc';
+        $rec = DB::select($sql, [$userId, $this->sequence_id, $this->sequence_id, $this->id, $this->lesson_id]);
         $previousProblemId = empty($rec) ? null : $rec[0]->id;
 
+        if (!$previousProblemId) {
+            $previousProblemId = $this->getLastProblemId($userId);
+        }
+
         return ['anterior' => $previousProblemId, 'siguiente' => $nextProblemId];
+    }
+
+    public function getFirstProblemId($userId)
+    {
+        $sql = '
+        SELECT P.id 
+        FROM problems P
+        LEFT JOIN problem_scores S ON S.problem_id = P.id AND S.user_id = ?
+        WHERE S.id IS NULL
+            AND lesson_id = ? and active = 1
+        ORDER BY sequence_id, id
+        ';
+        $rec = DB::select($sql, [$userId, $this->lesson_id]);
+        return empty($rec) ? null :  $rec[0]->id;
+    }
+
+    public function getLastProblemId($userId)
+    {
+        $sql = '
+        SELECT P.id 
+        FROM problems P
+        LEFT JOIN problem_scores S ON S.problem_id = P.id AND S.user_id = ?
+        WHERE S.id IS NULL
+            AND lesson_id = ? and active = 1
+        ORDER BY sequence_id DESC, id DESC
+        ';
+        $rec = DB::select($sql, [$userId, $this->lesson_id]);
+        return empty($rec) ? null :  $rec[0]->id;
     }
 
     public function ensureUserInCourse($userId)
