@@ -80,8 +80,8 @@ const ShowAltStu = ({ auth, problems, lesson, chapter, course, answers, hints, u
     })
 
     const confirmOkToReset = () => {
-        if (confirm('Quieres resetear tus resultades?')) {
-            alert("Enlace armado");
+        if (confirm('Quieres resetear tus resultados de esta lección?')) {
+            alert("Enlace armado. Haz clic una vez más.");
             setOkToReset(true)
         }
     }
