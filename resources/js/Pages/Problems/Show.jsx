@@ -22,7 +22,7 @@ const Show = ({ auth, prob, answers, hints, lesson, course, chapter, problemIds,
     const [showHint, setShowHint] = useState(false)
     const [hintsToShow, setHintsToShow] = useState(1)
     const title = `${ lesson.name }`
-console.log(problemIds)
+
     const handleAnswer = (id, points, msg) => {
         setFeedbackMessage(msg)
         setShowFeedback(true)

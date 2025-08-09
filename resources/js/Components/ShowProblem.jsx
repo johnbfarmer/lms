@@ -29,7 +29,7 @@ export default function ShowProblem(props) {
         })
         let pts = !total ? 1 : Math.floor(0.5 + 100 * (100 * score/total)) / 100
         setPoints(pts)
-        let msg = ('you scored ' + score + ' out of ' + total + ' for ' + pts + '%')
+        let msg = (score + ' correctos de ' + total + ' para ' + pts + '%')
         fetch(route('results.recordanswer', { id: props.problem.id, answers: ans, score: pts }))
         props.handleAnswer(props.problem.id, pts, msg)
     }
@@ -38,14 +38,34 @@ export default function ShowProblem(props) {
         let pts, msg
         if (ans.is_correct) {
             pts = 100
-             msg = ('Correct!')
+             msg = getPositiveFeedback()
         } else {
             pts = 0
-             msg = ('Not quite!')
+             msg = getNegativeFeedback()
         }
         setPoints(pts)
         fetch(route('results.recordanswer', { id: props.problem.id, answers: [ans.id], score: pts} ))
         props.handleAnswer(props.problem.id, pts, msg)
+    }
+
+    const getPositiveFeedback = () => {
+        const choices = [
+            'Así es!',
+            'Bien!',
+            'Correcto!',
+            'Excelente!',
+        ];
+        return choices[Math.floor(choices.length * Math.random())]
+    }
+
+    const getNegativeFeedback = () => {
+        const choices = [
+            'Casi...',
+            'Hmm, no...',
+            'No creo...',
+            'No estoy de acuerdo...!',
+        ];
+        return choices[Math.floor(choices.length * Math.random())]
     }
 
     const openAnswerSubmit = (ans) => {
@@ -62,10 +82,10 @@ export default function ShowProblem(props) {
         console.log(ans, houseAnswer, tolerance, ansMax, ansMin)
         if (ans >= ansMin && ans <= ansMax) {
             pts = 100
-            msg = ('Correct!')
+            msg = getPositiveFeedback()
         } else {
             pts = 0
-            msg = ('Not quite!')
+            msg = getNegativeFeedback()
         }
         setPoints(pts)
         fetch(route('results.recordanswer', { id: props.problem.id, answers: ans, score: pts} ))

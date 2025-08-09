@@ -7,9 +7,22 @@ import { handleFraction } from '@/Helpers/Utilities';
 export default function OpenAnswerComponent(props) {
     const [answer, setAnswer] = useState('')
     const [hasAnswered, setHasAnswered] = useState(false)
+
     const validateAnswer = (e) => {
         let ans = e.target.value
         setAnswer(handleFraction(ans))
+    }
+
+    const chgAnsTxt = (e, k) => {
+        let txt = e.target.value
+        if (problem.problem_type_id === 4) {
+            txt = handleFraction(txt)
+        }
+        let a = [...answers]
+        a[k].answer_text = txt
+        setAnswers(a)
+        data.answers = a
+        setData(data)
     }
     return (
         <>
@@ -27,6 +40,7 @@ export default function OpenAnswerComponent(props) {
                             isFocused={true}
                             onChange={(e) => setAnswer(e.target.value)}
                             onBlur={validateAnswer}
+                            disabled={hasAnswered}
                             onKeyDown={e => {if (e.key === 'Enter') {props.answerSelect(answer); setHasAnswered(false)}}}
                         />
 
@@ -36,7 +50,7 @@ export default function OpenAnswerComponent(props) {
             </div>
             {
                 !hasAnswered &&
-                <div className="mx-auto w-48 text-center my-6 space-y-6 sm:px-6 lg:px-8 cursor-pointer" onClick={ () => { props.answerSelect(answer); setAnswer(''); setHasAnswered(false)}}>
+                <div className="mx-auto w-48 text-center my-6 space-y-6 sm:px-6 lg:px-8 cursor-pointer" onClick={ () => { props.answerSelect(answer); setAnswer(''); setHasAnswered(true)}}>
                     <div className="bg-white p-6 shadow sm:rounded-lg sm:p-4">
                         Submit
                     </div>
