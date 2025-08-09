@@ -54,6 +54,11 @@ const Show = ({ auth, prob, answers, hints, lesson, course, chapter, problemIds,
         setShowHint(false)
     }
 
+    const closeFeedbackAndShowHints = () => {
+        setShowFeedback(false)
+        setShowHint(true)
+    }
+
     const breadcrumbs = buildBreadCrumbs({course, chapter}, 3)
     let topMenu = (
         <TopMenu 
@@ -94,6 +99,7 @@ const Show = ({ auth, prob, answers, hints, lesson, course, chapter, problemIds,
                 hasHints={hints != null && hints.length > 0}
                 hasNextProblem={problemIds.siguiente !== null}
                 onClose={closeFeedbackModal}
+                closeAndShowHints={closeFeedbackAndShowHints}
             />
             <HintComponent
                 show={showHint}

@@ -20,14 +20,15 @@ export default function FeedbackComponent(props) {
                     <div className="flex justify-between">
                         { textToShow }
                         <div className="flex justify-col">
-                        {
-                            props.hasNextProblem &&
-                            <div className="cursor-pointer bg-white p-2 m-2 rounded-lg" onClick={props.next}>siguiente</div>
-                        }
-                        {
-                            props.hasHints &&
                             <div className="cursor-pointer bg-white p-2 m-2 rounded-lg" onClick={props.onClose}>cerrar</div>
-                        }
+                            {
+                                props.hasHints &&
+                                <div className="cursor-pointer bg-white p-2 m-2 rounded-lg" onClick={props.closeAndShowHints}>ver los pasos</div>
+                            }
+                            {
+                                props.hasNextProblem &&
+                                <div className="cursor-pointer bg-white p-2 m-2 rounded-lg" onClick={props.next}>siguiente</div>
+                            }
                         </div>
                     </div>
                 </div>
