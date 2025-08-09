@@ -72,9 +72,11 @@ const ShowAltStu = ({ auth, problems, lesson, chapter, course, answers, hints, u
         }
         return (
             <div key={k}  className="flex flex-row justify-space">
-                <div className={`text-center ${bgCol} ${txtCol} w-full p-1 m-2 shadow text-2xl sm:rounded-lg sm:p-2 border border-slate-200`}>
-                    <Link as="button" disabled={userScore !== null} href={ route('problem.show', p.id) }>{ problemSection }</Link>
-                </div>
+                <Link as="button" disabled={userScore !== null} href={ route('problem.show', p.id) }>
+                    <div className={`text-center ${bgCol} ${txtCol} w-full p-1 m-2 shadow text-2xl sm:rounded-lg sm:p-2 border border-slate-200`}>
+                        { problemSection }
+                    </div>
+                </Link>
             </div>
         )
     })

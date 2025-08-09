@@ -152,6 +152,11 @@ export default function ShowProblem(props) {
             <OpenAnswerComponent answers={ props.answers } answered={ props.answered } answerSelect={ openAnswerSubmit } />
         )
     }
+    if (props.answered) {
+        answerComponent = (
+            <div className="mx-auto w-full text-center bg-slate-500/50">Ya contestaste este problema</div>
+        )
+    }
 
     return (
         <div className="py-2" >
