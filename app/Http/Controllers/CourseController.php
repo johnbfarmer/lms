@@ -25,6 +25,7 @@ class CourseController extends Controller
         foreach ($courses as $course) {
             $myProgress[$course->id] = $user->getCourseProgress($course->id);
         }
+ 
         return Inertia::render('Courses/Index', ['courses' => $courses, 'myProgress' => $myProgress]);
     }
 

@@ -41,4 +41,14 @@ class Result extends Model
         $sql = 'INSERT INTO results (user_id, problem_id, open_answer_alpha, score) VALUES (?, ?, ?, ?)';
         DB::insert($sql, [$userId, $problemId, $answers, $score]);
     }
+
+    public static function reset($userId, $lessonId)
+    {
+        $sql = '
+        DELETE S FROM problem_scores S
+        INNER JOIN problems P ON P.id = S.problem_id
+        WHERE user_id = ? AND lesson_id = ?';
+
+        DB::delete($sql, [$userId, $lessonId]);
+    }
 }

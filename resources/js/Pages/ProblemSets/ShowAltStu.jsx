@@ -12,6 +12,7 @@ import Latex from 'react-latex-next';
 import { router, Link, Head } from '@inertiajs/react';
 import Checkbox from '@/Components/Checkbox';
 import { buildBreadCrumbs } from '@/Helpers/Utilities';
+import { LuListRestart } from "react-icons/lu";
 
 const ShowAltStu = ({ auth, problems, lesson, chapter, course, answers, hints, userScores }) => {
     const [currentProblem, setCurrentProblem] = useState(null)
@@ -90,6 +91,9 @@ const ShowAltStu = ({ auth, problems, lesson, chapter, course, answers, hints, u
                                 <Link href={route("problemset.showset", lesson.id)}>Go to edit mode</Link>
                             </p>
                         }
+                        <div className="float-right" title="reiniciar problemas">
+                            <Link href={ route('results.reset', lesson.id) }><LuListRestart /></Link>
+                        </div>
                     </div>
                     <div className="text-center bg-white p-1 shadow text-2xl sm:rounded-lg sm:p-8">
                         { probList }

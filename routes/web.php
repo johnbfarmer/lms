@@ -59,6 +59,7 @@ Route::middleware('auth')->group(function () {
     Route::get('/course/{id}/chapters', [CourseController::class, 'chapters'])->name('course.chapters');
     Route::get('/chapter/{id}/lessons', [LessonSetController::class, 'lessons'])->name('chapter.lessons');
     Route::get('/record-answer', [ResultController::class, 'recordAnswer'])->name('results.recordanswer');
+    Route::get('/reset/{lessonId}', [ResultController::class, 'reset'])->name('results.reset');
 });
 
 require __DIR__.'/auth.php';

@@ -35,4 +35,13 @@ class ResultController extends Controller
         }
         ProblemScore::insert($userId, $prob->id, $data['score']);
     }
+
+    public function reset(Request $request, $lessonId)
+    {
+        Result::reset($request->user()->id, $lessonId);
+
+        return redirect()->route(
+            'problemset.altshowset', ['id' => $lessonId]
+        );
+    }
 }
