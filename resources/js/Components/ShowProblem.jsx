@@ -139,17 +139,17 @@ export default function ShowProblem(props) {
 
     if (props.problem.problem_type_id === 1) {
         answerComponent = (
-            <AnswersComponent answers={ props.answers } answerSelect={ answerSelect } />
+            <AnswersComponent answers={ props.answers } answered={ props.answered } answerSelect={ answerSelect } />
         )
     }
     if (props.problem.problem_type_id === 2) {
         answerComponent = (
-            <MultiAnswersComponent answers={ props.answers } answerSelect={ multiAnswerSelect } numCorrect={props.numberCorrect}/>
+            <MultiAnswersComponent answers={ props.answers } answered={ props.answered } answerSelect={ multiAnswerSelect } numCorrect={props.numberCorrect}/>
         )
     }
     if (props.problem.problem_type_id === 3 || props.problem.problem_type_id === 4) {
         answerComponent = (
-            <OpenAnswerComponent answers={ props.answers } answerSelect={ openAnswerSubmit } />
+            <OpenAnswerComponent answers={ props.answers } answered={ props.answered } answerSelect={ openAnswerSubmit } />
         )
     }
 

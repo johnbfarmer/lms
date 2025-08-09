@@ -6,7 +6,7 @@ import { handleFraction } from '@/Helpers/Utilities';
 
 export default function OpenAnswerComponent(props) {
     const [answer, setAnswer] = useState('')
-    const [hasAnswered, setHasAnswered] = useState(false)
+    const [hasAnswered, setHasAnswered] = useState(props.answered)
 
     const validateAnswer = (e) => {
         let ans = e.target.value
@@ -24,6 +24,7 @@ export default function OpenAnswerComponent(props) {
         data.answers = a
         setData(data)
     }
+console.log(props, hasAnswered)
     return (
         <>
             <div className="mx-auto space-y-6 sm:px-6 lg:px-8">

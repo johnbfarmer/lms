@@ -114,8 +114,9 @@ class ProblemController extends Controller
                 $numCorr++;
             }
         }
-
-        return Inertia::render('Problems/Show', ['prob' => $prob, 'answers' => $answers, 'hints' => $hints, 'lesson' => $lesson, 'problemIds' => $problemIds, 'lessonIds' => $lessonIds, 'chapter' => $chapter, 'course' => $course, 'numberCorrect' => $numCorr]);
+        $score = $prob->getUserScore($request->user()->id);
+OmniHelper::log($score);
+        return Inertia::render('Problems/Show', ['prob' => $prob, 'answers' => $answers, 'hints' => $hints, 'lesson' => $lesson, 'problemIds' => $problemIds, 'lessonIds' => $lessonIds, 'chapter' => $chapter, 'course' => $course, 'numberCorrect' => $numCorr, 'score' => $score]);
     }
 
     public function editProblem($id)

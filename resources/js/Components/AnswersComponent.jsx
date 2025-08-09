@@ -5,7 +5,7 @@ import Latex from 'react-latex-next';
 
 export default function AnswersComponent(props) {
     const [selectedAnswer, setSelectedAnswer] = useState(0)
-    const [hasAnswered, setHasAnswered] = useState(false)
+    const [hasAnswered, setHasAnswered] = useState(props.answered)
     const selectAnswer = ( ans ) => {
         if (!hasAnswered) {
             setSelectedAnswer(ans.id)

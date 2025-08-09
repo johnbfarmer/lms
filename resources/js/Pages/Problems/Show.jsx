@@ -13,7 +13,7 @@ import 'katex/dist/katex.min.css';
 import Latex from 'react-latex-next';
 import { buildBreadCrumbs } from '@/Helpers/Utilities';
 
-const Show = ({ auth, prob, answers, hints, lesson, course, chapter, problemIds, lessonIds, numberCorrect}) => {
+const Show = ({ auth, prob, answers, hints, lesson, course, chapter, problemIds, lessonIds, numberCorrect, score}) => {
     const [htmlContent, setHtmlContent] = useState(prob.problem_text)
     const [hasAnswered, setHasAnswered] = useState(false)
     const [points, setPoints] = useState(null)
@@ -81,6 +81,7 @@ const Show = ({ auth, prob, answers, hints, lesson, course, chapter, problemIds,
                 next={nextProblem}
                 prev={prevProblem}
                 numberCorrect={numberCorrect}
+                answered={score !== null}
                 hasNextProblem={problemIds.siguiente !== null}
                 hasPrevProblem={problemIds.anterior !== null}
             />

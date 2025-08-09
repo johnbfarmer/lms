@@ -23,6 +23,7 @@ const ShowAltStu = ({ auth, problems, lesson, chapter, course, answers, hints, u
     const [showHint, setShowHint] = useState(false)
     const [hintsToShow, setHintsToShow] = useState(1)
     const [showEndOfSet, setShowEndOfSet] = useState(false)
+    const [okToReset, setOkToReset] = useState(false)
 
     const title = `${ lesson.name } Ejercicios`
     const breadcrumbs = buildBreadCrumbs({lesson, chapter, course}, 4)
@@ -78,6 +79,13 @@ const ShowAltStu = ({ auth, problems, lesson, chapter, course, answers, hints, u
         )
     })
 
+    const confirmOkToReset = () => {
+        if (confirm('Quieres resetear tus resultades?')) {
+            alert("Enlace armado");
+            setOkToReset(true)
+        }
+    }
+
     return (
         <AuthenticatedLayout auth={auth} user={auth.user} header={ false } topMenu={ topMenu } >
             <Head title={title} />
@@ -92,7 +100,14 @@ const ShowAltStu = ({ auth, problems, lesson, chapter, course, answers, hints, u
                             </p>
                         }
                         <div className="float-right" title="reiniciar problemas">
-                            <Link href={ route('results.reset', lesson.id) }><LuListRestart /></Link>
+                            {
+                                !okToReset &&
+                                <div onClick={ confirmOkToReset } className="text-slate-400"><LuListRestart /></div>
+                            }
+                            {
+                                okToReset &&
+                                <Link href={ route('results.reset', lesson.id) } className="text-red-500"><LuListRestart /></Link>
+                            }
                         </div>
                     </div>
                     <div className="text-center bg-white p-1 shadow text-2xl sm:rounded-lg sm:p-8">
