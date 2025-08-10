@@ -138,8 +138,6 @@ OmniHelper::log($score);
             $lesson = null;
         } else {
             extract($this->getHierarchy($p->lesson_id));
-            OmniHelper::log('jbf');
-            OmniHelper::log($lesson);
             $lessonId = $p->lesson_id;
             $chapterId = $lesson->lesson_set_id;
             $courseId = $chapter->course_id;

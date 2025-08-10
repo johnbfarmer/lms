@@ -6,7 +6,7 @@ export default function ImageGalleryComponent(props) {
     const {data, setData, post} = useForm({
         courseId: props.course.id,
         file: null,
-        imageName: null,
+        imageName: '',
     })
 
     const submit = (e) => {
@@ -14,21 +14,27 @@ export default function ImageGalleryComponent(props) {
         e.preventDefault();
     }
 
-    const setFileName = (e) => {
+    const setFile = (e) => {
         let c = { ...data }
         c.file = e.target.files[0]
         c.imageName = e.target.files[0].name
         setData(c)
     }
 
+    const setImageName = (e) => {
+        let c = { ...data }
+        c.imageName = e.target.value
+        setData(c)
+    }
+
     const images = props.images.map((im, k) => {
         return (
-            <div key={k} className="m-2">
+            <div key={k} className="m-2" onClick={() => props.addImageToProb(im)}>
                 <div className="m-2">
                     <img src={im} width={50} height={50} />
                 </div>
                 <div className="m-2">
-                    {im}
+                    {im.replace('/storage/'+props.course.id+'/', '')}
                 </div>
             </div>
         )
@@ -40,15 +46,24 @@ export default function ImageGalleryComponent(props) {
                 <div className={`bg-white p-4 shadow sm:rounded-lg`}>
                     <MdClear className="float-right cursor-pointer" onClick={ props.onClose }/>
                     <div className="flex flex-col justify-between">
-                        <div className="flex justify-col">
+                        <div className="text-lg text-center">
                             Galería Curso {props.course.name}
                         </div>
                         <div className="py-2">
                             <input
                                 type="file"
-                                onChange={ setFileName }
+                                onChange={ setFile }
                                 className="w-full"
                                 placeholder="upload image..."
+                            />
+                        </div>
+                        <div className="py-2 w-1/2">
+                            <input
+                                type="text"
+                                value={data.imageName}
+                                onChange={ setImageName }
+                                className="w-full"
+                                placeholder="image name"
                             />
                         </div>
                         <div className="mx-auto w-24 text-center my-4 sm:px-4 space-y-6 lg:px-8 cursor-pointer border border-black bg-white px-6 shadow sm:rounded-lg" onClick={ submit }>
@@ -56,7 +71,7 @@ export default function ImageGalleryComponent(props) {
                                 Subir
                             </div>
                         </div>
-                        <div className="flex justify-col">
+                        <div className="flex text-center mx-auto">
                             {images}
                         </div>
                     </div>

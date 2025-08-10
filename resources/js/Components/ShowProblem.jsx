@@ -14,7 +14,7 @@ export default function ShowProblem(props) {
     const [hasAnswered, setHasAnswered] = useState(false)
     const [points, setPoints] = useState(null)
     const [feedbackMessage, setFeedbackMessage] = useState('right')
-
+console.log(props.problem.problem_text)
     const multiAnswerSelect = (ans) => {
         let numCorr = props.numberCorrect
         let score = 0, total = 0
@@ -33,6 +33,10 @@ export default function ShowProblem(props) {
         fetch(route('results.recordanswer', { id: props.problem.id, answers: ans, score: pts }))
         props.handleAnswer(props.problem.id, pts, msg)
     }
+
+    useEffect(() => {
+        console.log('props', props)
+    }, [props.ctr])
 
     const answerSelect = (ans) => {
         let pts, msg

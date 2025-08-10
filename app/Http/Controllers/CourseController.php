@@ -182,6 +182,10 @@ class CourseController extends Controller
         $courseId = $data['courseId'];
         $f = $data['file'];
         $folder = $courseId;
+        if ($data['imageName'] !== urlencode($data['imageName'])) {
+            OmniHelper::log("POSSIBLE BAD FILENAME");
+            OmniHelper::log($data['imageName']);
+        }
         $path = Storage::disk('public')->putFileAs($folder, new File($f), $data['imageName']);
 
         // return response()->json(['success' => true, 'file' => $path]);

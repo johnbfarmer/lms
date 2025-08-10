@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import Select from 'react-select';
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout';
 import { useForm, Link, Head } from '@inertiajs/react';
@@ -16,6 +16,9 @@ import { handleFraction, buildBreadCrumbs } from '@/Helpers/Utilities';
 
 const Edit = ({ auth, origProblem, origAnswers, origHints, courses, origCourseId, origChapterId, origLessonId, lesson, chapter, course, images }) => {
     const [probTxt, setProbTxt] = useState(origProblem.problem_text)
+    const [probDisplayType, setProbDisplayType] = useState(origProblem.display_type)
+    const [probType, setProbType] = useState(origProblem.problem_type_id)
+    const [probPublished, setProbPublished] = useState(origProblem.active)
     const [problem, setProblem] = useState(origProblem)
     const [answers, setAnswers] = useState(origAnswers)
     const [hints, setHints] = useState(origHints || [])
@@ -34,6 +37,16 @@ const Edit = ({ auth, origProblem, origAnswers, origHints, courses, origCourseId
         hints: hints || [],
         lessonId: lessonId
     })
+
+    useEffect(() => {
+        console.log('prob', problem)
+        let p = { ...problem }
+        let d = { ...data }
+        p.problem_text = probTxt
+        setProblem(p)
+        d.problem = p
+        setData(d)
+    }, [probTxt, probDisplayType, probType, probPublished, lessonId])
 
     const title = 'id' in problem ?`${ problem.id }` : 'New Problem'
 
@@ -78,16 +91,11 @@ const Edit = ({ auth, origProblem, origAnswers, origHints, courses, origCourseId
     const chgProbTxt = (e) => {
         let txt = e.target.value
         setProbTxt(txt)
-        let prob = {...problem}
-        prob.problem_text = txt
-        setProblem(prob)
-        data.problem = prob
-        setData(data)
     }
 
     const chgAnsTxt = (e, k) => {
         let txt = e.target.value
-        if (problem.problem_type_id === 4) {
+        if (probType === 4) {
             txt = handleFraction(txt)
         }
         let a = [...answers]
@@ -161,36 +169,39 @@ const Edit = ({ auth, origProblem, origAnswers, origHints, courses, origCourseId
 
     const selectLesson = (e) => {
         setLessonId(e.value)
-        let p = { ...problem }
-        p.lesson_id = e.value
-        setProblem(p)
-        data.problem = p
-        setData(data)
+        // let p = { ...problem }
+        // p.lesson_id = e.value
+        // setProblem(p)
+        // data.problem = p
+        // setData(data)
     }
 
     const changeProblemDisplayType = (t) => {
-        let p = { ...problem }
-        p.display_type = t
-        setProblem(p)
-        data.problem = p
-        setData(data)
+        setProbDisplayType(t)
+        // let p = { ...problem }
+        // p.display_type = t
+        // setProblem(p)
+        // data.problem = p
+        // setData(data)
     }
 
     const changeProblemType = (t) => {
-        let p = { ...problem }
-        p.problem_type_id = t
-        setProblem(p)
-        data.problem = p
-        setData(data)
+        setProbType(t)
+        // let p = { ...problem }
+        // p.problem_type_id = t
+        // setProblem(p)
+        // data.problem = p
+        // setData(data)
     }
 
     const togglePublish = () => {
-        let p = { ...problem }
-        // console.log(p.active)
-        p.active = !p.active
-        setProblem(p)
-        data.problem = p
-        setData(data)
+        setProbPublished(!probPublished)
+        // let p = { ...problem }
+        // // console.log(p.active)
+        // p.active = !p.active
+        // setProblem(p)
+        // data.problem = p
+        // setData(data)
     }
 
     const toggleShowGallery = () => {
@@ -199,7 +210,7 @@ const Edit = ({ auth, origProblem, origAnswers, origHints, courses, origCourseId
 
     const deleteProblem = () => {
         if (confirm('Really delete this problem?')) {
-            console.log('mkay')
+            alert('TBI')
         }
     }
 
@@ -216,7 +227,7 @@ const Edit = ({ auth, origProblem, origAnswers, origHints, courses, origCourseId
     )
 
     let problemDisplayTypeSelector = ['latex', 'text', 'hybrid'].map(t => {
-        let sel = t === problem.display_type ? 'font-bold' : 'text-slate-500'
+        let sel = t === probDisplayType ? 'font-bold' : 'text-slate-500'
         return (
             <div key={t} className={`cursor-pointer text-sm mx-1 ${sel}`} onClick={() => changeProblemDisplayType(t)}>{t}</div>
         )
@@ -224,11 +235,28 @@ const Edit = ({ auth, origProblem, origAnswers, origHints, courses, origCourseId
 
     let problemTypeSelector = ['single MC', 'multiple MC', 'text', 'numeric'].map((t,k) => {
         let key = k + 1
-        let sel = key === problem.problem_type_id ? 'font-bold' : 'text-slate-500'
+        let sel = key === probType ? 'font-bold' : 'text-slate-500'
         return (
             <div key={t} className={`cursor-pointer text-sm mx-1 ${sel}`} onClick={() => changeProblemType(key)}>{t}</div>
         )
     })
+
+    const addImageToProb = (imgU) => {
+        let prob = {...problem}
+        let txt = prob.problem_text
+        let imgTag = "<img src=\"" + imgU + "\" alt='image' height='200' width='200'/>"
+        if (probDisplayType === 'latex') {
+            probDisplayType = 'hybrid'
+            txt = '[LLL] ' + txt
+        }
+        if (probDisplayType === 'hybrid') {
+            txt = txt + " [HHH] " + imgTag
+        } else {
+            txt = txt + imgTag
+        }
+        toggleShowGallery()
+        setProbTxt(txt)
+    }
 
     let errMsg = ''
     for (let i in errors) {
@@ -250,7 +278,7 @@ const Edit = ({ auth, origProblem, origAnswers, origHints, courses, origCourseId
                         </div>
                         <div className="flex items-center mx-2">
                             <Checkbox
-                                checked={ problem.active }
+                                checked={ probPublished }
                                 onChange={ togglePublish }
                                 className='border border-black border-1'
                             />
@@ -389,6 +417,7 @@ const Edit = ({ auth, origProblem, origAnswers, origHints, courses, origCourseId
                 onClose={closeGalleryModal}
                 course={course}
                 images={images}
+                addImageToProb={addImageToProb}
             />
             <CourseSelect
                 courses={courses}
