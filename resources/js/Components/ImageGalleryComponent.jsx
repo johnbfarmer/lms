@@ -29,23 +29,23 @@ export default function ImageGalleryComponent(props) {
 
     const images = props.images.map((im, k) => {
         return (
-            <div key={k} className="m-2" onClick={() => props.addImageToProb(im)}>
+            <div key={k} className="max-w-[300px] m-2 overflow-x-hide" onClick={() => props.addImageToProb(im)}>
                 <div className="m-2">
                     <img src={im} width={50} height={50} />
                 </div>
                 <div className="m-2">
-                    {im.replace('/storage/'+props.course.id+'/', '')}
+                    {im.replace('/storage/'+props.course.id+'/thumbs/', '')}
                 </div>
             </div>
         )
     })
 
     return (
-        <div className="mx-auto my-6 max-w-7xl space-y-6 sm:px-6 lg:px-8 h-screen">
+        <div className="mx-auto my-6 w-7xl space-y-6 sm:px-6 lg:px-8 h-screen">
             <Modal show={props.show} onClose={props.onClose} >
                 <div className={`bg-white p-4 shadow sm:rounded-lg`}>
                     <MdClear className="float-right cursor-pointer" onClick={ props.onClose }/>
-                    <div className="flex flex-col justify-between">
+                    <div className="h-fit">
                         <div className="text-lg text-center">
                             Galería Curso {props.course.name}
                         </div>
@@ -71,7 +71,7 @@ export default function ImageGalleryComponent(props) {
                                 Subir
                             </div>
                         </div>
-                        <div className="flex text-center mx-auto">
+                        <div className="flex flex-wrap overflow-y-scroll">
                             {images}
                         </div>
                     </div>

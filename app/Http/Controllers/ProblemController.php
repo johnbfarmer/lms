@@ -145,10 +145,9 @@ OmniHelper::log($score);
         $answers = $p->getAnswers();
         $hints = $p->getHints();
         $courses = Course::where(['active' => 1])->get();
-        $filePaths = Storage::disk('public')->files($courseId);
+        $filePaths = Storage::disk('public')->files($courseId . '/thumbs');
         $imageUrls = [];
         foreach ($filePaths as $path) {
-            OmniHelper::log($path);
             $imageUrls[] = '/storage/' . $path;
         }
         return Inertia::render('Problems/Edit', ['origProblem' => $p, 'origAnswers' => $answers, 'origHints' => $hints, 'courses' => $courses, 'origCourseId' => $courseId, 'origChapterId' => $chapterId, 'origLessonId' => $lessonId, 'lesson' => $lesson, 'chapter' => $chapter, 'course' => $course, 'images' => $imageUrls]);

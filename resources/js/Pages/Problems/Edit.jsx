@@ -244,12 +244,13 @@ const Edit = ({ auth, origProblem, origAnswers, origHints, courses, origCourseId
     const addImageToProb = (imgU) => {
         let prob = {...problem}
         let txt = prob.problem_text
-        let imgTag = "<img src=\"" + imgU + "\" alt='image' height='200' width='200'/>"
-        if (probDisplayType === 'latex') {
-            probDisplayType = 'hybrid'
+        let imgTag = "<img src=\"" + imgU.replace('/thumbs', '') + "\" alt='image'/>"
+        if (prob.display_type === 'latex') {
+            prob.display_type = 'hybrid'
+            setProblem(prob)
             txt = '[LLL] ' + txt
         }
-        if (probDisplayType === 'hybrid') {
+        if (prob.display_type === 'hybrid') {
             txt = txt + " [HHH] " + imgTag
         } else {
             txt = txt + imgTag

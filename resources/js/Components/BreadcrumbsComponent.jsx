@@ -6,8 +6,8 @@ export default function BreadcrumbsComponent(props) {
     }
     let separator
     const bc = props.data.map((d, k) => {
-        separator = k < props.data.length - 1 ? ' > ' : ''
-        return (<div key={k}><Link href={d.link}>{d.name}</Link>{ separator }</div>) 
+        separator = k < props.data.length - 1 ? '>' : ''
+        return (<div key={k} className="text-nowrap flex"><Link href={d.link}>{d.name}</Link><div className="mx-1">{ separator }</div></div>) 
     })
 
     return (

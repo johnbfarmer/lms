@@ -35,4 +35,27 @@ class LessonSet extends Model
         $recs = DB::select($sql, [$this->id]);
         return $recs;
     }
+
+    public function getScores($studentId)
+    {
+        $groupByUser = $studentId ? ', U.id' : '';
+        $whereUser = $studentId ? 'AND U.id = ?' : '';
+        $params = [$this->id];
+        if ($studentId) {
+            $params[] = $studentId;
+        }$sql = '
+        SELECT L.name as lessonName, U.id as userId, U.name as userName, avg(score) as userScore, sum(IF(S.id IS NULL, 0, 1)) as problemsDone, count(P.id) as numProblems, L.sequence_id + L.id / 10000 as sortKey
+        FROM users U
+        CROSS JOIN courses C
+        INNER JOIN lesson_sets LS ON C.id = LS.course_id
+        INNER JOIN lessons L ON LS.id = L.lesson_set_id
+        INNER JOIN problems P ON L.id = P.lesson_id
+        LEFT JOIN problem_scores S ON S.problem_id = P.id AND S.user_id = U.id
+        WHERE LS.id = ? ' . $whereUser . ' AND P.active = 1 AND LS.active = 1 AND L.active = 1
+        GROUP BY L.id ' . $groupByUser . ';';
+
+        $recs = DB::select($sql, $params);
+
+        return $recs;
+    }
 }

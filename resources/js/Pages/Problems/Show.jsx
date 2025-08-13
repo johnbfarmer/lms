@@ -59,7 +59,7 @@ const Show = ({ auth, prob, answers, hints, lesson, course, chapter, problemIds,
         setShowHint(true)
     }
 
-    const breadcrumbs = buildBreadCrumbs({course, chapter}, 3)
+    const breadcrumbs = buildBreadCrumbs({course, chapter, lesson}, 4)
     let topMenu = (
         <TopMenu 
             auth={auth}

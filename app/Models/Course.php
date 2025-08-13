@@ -59,4 +59,29 @@ class Course extends Model
 
         return $recs;
     }
+
+    public function getStudentScores($groupId, $studentId)
+    {
+        $whereUser = $studentId ? 'AND U.id = ?' : '';
+        $params = [$this->id, $groupId];
+        if ($studentId) {
+            $params[] = $studentId;
+        }
+        $sql = '
+        SELECT LS.name as chapterName, LS.id as chapterId, U.id as userId, U.name as userName, avg(score) as userScore, sum(IF(S.id IS NULL, 0, 1)) as problemsDone, count(P.id) as numProblems, LS.sequence_id + LS.id / 10000 as sortKey
+        FROM users U
+        CROSS JOIN courses C
+        INNER JOIN lesson_sets LS ON C.id = LS.course_id
+        INNER JOIN lessons L ON LS.id = L.lesson_set_id
+        INNER JOIN problems P ON L.id = P.lesson_id
+        INNER JOIN student_group_user SGU ON SGU.user_id = U.id
+        INNER JOIN student_groups SG ON SG.id = SGU.student_group_id
+        LEFT JOIN problem_scores S ON S.problem_id = P.id AND S.user_id = U.id
+        WHERE C.id = ? ' . $whereUser . ' AND SG.id = ? AND P.active = 1 AND LS.active = 1 AND L.active = 1
+        GROUP BY LS.id, U.id';
+
+        $recs = DB::select($sql, $params);
+
+        return $recs;
+    }
 }

@@ -50,6 +50,14 @@ class LessonSetController extends Controller
         return Inertia::render('LessonSets/Edit', ['origLessons' => $lessons, 'origChapter' => $chapter, 'course' => $course]);
     }
 
+    public function studentReport(Request $request, $chapterId, $studentId)
+    {
+        $chapter = LessonSet::find($chapterId);
+        $scores = $chapter->getStudentScores($studentId);
+
+        return Inertia::render('LessonSets/StudentReport', ['chapter' => $chapter, 'scores' => $scores]);
+    }
+
     public function saveChapter(Request $request)
     {
         $data = $request->all();

@@ -14,6 +14,8 @@ use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Http\JsonResponse ;
 use Inertia\Inertia;
+use Intervention\Image\ImageManager as ImageManager;
+use Intervention\Image\Drivers\Gd\Driver;
 
 class CourseController extends Controller
 {
@@ -89,6 +91,41 @@ class CourseController extends Controller
         $students = User::allStudentsWithGroupMembership($id);
 
         return Inertia::render('Groups/Edit', ['course' => $course, 'group' => $group, 'allStudents' => $students]);
+    }
+
+    public function groupReport(Request $request, $groupId, $unit, $unitId, $agg, $studentId)
+    {
+        $group = StudentGroup::find($groupId);
+        $course = Course::find($group->course_id);
+        $chapter = null;
+        $lesson = null;
+        switch($unit) {
+            case 'chapter':
+                $chapter = LessonSet::find($unitId);
+                // $scores = $group->getScores($studentId);
+                break;
+            case 'lesson':
+                $lesson = Lesson::find($unitId);
+                $chapter = LessonSet::find($lesson->lesson_set_id);
+                // $scores = $lesson->getScores($studentId);
+                break;
+            default:
+                // $scores = $group->getScores($studentId);
+                // $unit = $studentId ? 'chapter' : 'course';
+
+        }
+        $scores = $group->getScores(['studentId' => $studentId, 'unit' => $unit, 'unitId' => $unitId, 'agg' => $agg, ]);
+        $students = $group->getGroupMembers();
+
+        return Inertia::render('Reports/Report', ['course' => $course, 'group' => $group, 'scores' => $scores, 'students' => $students, 'unit' => $unit, 'unitId' => $unitId, 'agg' => $agg, 'studentId' => $studentId]);
+    }
+
+    public function studentReport(Request $request, $courseId, $studentId)
+    {
+        $course = Course::find($courseId);
+        $scores = $course->getStudentScores($studentId);
+
+        return Inertia::render('Courses/StudentReport', ['course' => $course, 'scores' => $scores]);
     }
 
     public function saveGroup(Request $request)
@@ -170,6 +207,7 @@ class CourseController extends Controller
             mkdir($dataDir);
             mkdir($dataDir . DIRECTORY_SEPARATOR . 'pdf');
             mkdir($dataDir . DIRECTORY_SEPARATOR . 'img');
+            mkdir($dataDir . DIRECTORY_SEPARATOR . 'thumbs');
         }
         return redirect()->route(
             'lessonset.index', ['id' => $course->id]
@@ -186,8 +224,29 @@ class CourseController extends Controller
             OmniHelper::log("POSSIBLE BAD FILENAME");
             OmniHelper::log($data['imageName']);
         }
-        $path = Storage::disk('public')->putFileAs($folder, new File($f), $data['imageName']);
 
+        $manager = new ImageManager(new Driver());
+        $img = $manager->read($f->getRealPath());
+        $path = public_path('storage/' . $courseId . '/' . $data['imageName']);
+        $height = $img->height();
+        $width = $img->width();
+        $maxDim = max($height, $width);
+        $factor = $maxDim < 200 ? 1 : $maxDim / 400;
+        $h = $height / $factor;
+        $w = $width / $factor;
+        // $path = Storage::disk('public')->putFileAs($folder, new File($f), $data['imageName']);
+        $img->resize($w, $h, function ($constraint) {
+            $constraint->aspectRatio();
+            $constraint->upsize(); // Prevent upsizing if the original is smaller
+        });
+        $img->save($path);
+        $path = public_path('storage/' . $courseId . '/thumbs/' . $data['imageName']);
+        // $path = Storage::disk('public')->putFileAs($folder, new File($f), $data['imageName']);
+        $img->resize($w/4, $h/4, function ($constraint) {
+            $constraint->aspectRatio();
+            $constraint->upsize(); // Prevent upsizing if the original is smaller
+        });
+        $img->save($path);
         // return response()->json(['success' => true, 'file' => $path]);
         return redirect()->back()->with(['data' => 'Something you want to pass to front-end',]);
     }

@@ -113,7 +113,7 @@ const Groups = ({ auth, course, group, allStudents }) => {
         a.splice(idx, 1)
         return a
     }
-console.log(data)
+
     return (
         <AuthenticatedLayout auth={auth} user={auth.user} header={ false } topMenu={ topMenu }>
             <div className="text-center w-full">
