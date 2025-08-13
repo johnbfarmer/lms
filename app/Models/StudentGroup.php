@@ -64,7 +64,7 @@ class StudentGroup extends Model
         INNER JOIN problems P ON L.id = P.lesson_id ' .
         $joinType.' JOIN problem_scores S ON S.problem_id = P.id AND S.user_id = U.id
         WHERE G.id = ? ' . $whereUser . $whereUnit . ' AND P.active = 1 AND LS.active = 1 AND L.active = 1
-        GROUP BY ' . $agg . '.id,' . $agg . '.name, U.id, G.id';
+        GROUP BY ' . $agg . '.id,' . $agg . '.name, U.id, U.name, G.id';
 OmniHelper::log($sql);
 OmniHelper::log($params);
 OmniHelper::log($scoreParams);
